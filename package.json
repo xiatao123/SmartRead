@@ -1,6 +1,6 @@
 {
-    "name": "post-cellar",
-    "description": "Post Cellar Application",
+    "name": "smart read",
+    "description": "",
     "version": "0.0.1",
     "private": true,
     "dependencies": {
