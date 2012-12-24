@@ -19,9 +19,24 @@
         <button type="submit" class="btn btn-primary">申请体验</button>
     </form>
 
+    <div id="loginModal" class="modal hide fade">
+        <div class="modal-body">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <form class="well" id="login-form" method="post" action="login">
+                <label>用户名 </label>
+                <input type="text" class="required" id="user-tf" name="user">
+                <label>密码</label>
+                <input type="password" class="required" id="pass-tf" name="pass">
+                <button class="btn btn-primary login" id="btn-login" type="submit"><i class="icon-lock icon-white"></i>Sign in</button>
+                <label class="checkbox" id="remember-me">Remember Me
+                    <input type="checkbox" checked="checked">
+                </label>
+                <div class="clear-fix"></div>
+                <hr>
+                <div class="btm-links"><a id="forgot-password" href="#">Forgot Your Password? </a><!--<a id="create-account" href="/signup">Create An Account</a>--></div>
+            </form>
+
+        </div>
+    </div>
 
 </div>
-
-<!--<div class="front-bg">-->
-    <!--<img class="front-image" src="http://a0.twimg.com/a/1355267558/t1/img/front_page/cricket@2x.jpg">-->
-<!--</div>-->

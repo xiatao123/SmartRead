@@ -3,8 +3,10 @@ var SR = SR || {};
 SR.AppRouter = Backbone.Router.extend({
 
     routes: {
-        ""                  : "home",
-        "posts"	: "list",
+        ""                  : "list",
+//        ""                  : "home",
+        "home"                  : "home",
+        "posts"	            : "list",
         "posts/page/:page"	: "list",
         "posts/add"         : "addPost",
         "posts/:id"         : "postDetails",
@@ -28,9 +30,17 @@ SR.AppRouter = Backbone.Router.extend({
 	list: function(page) {
         var p = page ? parseInt(page, 10) : 1;
         var postList = new SR.PostCollection();
-        postList.fetch({success: function(){
-            $("#content").html(new SR.PostListView({model: postList, page: p}).el);
-        }});
+        postList.fetch({
+            success: function(model, response, options){
+                $("#content").html(new SR.PostListView({model: postList, page: p}).el);
+            },
+            error: function(model, xhr, options){
+                if(xhr.status === 401){
+                    SR.app.navigate("home", {trigger: true});
+                }
+            }
+
+        });
         this.headerView.selectMenuItem('home-menu');
         $('.backstretch').remove();
     },

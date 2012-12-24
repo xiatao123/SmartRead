@@ -11,6 +11,14 @@ SR.HeaderView = Backbone.View.extend({
         return this;
     },
 
+    events: {
+        "click .openModal"   : "openModal"
+    },
+
+    openModal: function(evt){
+        $('#loginModal').modal({backdrop:false});
+    },
+
     selectMenuItem: function (menuItem) {
         $('.nav li').removeClass('active');
         if (menuItem) {

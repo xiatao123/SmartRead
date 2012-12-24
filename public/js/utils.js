@@ -52,5 +52,4 @@ SR.utils = {
     hideAlert: function() {
         $('.alert').hide();
     }
-
 };

@@ -62,3 +62,8 @@ SR.PostCollection = Backbone.Collection.extend({
     url: "/posts"
 
 });
+
+//SR.Account = Backbone.Model.extend({
+//    urlRoot: "/"
+//
+//});
