@@ -33,6 +33,18 @@ module.exports = function(app) {
         });
     });
 
+    app.post('/logout', function(req, res){
+        res.clearCookie('user');
+        res.clearCookie('pass');
+        req.session.destroy(function(e){ res.send(200,{status: "success"}); });
+    });
+
+    app.get('/session', function(req, res){
+        authenticate(req, res, function(){
+            res.send(200,req.session.user);
+        });
+    });
+
     app.get('/', function(req, res){
         // check if the user's credentials are saved in a cookie //
         if (req.cookies.user === undefined || req.cookies.pass === undefined){
@@ -70,9 +82,11 @@ function authenticate(req, res, callback){
     }
 
     if (req.cookies.user === undefined || req.cookies.pass === undefined){
-        Utils.log("1");
+        Utils.log(req.cookies);
+        Utils.log(1);
         res.send(401,"unauthorized");
     }	else{
+        Utils.log(req.cookies);
         Utils.log(2);
         // attempt automatic login //
         AM.autoLogin(req.cookies.user, req.cookies.pass, function(o){

@@ -17,7 +17,12 @@
 
 
                 <ul class="nav pull-right">
-                    <li class="login-menu"><a class="openModal">Login</a></li>
+                    <% if (user != undefined) { %>
+                    <li class="login-menu"><a href="javascript:void(0)"><%= user.name%></a></li>
+                    <li class="logout-menu"><a href="javascript:void(0)" class="logout">logout</a></li>
+                    <% } else {%>
+                    <li class="login-menu"><a href="javascript:void(0)" class="openModal">Login</a></li>
+                    <% } %>
                     <!--<li class="about-menu"><a href="#about">About</a></li>-->
                     <!--<li class="dropdown">-->
                         <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">Resources <b class="caret"></b></a>-->

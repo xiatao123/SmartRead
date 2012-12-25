@@ -7,16 +7,46 @@ SR.HeaderView = Backbone.View.extend({
     },
 
     render: function () {
-        $(this.el).html(this.template());
-        return this;
+        var request = $.ajax({
+            url: "session",
+            type: "GET",
+            dataType: "json"
+        });
+
+        var session={},
+            that = this;
+        request.done(function(data) {
+            session['user'] = data;
+            $(that.el).html(that.template(session));
+            return that;
+        });
+        request.fail(function(jqXHR, textStatus) {
+            session['user'] = undefined;
+            $(that.el).html(that.template(session));
+            return that;
+        });
     },
 
     events: {
-        "click .openModal"   : "openModal"
+        "click .openModal"   : "openModal",
+        "click .logout"   : "logout"
     },
 
     openModal: function(evt){
+        evt.preventDefault();
         $('#loginModal').modal({backdrop:false});
+    },
+
+    logout: function(evt){
+        var request = $.ajax({
+            url: "logout",
+            type: "POST",
+            dataType: "json"
+        });
+
+        request.done(function(data) {
+            SR.app.navigate("home",{trigger: true});
+        });
     },
 
     selectMenuItem: function (menuItem) {
