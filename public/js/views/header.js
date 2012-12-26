@@ -13,16 +13,16 @@ SR.HeaderView = Backbone.View.extend({
             dataType: "json"
         });
 
-        var session={},
+        var account={},
             that = this;
         request.done(function(data) {
-            session['user'] = data;
-            $(that.el).html(that.template(session));
+            account['user'] = data;
+            $(that.el).html(that.template(account));
             return that;
         });
         request.fail(function(jqXHR, textStatus) {
-            session['user'] = undefined;
-            $(that.el).html(that.template(session));
+            account['user'] = undefined;
+            $(that.el).html(that.template(account));
             return that;
         });
     },
