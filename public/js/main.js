@@ -26,7 +26,8 @@ SR.AppRouter = Backbone.Router.extend({
             this.homeView = new SR.HomeView();
         }
         $('#content').html(this.homeView.el);
-        this.homeView.bindjQueryForm();
+        this.homeView.bindLogonjQueryForm();
+        this.homeView.bindInvitejQueryForm();
 
         this.headerView.selectMenuItem('home-menu');
         $.backstretch("../css/img/bg2.jpg");

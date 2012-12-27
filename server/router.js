@@ -1,6 +1,7 @@
 var PM = require('./controllers/post-manager');
 var AM = require('./controllers/account-manager');
 var EM = require('./controllers/email-manager');
+var IM = require('./controllers/invitation-manager');
 var Utils = require('./server_utils');
 
 module.exports = function(app) {
@@ -66,6 +67,17 @@ module.exports = function(app) {
                 res.send('email-not-found', 400);
             }
         });
+    });
+
+    app.post('/require-invite', function(req,res){
+        IM.requireInvite(req.param('email'),function(e){
+            if(e){
+                res.send('already_registered_for_invite',200);
+            }else{
+                res.send('ok',200);
+            }
+        });
+
     });
 
 //    app.get('/', function(req, res){

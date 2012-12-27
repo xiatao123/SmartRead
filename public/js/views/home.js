@@ -15,7 +15,7 @@ SR.HomeView = Backbone.View.extend({
 //        "click .login"   : "login"
 //    },
 
-    bindjQueryForm: function(){
+    bindLogonjQueryForm: function(){
         $('#login-form').ajaxForm({
             beforeSubmit : function(formData, jqForm, options){
 //                if (lv.validateForm() == false){
@@ -33,6 +33,32 @@ SR.HomeView = Backbone.View.extend({
                 SR.app.navigate("posts", {trigger: true});
             },
             error : function(e){
+//                lv.showLoginError('Login Failure', 'Please check your username and/or password');
+            },
+            resetForm: true
+        });
+    },
+
+    bindInvitejQueryForm: function(){
+        $('#invite-form').ajaxForm({
+            beforeSubmit : function(formData, jqForm, options){
+//                if (lv.validateForm() == false){
+//                    return false;
+//                } 	else{
+//                    // append 'remember-me' option to formData to write local cookie //
+//                    formData.push({name:'remember-me', value:$("input:checkbox:checked").length == 1})
+//                    return true;
+//                }
+//                formData.push({name:'remember-me', value:$("input:checkbox:checked").length == 1})
+                return true;
+            },
+            success	: function(data, status, xhr, $form){
+//                $('#loginModal').hide();
+                  alert("We will send you an email invite soon!");
+//                SR.app.navigate("posts", {trigger: true});
+            },
+            error : function(e){
+                alert("some problem with our server, please try again!");
 //                lv.showLoginError('Login Failure', 'Please check your username and/or password');
             },
             resetForm: true
