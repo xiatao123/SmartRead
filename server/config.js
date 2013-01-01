@@ -9,6 +9,10 @@ app.configure(function(){
     app.use(express.session({ secret: 'super-duper-secret-secret' }));
     app.use(express.methodOverride());
     app.use(express.static(app.root + '/public'));
+//    app.use(function(req, res, next) {
+//        res.contentType('application/json');
+//        next();
+//    });
 });
 
 }

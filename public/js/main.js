@@ -4,12 +4,12 @@ SR.AppRouter = Backbone.Router.extend({
 
     routes: {
         ""                  : "list",
-//        ""                  : "home",
         "home"                  : "home",
         "posts"	            : "list",
         "posts/page/:page"	: "list",
         "posts/add"         : "addPost",
         "posts/:id"         : "postDetails",
+        "admin-invite"         : "adminInviteList",
         "about"             : "about"
     },
 
@@ -18,10 +18,16 @@ SR.AppRouter = Backbone.Router.extend({
 //        $('.header').html(this.headerView.el);
     },
 
-    home: function (id) {
+    renderHeader: function(){
         this.headerView = new SR.HeaderView();
         $('.header').html(this.headerView.el);
+    },
 
+    home: function (id) {
+//        this.headerView = new SR.HeaderView();
+//        $('.header').html(this.headerView.el);
+
+        this.renderHeader();
         if (!this.homeView) {
             this.homeView = new SR.HomeView();
         }
@@ -31,11 +37,13 @@ SR.AppRouter = Backbone.Router.extend({
 
         this.headerView.selectMenuItem('home-menu');
         $.backstretch("../css/img/bg2.jpg");
+//        $('body').addClass("homeView");
     },
 
 	list: function(page) {
-        this.headerView = new SR.HeaderView();
-        $('.header').html(this.headerView.el);
+//        this.headerView = new SR.HeaderView();
+//        $('.header').html(this.headerView.el);
+        this.renderHeader();
 
         var p = page ? parseInt(page, 10) : 1;
         var postList = new SR.PostCollection();
@@ -51,7 +59,9 @@ SR.AppRouter = Backbone.Router.extend({
 
         });
         this.headerView.selectMenuItem('home-menu');
-        $('.backstretch').remove();
+//        $('body').addClass("listView");
+//        $('.backstretch').remove();
+        $.backstretch("../css/img//paper.jpg");
     },
 
     postDetails: function (id) {
@@ -70,17 +80,38 @@ SR.AppRouter = Backbone.Router.extend({
 	},
 
     about: function () {
+        this.renderHeader();
+
         if (!this.aboutView) {
             this.aboutView = new SR.AboutView();
         }
         $('#content').html(this.aboutView.el);
         this.headerView.selectMenuItem('about-menu');
         $('.backstretch').remove();
+//        $('body').removeClass();
+    },
+
+    //admin functions.
+    adminInviteList: function(){
+        this.renderHeader();
+        var inviteList = new SR.InviteCollection();
+        inviteList.fetch({
+            success: function(model, response, options){
+                $("#content").html(new SR.AdminInviteUsersView({model: inviteList}).el);
+            },
+            error: function(model, xhr, options){
+                if(xhr.status === 401){
+                    SR.app.navigate("", {trigger: true});
+                }
+            }
+
+        });
+        $('.backstretch').remove();
     }
 
 });
 
-SR.utils.loadTemplate(['HomeView', 'HeaderView', 'PostView', 'PostListItemView', 'AboutView','PostModalView'], function() {
+SR.utils.loadTemplate(['HomeView', 'HeaderView', 'PostView', 'PostListItemView', 'AboutView','PostModalView','AdminInviteUsersView'], function() {
     SR.app = new SR.AppRouter();
     Backbone.history.start();
 });

@@ -67,3 +67,24 @@ SR.PostCollection = Backbone.Collection.extend({
 //    urlRoot: "/"
 //
 //});
+
+SR.Invite = Backbone.Model.extend({
+    urlRoot: "/invite-users",
+    idAttribute: "_id",
+    initialize: function(){
+
+    },
+    defaults: {
+        _id: null,
+        email: null,
+        isInvited: false
+    }
+});
+
+SR.InviteCollection = Backbone.Collection.extend({
+
+    model: SR.Invite,
+
+    url: "/invite-users"
+
+});

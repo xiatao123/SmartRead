@@ -146,8 +146,8 @@ AM.getAllRecords = function(callback)
 {
     AM.accounts.find().toArray(
         function(e, res) {
-            if (e) callback(e)
-            else callback(null, res)
+            if (e) callback(e);
+            else callback(null, res);
         });
 };
 

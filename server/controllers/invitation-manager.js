@@ -49,12 +49,29 @@ IM.requireInvite = function(email, callback)
 };
 
 //List all of the entries from invites collection.
-IM.listAllInvitees = function(){
-
-
+IM.getAllRecords = function(callback)
+{
+    IM.invites.find().toArray(
+        function(e, res) {
+            if (e){
+                callback(e);
+            }
+            else{
+                callback(null, res);
+            }
+        });
 };
 
-//List only the entries whos' invitation email not been sent out yet.
-IM.listUninvitees = function(){
 
+////List only the entries whos' invitation email not been sent out yet.
+//IM.listOnlyUninviteUsers = function(){
+//
+//};
+
+
+// auxiliary methods //
+
+IM.getEmail = function(email, callback)
+{
+    IM.invites.findOne({email:email}, function(e, o){ callback(o); });
 };

@@ -1,8 +1,11 @@
+var _ = require('underscore');
+
 var PM = require('./controllers/post-manager');
 var AM = require('./controllers/account-manager');
 var EM = require('./controllers/email-manager');
 var IM = require('./controllers/invitation-manager');
 var Utils = require('./server_utils');
+var ADMIN_USER = require('./admin-users').adminUsers;
 
 module.exports = function(app) {
 
@@ -52,7 +55,6 @@ module.exports = function(app) {
 //        AM.getEmail(req.param('email'), function(o){
         AM.getEmail("frankyanwang@gmail.com", function(o){
             if (o){
-//                res.send('ok', 200);
                 EM.dispatchResetPasswordLink(o, function(e, m){
                     // this callback takes a moment to return //
                     // should add an ajax loader to give user feedback //
@@ -80,28 +82,47 @@ module.exports = function(app) {
 
     });
 
-//    app.get('/', function(req, res){
-//        // check if the user's credentials are saved in a cookie //
-//        if (req.cookies.user === undefined || req.cookies.pass === undefined){
-//            console.log("no******", req.cookies.user);
-//            res.render('login', { locals: { title: 'Hello - Please Login To Your Account' }});
-//        }	else{
-//            console.log("yes******", req.cookies.user);
-//            // attempt automatic login //
-//            AM.autoLogin(req.cookies.user, req.cookies.pass, function(o){
-//                if (o != null){
-//                    console.log("auto******", o);
-//                    req.session.user = o;
-//                    res.redirect('/home');
-//                }	else{
-//                    console.log("auto****** log back in");
-//                    res.render('login', { locals: { title: 'Hello - Please Login To Your Account' }});
-//                }
-//            });
-//        }
-//    });
+    //=========  Admin Only Request ===========================================
+    app.get('/invite-users', function(req,res){
+        authenticate(req, res, function(){
+            authorize(req, res, function(){
+                IM.getAllRecords(function(e, invites){
+                    if(e){
+                        res.send('no records found',200);
+                    }else{
+                        res.send(200,invites);
+                    }
+                });
+            });
+        });
+    });
 
+    app.post('/email-invite', function(req,res){
+        authenticate(req, res, function(){
+            authorize(req, res, function(){
+                console.log("email",req.param('email'));
+                IM.getEmail(req.param('email'), function(o){
+                    if (o){
+                        EM.dispatchSignupLink(o.email, function(e, m){
+                            // this callback takes a moment to return //
+                            // should add an ajax loader to give user feedback //
+                            if (!e) {
+                                res.send('ok', 200);
+                            }	else{
+                                res.send('email-server-error', 400);
+                                for (k in e) console.log('error : ', k, e[k]);
+                            }
+                        });
+                    }	else{
+                        res.send('email-not-found', 400);
+                    }
+                });
+            });
+        });
 
+    });
+
+    //=========================================================================
     app.get('*', function(req, res) {
         res.send("oops! page not found", 404);
 
@@ -137,3 +158,12 @@ function authenticate(req, res, callback){
         });
     }
 }
+
+function authorize(req, res, callback){
+    if(req.session.user != null && _.indexOf(ADMIN_USER, req.session.user.email) > -1){
+        callback();
+    }else{
+        res.send(401,"unauthorized action");
+    }
+}
+
