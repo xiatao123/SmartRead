@@ -1,0 +1,28 @@
+<div class="row-fluid">
+    <table  class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Invited</th>
+                <th>Operation</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% _.each(action, function(invite) { %>
+            <tr>
+                <td><%= invite._id%></td>
+                <td><%= invite.email%></td>
+                <td><%= invite.isInvited%></td>
+                <td><button data-email="<%= invite.email%>" class="invite btn btn-primary">邀请</button></td>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>
+
+<!--<script type="text/template" id="actions-template">-->
+    <!--<% _.each(action, function(acs) { %>-->
+    <!--<a class="btn"><%= acs.label %></a>-->
+    <!--<% }); %>-->
+<!--</script>-->​
