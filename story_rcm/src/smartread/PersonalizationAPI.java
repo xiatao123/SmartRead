@@ -1,5 +1,6 @@
 package smartread;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,9 +16,27 @@ public class PersonalizationAPI {
     }
 
     public void updateUserInterests(int lookbackMinute) {
-        List<ServeEvent> serves = DBServeEvent.QueryEvents(lookbackMinute);
-        for (ServeEvent s : serves) {
-            System.out.println(s);
+        Map<String, List<ServeEvent>> serves = DBServeEvent.QueryEvents(lookbackMinute);
+        String freq;
+        if(lookbackMinute==5)
+            freq = "5m";
+        else if(lookbackMinute==60*24)
+            freq = "1d";
+        else if(lookbackMinute==60*24*7)
+            freq = "7d";
+        else{
+            return;
+        }
+        
+        for (String uid : serves.keySet()) {
+            List<String> tags = new ArrayList<String>();
+            List<ServeEvent> userServes = serves.get(uid);
+            for(ServeEvent s: userServes){
+                String storyID = s.getStoryID();
+                Story story = DBStory.getStory(storyID);
+                tags.addAll(story.getTags());
+            }
+            DBUser.updateUserInterest(uid, freq, tags);
         }
     }
 
@@ -34,12 +53,12 @@ public class PersonalizationAPI {
     }
 
     public static void main(String args[]) {
-        (new PersonalizationAPI()).updateUserInterests(5);
+        PersonalizationAPI api = new PersonalizationAPI();
+        api.updateUserInterests(5);
 
-        // List<Story> stories = (new PersonalizationAPI())
-        // .getUserStory("test_user1");
-        // for (Story s : stories) {
-        // System.out.println(s);
-        // }
+        List<Story> stories = api.getUserStory("test_user1");
+        for (Story s : stories) {
+            System.out.println(s);
+        }
     }
 }

@@ -13,8 +13,8 @@ public class InitEventTestDB {
         DB db = mongoClient.getDB("test");
         DBCollection coll = db.getCollection("serve_events");
         // coll.drop();
-        BasicDBObject doc = new BasicDBObject("story_id",
-                "50d25afcc5ace13555000006").append("uid", "test_user1")
+        BasicDBObject doc = new BasicDBObject("story_id", "50d25afcc5ace13555000006")
+                .append("uid", "test_user1")
                 .append("timespend", 300).append("tags", "tech")
                 .append("timestamp", System.currentTimeMillis());
         coll.insert(doc);
@@ -28,7 +28,7 @@ public class InitEventTestDB {
         doc = new BasicDBObject("story_id", "50d2952fb791783156000015")
                 .append("uid", "test_user1").append("timespend", 300)
                 .append("tags", "fas")
-                .append("timestamp", Long.valueOf("1357043811872"));
+                .append("timestamp", System.currentTimeMillis());
         coll.insert(doc);
     }
 }

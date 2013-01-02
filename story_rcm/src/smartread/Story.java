@@ -7,7 +7,7 @@ public class Story {
     private List<String> tags;
     private Double score;
 
-    public Story(String storyID, List<String> tags, Double score) {
+    public Story(String storyID, Double score, List<String> tags) {
         super();
         this.storyID = storyID;
         this.tags = tags;

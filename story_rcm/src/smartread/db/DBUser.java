@@ -2,6 +2,7 @@ package smartread.db;
 
 import java.net.UnknownHostException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import smartread.User;
@@ -50,7 +51,7 @@ public class DBUser {
         return new User((String) userInfo.get("uid"), maps);
     }
 
-    public static void updateUserInterest(User user) {
+    public static void updateUserInterest(String uid, String freq, List<String> tags) {
         MongoClient mongoClient = null;
         try {
             mongoClient = new MongoClient();
@@ -62,16 +63,19 @@ public class DBUser {
         DB db = mongoClient.getDB("test");
         DBCollection coll = db.getCollection("users");
 
-        DBObject q = new BasicDBObject("uid", user.getUid());
-        BasicDBObject interestsDB = null;
-        for (String key : user.getInterests().keySet()) {
-            if (interestsDB == null) {
-                interestsDB = new BasicDBObject(key, user.getInterests().get(
-                        key));
-            } else {
-                interestsDB.append(key, user.getInterests().get(key));
+        DBObject query = new BasicDBObject("uid", uid);
+        
+        BasicDBObject interestsDB = new BasicDBObject();
+        for (String key : tags) {
+            Integer value = (Integer) interestsDB.get(key);
+            if(value == null){
+                interestsDB.append(key, 1);
+            }else{
+                interestsDB.put(key, value+1);
             }
         }
-        coll.update(q, new BasicDBObject("interests", interestsDB));
+        
+        coll.update(query, new BasicDBObject().append("$set", 
+                new BasicDBObject().append("interests_"+freq, interestsDB)));
     }
 }
