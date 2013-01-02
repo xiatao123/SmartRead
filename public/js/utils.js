@@ -21,6 +21,21 @@ SR.utils = {
         $.when.apply(null, deferreds).done(callback);
     },
 
+    showNotification: function(option){
+        var DEFAULT_OPTION = {
+            message: { text: 'Operation executed successfully!' },
+            type: "success",
+            fadeOut: { enabled: true, delay: 3000 }
+            };
+
+        var newOption = $.extend({},DEFAULT_OPTION,option);
+        $('.notifications').notify(newOption).show();
+    },
+
+    hideNotification: function(){
+        $('.notifications').empty();
+    },
+
     displayValidationErrors: function (messages) {
         for (var key in messages) {
             if (messages.hasOwnProperty(key)) {

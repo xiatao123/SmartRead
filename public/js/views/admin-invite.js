@@ -28,10 +28,12 @@ SR.AdminInviteUsersView = Backbone.View.extend({
         });
 
         request.done(function(data) {
-            alert("success");
+            $(evt.target).parent().prev().text("true");
+            SR.utils.showNotification({message: "email has been sent out!"});
+
         });
         request.fail(function(jqXHR, textStatus) {
-            alert("failed");
+            SR.utils.showNotification({message: "failed to sent out the invitation email!"});
         });
     }
 });

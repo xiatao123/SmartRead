@@ -15,6 +15,10 @@
         }
     </style>
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="lib/bootstrp-notify/css/bootstrap-notify.css" rel="stylesheet">
+    <link href="lib/bootstrp-notify/css/styles/alert-notification-animations.css" rel="stylesheet">
+
+    <!--should be loaded last to overwrite others-->
     <link href="css/styles.css" rel="stylesheet">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -42,8 +46,10 @@
 <body>
 
 <div class="header"></div>
+<div class='notifications top-right'></div>
 
 <div class="container">
+    <!--<div class='notifications navbar-static-top'></div>-->
 
     <div class="row">
         <div id="content" class="span12"></div>
@@ -62,6 +68,7 @@
 <script src="lib/backbone-min.js"></script>
 <script src="lib/bootstrap.min.js"></script>
 <script src="lib/jquery.form.js"></script>
+<script src="lib/bootstrp-notify/bootstrap-notify.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.3/jquery.backstretch.min.js"></script>
 
 <script src="js/utils.js"></script>
