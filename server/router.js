@@ -50,6 +50,9 @@ module.exports = function(app) {
         });
     });
 
+    app.post('/signup', function(req, res){
+    });
+
     app.get('/lost-password', function(req, res){
         // look up the user's account via their email //
 //        AM.getEmail(req.param('email'), function(o){
