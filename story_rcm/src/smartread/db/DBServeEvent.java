@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import smartread.ServeEvent;
 
 import com.mongodb.BasicDBObject;
@@ -16,8 +19,11 @@ import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 
 public class DBServeEvent {
+    private static final Logger logger = LogManager.getLogger(DBUser.class);
 
     public static Map<String, List<ServeEvent>> QueryEvents(int min) {
+        Long starttime = System.currentTimeMillis();
+
         MongoClient mongoClient = null;
         try {
             mongoClient = new MongoClient();
@@ -30,8 +36,6 @@ public class DBServeEvent {
 
         Long current = System.currentTimeMillis();
         Long time = current - min * 60 * 1000;
-        // System.out.println(current+" "+time);
-        //time = Long.valueOf("1357049969819");
 
         DBCollection coll = db.getCollection("serve_events");
         BasicDBObject query = new BasicDBObject("timestamp", new BasicDBObject(
@@ -53,6 +57,8 @@ public class DBServeEvent {
         } finally {
             cursor.close();
         }
+        Long endtime = System.currentTimeMillis();
+        logger.debug("Time(ms) taken to retrive serve events for the last "+min+" minutes: "+ String.valueOf(endtime-starttime));
         return serves;
     }
 }

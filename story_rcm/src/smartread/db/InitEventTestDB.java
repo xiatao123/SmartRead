@@ -20,13 +20,13 @@ public class InitEventTestDB {
         coll.insert(doc);
 
         doc = new BasicDBObject("story_id", "50d2952fb791783156000015")
-                .append("uid", "test_user2").append("timespend", 300)
+                .append("uid", "test_user2").append("timespend", 200)
                 .append("tags", "fas")
                 .append("timestamp", System.currentTimeMillis());
         coll.insert(doc);
 
         doc = new BasicDBObject("story_id", "50d2952fb791783156000015")
-                .append("uid", "test_user1").append("timespend", 300)
+                .append("uid", "test_user1").append("timespend", 150)
                 .append("tags", "fas")
                 .append("timestamp", System.currentTimeMillis());
         coll.insert(doc);

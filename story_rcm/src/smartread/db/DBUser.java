@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import smartread.User;
 
 import com.mongodb.BasicDBObject;
@@ -14,7 +17,11 @@ import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 
 public class DBUser {
+    private static final Logger logger = LogManager.getLogger(DBUser.class);
+
     public static User retrieveUser(String uid) {
+        Long starttime = System.currentTimeMillis();
+
         MongoClient mongoClient = null;
         try {
             mongoClient = new MongoClient();
@@ -48,10 +55,15 @@ public class DBUser {
             }
         }
 
+        Long endtime = System.currentTimeMillis();
+        logger.debug("Time(ms) taken to retrive user from DB: "+ String.valueOf(endtime-starttime));
+
         return new User((String) userInfo.get("uid"), maps);
     }
 
-    public static void updateUserInterest(String uid, String freq, List<String> tags) {
+    public static void updateUserInterest(String uid, String freq, Map<List<String>, Double> tags) {
+        Long starttime = System.currentTimeMillis();
+
         MongoClient mongoClient = null;
         try {
             mongoClient = new MongoClient();
@@ -66,16 +78,22 @@ public class DBUser {
         DBObject query = new BasicDBObject("uid", uid);
         
         BasicDBObject interestsDB = new BasicDBObject();
-        for (String key : tags) {
-            Integer value = (Integer) interestsDB.get(key);
-            if(value == null){
-                interestsDB.append(key, 1);
-            }else{
-                interestsDB.put(key, value+1);
+        for (List<String> key : tags.keySet()) {
+            Double score = tags.get(key);
+
+            for(String tag: key){
+                Double value = (Double) interestsDB.get(tag);
+                if(value == null){
+                    interestsDB.append(tag, score);
+                }else{
+                    interestsDB.put(tag, value+score);
+                }
             }
         }
         
         coll.update(query, new BasicDBObject().append("$set", 
                 new BasicDBObject().append("interests_"+freq, interestsDB)));
+        Long endtime = System.currentTimeMillis();
+        logger.debug("Time(ms) taken to update interests for user "+uid+": "+ String.valueOf(endtime-starttime));
     }
 }

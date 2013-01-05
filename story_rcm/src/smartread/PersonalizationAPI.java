@@ -1,6 +1,7 @@
 package smartread;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,7 +11,6 @@ import smartread.db.DBUser;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.config.ConfigurationFactory;
 
 public class PersonalizationAPI {
     private static final Logger logger = LogManager.getLogger(PersonalizationAPI.class);
@@ -41,12 +41,14 @@ public class PersonalizationAPI {
         }
         
         for (String uid : serves.keySet()) {
-            List<String> tags = new ArrayList<String>();
+            Map<List<String>, Double> tags = new HashMap<List<String>, Double>();
+            
+            
             List<ServeEvent> userServes = serves.get(uid);
             for(ServeEvent s: userServes){
                 String storyID = s.getStoryID();
                 Story story = DBStory.getStory(storyID);
-                tags.addAll(story.getTags());
+                tags.put(new ArrayList<String>(story.getTags()), s.getTimespend()/300.0);
             }
             DBUser.updateUserInterest(uid, freq, tags);
         }
