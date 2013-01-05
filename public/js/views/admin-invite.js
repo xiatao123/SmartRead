@@ -20,6 +20,8 @@ SR.AdminInviteUsersView = Backbone.View.extend({
 
     inviteUser: function(evt){
         var email = $(evt.target).data('email');
+        //disable button
+        $(evt.target).attr("disabled", "disabled");
 
         var request = $.ajax({
             url: "email-invite",
@@ -28,10 +30,14 @@ SR.AdminInviteUsersView = Backbone.View.extend({
         });
 
         request.done(function(data) {
-            alert("success");
+            $(evt.target).removeAttr("disabled");
+            $(evt.target).parent().prev().text("true");
+            SR.utils.showNotification({message: "email has been sent out!"});
+
         });
         request.fail(function(jqXHR, textStatus) {
-            alert("failed");
+            $(evt.target).removeAttr("disabled");
+            SR.utils.showNotification({message: "failed to sent out the invitation email!"});
         });
     }
 });

@@ -75,3 +75,13 @@ IM.getEmail = function(email, callback)
 {
     IM.invites.findOne({email:email}, function(e, o){ callback(o); });
 };
+
+IM.update = function(newData, callback)
+{
+    IM.invites.findOne({email:newData.email}, function(e, o){
+        o.email 	= newData.email;
+        o.accountId 	= newData.accountId;
+        o.isInvited 	= newData.isInvited;
+        IM.invites.save(o); callback(o);
+    });
+};

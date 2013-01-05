@@ -194,3 +194,9 @@ label {
     margin-right: 40px;
     margin-top: 5px;
 }
+
+/*overwrite notification*/
+.notifications.top-right {
+    right: 10px;
+    top: 45px;
+}

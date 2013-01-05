@@ -4,12 +4,13 @@ SR.AppRouter = Backbone.Router.extend({
 
     routes: {
         ""                  : "list",
-        "home"                  : "home",
+        "home"              : "home",
+        "signup"            : "signup",
         "posts"	            : "list",
         "posts/page/:page"	: "list",
         "posts/add"         : "addPost",
         "posts/:id"         : "postDetails",
-        "admin-invite"         : "adminInviteList",
+        "admin-invite"      : "adminInviteList",
         "about"             : "about"
     },
 
@@ -38,6 +39,15 @@ SR.AppRouter = Backbone.Router.extend({
         this.headerView.selectMenuItem('home-menu');
         $.backstretch("../css/img/bg2.jpg");
 //        $('body').addClass("homeView");
+    },
+
+    signup: function(){
+        this.renderHeader();
+        if(!this.signupView){
+            this.signupView = new SR.SignupView();
+        }
+        $('#content').html(this.signupView.el);
+        $.backstretch("../css/img/bg2.jpg");
     },
 
 	list: function(page) {
@@ -111,7 +121,7 @@ SR.AppRouter = Backbone.Router.extend({
 
 });
 
-SR.utils.loadTemplate(['HomeView', 'HeaderView', 'PostView', 'PostListItemView', 'AboutView','PostModalView','AdminInviteUsersView'], function() {
+SR.utils.loadTemplate(['HomeView', 'HeaderView', 'PostView', 'PostListItemView', 'AboutView','PostModalView','SignupView','AdminInviteUsersView'], function() {
     SR.app = new SR.AppRouter();
     Backbone.history.start();
 });
