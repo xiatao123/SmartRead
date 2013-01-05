@@ -10,6 +10,7 @@ import smartread.db.DBUser;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.config.ConfigurationFactory;
 
 public class PersonalizationAPI {
     private static final Logger logger = LogManager.getLogger(PersonalizationAPI.class);
@@ -20,7 +21,7 @@ public class PersonalizationAPI {
         User user = DBUser.retrieveUser(uid);
         Long endtime = System.currentTimeMillis();
         
-        logger.error("Time(ms) taken to retrive user story: "+ String.valueOf(endtime-starttime));
+        logger.debug("Time(ms) taken to retrive user story: "+ String.valueOf(endtime-starttime));
         
         return calcualte(user, stories);
     }
@@ -50,7 +51,7 @@ public class PersonalizationAPI {
             DBUser.updateUserInterest(uid, freq, tags);
         }
         Long endtime = System.currentTimeMillis();
-        logger.error("Time(ms) taken to update user interests for "+lookbackMinute+" minutes: "+ String.valueOf(endtime-starttime));
+        logger.debug("Time(ms) taken to update user interests for "+lookbackMinute+" minutes: "+ String.valueOf(endtime-starttime));
     }
 
     private List<Story> calcualte(User user, List<Story> stories) {
@@ -64,7 +65,7 @@ public class PersonalizationAPI {
             s.setScore(s.getScore()*Utils.evaluateInterest(interest, tags));
         }
         Long endtime = System.currentTimeMillis();
-        logger.error("Time(ms) taken to calculate story point for user "+user.getUid()+": "+ String.valueOf(endtime-starttime));
+        logger.debug("Time(ms) taken to calculate story point for user "+user.getUid()+": "+ String.valueOf(endtime-starttime));
         return stories;
     }
 
@@ -76,7 +77,7 @@ public class PersonalizationAPI {
 
         List<Story> stories = api.getUserStory("test_user1");
         for (Story s : stories) {
-            System.out.println(s);
+            //System.out.println(s);
         }
         logger.trace("Exiting application.");
     }
