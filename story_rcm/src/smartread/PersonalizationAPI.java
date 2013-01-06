@@ -79,7 +79,7 @@ public class PersonalizationAPI {
 
         List<Story> stories = api.getUserStory("test_user1");
         for (Story s : stories) {
-            //System.out.println(s);
+            System.out.println(s);
         }
         logger.trace("Exiting application.");
     }

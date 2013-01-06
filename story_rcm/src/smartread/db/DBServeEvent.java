@@ -12,27 +12,25 @@ import org.apache.logging.log4j.Logger;
 import smartread.ServeEvent;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
 
-public class DBServeEvent {
+public class DBServeEvent extends DBBase{
     private static final Logger logger = LogManager.getLogger(DBUser.class);
 
     public static Map<String, List<ServeEvent>> QueryEvents(int min) {
         Long starttime = System.currentTimeMillis();
 
-        MongoClient mongoClient = null;
-        try {
-            mongoClient = new MongoClient();
-        } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return null;
+        if(mongoClient == null){
+            try {
+                initDB();
+            } catch (UnknownHostException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                return null;
+            }
         }
-        DB db = mongoClient.getDB("test");
 
         Long current = System.currentTimeMillis();
         Long time = current - min * 60 * 1000;
@@ -58,7 +56,7 @@ public class DBServeEvent {
             cursor.close();
         }
         Long endtime = System.currentTimeMillis();
-        logger.debug("Time(ms) taken to retrive serve events for the last "+min+" minutes: "+ String.valueOf(endtime-starttime));
+        logger.debug("Time(ms) taken to query serve events for the last "+min+" minutes: "+ String.valueOf(endtime-starttime));
         return serves;
     }
 }

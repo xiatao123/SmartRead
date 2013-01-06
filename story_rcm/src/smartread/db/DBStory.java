@@ -4,28 +4,33 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bson.types.ObjectId;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
 
 import smartread.Story;
 
-public class DBStory {
-    public static List<Story> retrieveDefaultStory() {
-        MongoClient mongoClient = null;
-        try {
-            mongoClient = new MongoClient();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-            return null;
-        }
-        DB db = mongoClient.getDB("test");
+public class DBStory extends DBBase{
+    private static final Logger logger = LogManager.getLogger(DBStory.class);
 
+    public static List<Story> retrieveDefaultStory() {
+        Long starttime = System.currentTimeMillis();
+
+        if(mongoClient == null){
+            try {
+                initDB();
+            } catch (UnknownHostException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                return null;
+            }
+        }
+        
         DBCollection coll = db.getCollection("stories");
 
         DBCursor cursor = coll.find();
@@ -42,18 +47,23 @@ public class DBStory {
         } finally {
             cursor.close();
         }
+        Long endtime = System.currentTimeMillis();
+        logger.debug("Time(ms) taken to retrive default stories from DB: "+ String.valueOf(endtime-starttime));
         return stories;
     }
     
     public static Story getStory(String storyID){
-        MongoClient mongoClient = null;
-        try {
-            mongoClient = new MongoClient();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-            return null;
+        Long starttime = System.currentTimeMillis();
+
+        if(mongoClient == null){
+            try {
+                initDB();
+            } catch (UnknownHostException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                return null;
+            }
         }
-        DB db = mongoClient.getDB("test");
 
         DBCollection coll = db.getCollection("stories");
 
@@ -65,6 +75,9 @@ public class DBStory {
         List<String> tags = new ArrayList<String>();
         tags.add((String) story.get("category"));
         
+        Long endtime = System.currentTimeMillis();
+        logger.debug("Time(ms) taken to retrive story "+storyID+" from DB: "+ String.valueOf(endtime-starttime));
+
         return new Story(storyID, score, tags);
     }
 }

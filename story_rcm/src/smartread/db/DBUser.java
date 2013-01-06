@@ -11,26 +11,25 @@ import org.apache.logging.log4j.Logger;
 import smartread.User;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
 
-public class DBUser {
+public class DBUser extends DBBase{
     private static final Logger logger = LogManager.getLogger(DBUser.class);
 
     public static User retrieveUser(String uid) {
         Long starttime = System.currentTimeMillis();
 
-        MongoClient mongoClient = null;
-        try {
-            mongoClient = new MongoClient();
-        } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return null;
+        if(mongoClient == null){
+            try {
+                initDB();
+            } catch (UnknownHostException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                return null;
+            }
         }
-        DB db = mongoClient.getDB("test");
+        
         DBCollection coll = db.getCollection("users");
 
         DBObject obj = new BasicDBObject("uid", uid);
@@ -64,15 +63,16 @@ public class DBUser {
     public static void updateUserInterest(String uid, String freq, Map<List<String>, Double> tags) {
         Long starttime = System.currentTimeMillis();
 
-        MongoClient mongoClient = null;
-        try {
-            mongoClient = new MongoClient();
-        } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return;
+        if(mongoClient == null){
+            try {
+                initDB();
+            } catch (UnknownHostException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                return;
+            }
         }
-        DB db = mongoClient.getDB("test");
+
         DBCollection coll = db.getCollection("users");
 
         DBObject query = new BasicDBObject("uid", uid);
