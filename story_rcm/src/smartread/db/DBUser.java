@@ -34,11 +34,15 @@ public class DBUser extends DBBase{
 
         DBObject obj = new BasicDBObject(DB_UID_FIELD, uid);
         DBObject userInfo = coll.findOne(obj);
+        if(userInfo==null){
+            logger.error("Cannot find user: "+uid+" in DB");
+            return null;
+        }
 
         Map<String, Double> maps = new HashMap<String, Double>();
         DBObject interests;
 
-        String[] int_info = { "interests_5m", "interests_1d", "interests_7d" };
+        String[] int_info = { "interests_5m", "interests_1h", "interests_1d", "interests_7d" };
         for (String s : int_info) {
             interests = (DBObject) userInfo.get(s);
             for (String key : interests.keySet()) {
