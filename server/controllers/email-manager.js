@@ -46,9 +46,9 @@ EM.dispatchSignupLink = function(email, callback)
     }, callback );
 };
 
-EM.composeSignupEmail = function(o)
+EM.composeSignupEmail = function(email)
 {
-    var link = 'http://localhost:3000/signup?e='+o.email;
+    var link = 'http://localhost:3000/#signup/'+email;
     var html = "<html><body>";
     html += "你好,<br><br>";
     html += "欢迎你申请尝试悦读网，希望它能伴随你成长！</b><br><br>";

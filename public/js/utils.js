@@ -32,8 +32,41 @@ SR.utils = {
         $('.notifications').notify(newOption).show();
     },
 
+    showError: function(option){
+//        {html: true, message: msg, type: "error",delay:6000,fadeOut: { enabled: false, delay: 3000 }}
+        var DEFAULT_OPTION = {
+            message: { text: 'Operation executed successfully!' },
+            type: "error",
+            fadeOut: { enabled: false, delay: 3000 }
+        };
+
+        var newOption = $.extend({},DEFAULT_OPTION,option);
+        $('.notifications').notify(newOption).show();
+    },
+
+    showSystemError: function(option){
+        var DEFAULT_OPTION = {
+            message: { text: '对不起，系统异常，请稍后再尝试！' },
+            type: "error",
+            fadeOut: { enabled: true, delay: 5000 }
+        };
+
+        var newOption = $.extend({},DEFAULT_OPTION,option);
+        $('.notifications').notify(newOption).show();
+    },
+
     hideNotification: function(){
         $('.notifications').empty();
+    },
+
+    disableButton: function(button, label){
+        button.attr("disabled", "disabled");
+        button.text(label);
+    },
+
+    enableButton: function(button, label){
+        button.removeAttr("disabled");
+        button.text(label);
     },
 
     displayValidationErrors: function (messages) {

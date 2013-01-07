@@ -30,7 +30,7 @@ IM.requireInvite = function(email, callback)
 {
     IM.invites.findOne({email:email}, function(e, o) {
         if (o){
-            callback('email already existed.');
+            callback('email-already-register');
         }else{
             IM.invites.insert({
                 email: email,
