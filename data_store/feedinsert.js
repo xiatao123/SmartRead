@@ -62,7 +62,7 @@ function callback(error, meta, articles){
 					comments: article.comments,
 					//: config.category[meta.link],
 					//keywords: tags,
-					image: imgurl				
+					picture: imgurl				
 				}, {
 					upsert: true
 				}, function(){
