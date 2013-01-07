@@ -12,7 +12,7 @@ public class InitUserTestDB {
         MongoClient mongoClient = new MongoClient();
         DB db = mongoClient.getDB("test");
         DBCollection coll = db.getCollection("users");
-        coll.drop();
+        //coll.drop();
         BasicDBObject doc = new BasicDBObject("uid", "test_user1")
                 .append("interests_5m",
                         new BasicDBObject("tech", 2).append("news", 3))
