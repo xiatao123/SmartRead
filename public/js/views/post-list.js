@@ -53,7 +53,9 @@ SR.PostListItemView = Backbone.View.extend({
     },
 
     render: function () {
-        $(this.el).html(this.template(this.model.toJSON()));
+        var item = this.model.toJSON();
+        item['description'] = item['description'].substr(0,150) + " 。。。";
+        $(this.el).html(this.template(item));
         return this;
     }
 
