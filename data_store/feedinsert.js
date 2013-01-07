@@ -1,6 +1,6 @@
 var feedparser = require('feedparser'),
     cheerio = require('cheerio'),
-    request = require('request'),
+//    request = require('request'),
 	mongo = require('mongodb'),
 	gridstore = mongo.GridStore,
 	config = require('./config.js'),
@@ -34,6 +34,8 @@ function callback(error, meta, articles){
 		db.collection("posts", function(error, collection){
 			
 		    articles.forEach(function (article){
+
+                console.log(article);
 
 		  //   	request(article.link, function(error, response, body) {
     //     			var $ = cheerio.load(body);
