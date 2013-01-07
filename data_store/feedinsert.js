@@ -93,6 +93,7 @@ function callback(error, meta, articles){
   }//else
 }//callback
 
+feedparser.parseUrl(config.sites.tech.url1, callback);
 feedparser.parseUrl(config.sites.tech.url2, callback);
 // for(var i = 0; i <urllist.length; i++){
 // 	feedparser.parseUrl(urllist[i], callback);

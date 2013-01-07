@@ -16,7 +16,7 @@ PM.db.open(function(err, db){
         PM.db.collection('posts', {safe:true}, function(err, collection) {
             if (err) {
                 console.log("The 'posts' collection doesn't exist. Creating it with sample data...");
-                populateDB();
+//                populateDB();
             }
         });
     }else{
