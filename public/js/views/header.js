@@ -35,6 +35,7 @@ SR.HeaderView = Backbone.View.extend({
     openModal: function(evt){
         evt.preventDefault();
         $('#loginModal').modal({backdrop:false});
+        $('#user-tf').focus();
     },
 
     logout: function(evt){

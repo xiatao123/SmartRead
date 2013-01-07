@@ -5,7 +5,7 @@ SR.AppRouter = Backbone.Router.extend({
     routes: {
         ""                  : "list",
         "home"              : "home",
-        "signup"            : "signup",
+        "signup/:email"     : "signup",
         "posts"	            : "list",
         "posts/page/:page"	: "list",
         "posts/add"         : "addPost",
@@ -41,12 +41,20 @@ SR.AppRouter = Backbone.Router.extend({
 //        $('body').addClass("homeView");
     },
 
-    signup: function(){
+    signup: function(email){
         this.renderHeader();
         if(!this.signupView){
-            this.signupView = new SR.SignupView();
+            this.signupView = new SR.SignupView(email);
         }
         $('#content').html(this.signupView.el);
+
+        $('#name-tf').focus();
+        this.signupView.bindSignupjQueryForm();
+
+        $('.modal-alert').modal({ show : false, keyboard : false, backdrop : 'static' });
+        $('.modal-alert .modal-header h3').text('Success!');
+        $('.modal-alert .modal-body p').html('Your account has been created.</br>Click OK to return to the login page.');
+
         $.backstretch("../css/img/bg2.jpg");
     },
 

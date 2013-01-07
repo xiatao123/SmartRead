@@ -11,89 +11,57 @@ SR.HomeView = Backbone.View.extend({
         return this;
     },
 
-//    events: {
-//        "click .login"   : "login"
-//    },
-
     bindLogonjQueryForm: function(){
+        var lv = new LoginValidator();
+
         $('#login-form').ajaxForm({
             beforeSubmit : function(formData, jqForm, options){
-//                if (lv.validateForm() == false){
-//                    return false;
-//                } 	else{
-//                    // append 'remember-me' option to formData to write local cookie //
-//                    formData.push({name:'remember-me', value:$("input:checkbox:checked").length == 1})
-//                    return true;
-//                }
-                formData.push({name:'remember-me', value:$("input:checkbox:checked").length == 1})
-                return true;
+                if (lv.validateForm() === false){
+                    return false;
+                } 	else{
+                    // append 'remember-me' option to formData to write local cookie //
+                    formData.push({name:'remember-me', value:$("input:checkbox:checked").length == 1})
+                    return true;
+                }
             },
             success	: function(data, status, xhr, $form){
                 $('#loginModal').hide();
                 SR.app.navigate("posts", {trigger: true});
             },
             error : function(e){
-//                lv.showLoginError('Login Failure', 'Please check your username and/or password');
+                if(e.responseText === "user-not-found" || e.responseText === "invalid-password"){
+                    lv.invalidLogin();
+                }else{
+                    SR.utils.showSystemError();
+                }
+
+
             },
             resetForm: true
         });
     },
 
     bindInvitejQueryForm: function(){
+        var iv = new InviteValidator();
+
         $('#invite-form').ajaxForm({
             beforeSubmit : function(formData, jqForm, options){
-//                if (lv.validateForm() == false){
-//                    return false;
-//                } 	else{
-//                    // append 'remember-me' option to formData to write local cookie //
-//                    formData.push({name:'remember-me', value:$("input:checkbox:checked").length == 1})
-//                    return true;
-//                }
-//                formData.push({name:'remember-me', value:$("input:checkbox:checked").length == 1})
+                if (iv.validateForm() == false){
+                    return false;
+                }
                 return true;
             },
             success	: function(data, status, xhr, $form){
-//                $('#loginModal').hide();
-                  alert("We will send you an email invite soon!");
-//                SR.app.navigate("posts", {trigger: true});
+                SR.utils.showNotification({message: "欢迎申请悦读体验，我们会尽快并通知您！"});
             },
             error : function(e){
-                alert("some problem with our server, please try again!");
-//                lv.showLoginError('Login Failure', 'Please check your username and/or password');
+                if(e.responseText === "email-already-register"){
+                    SR.utils.showError({message: "您的邮箱此前已经申请过体验，我们会尽快处理并通知您。"});
+                }else{
+                    SR.utils.showSystemError();
+                }
             },
             resetForm: true
         });
     }
-
-//    bindjQueryForm1: function(){
-//            $('#login-form').submit(function() {
-//                // inside event callbacks 'this' is the DOM element so we first
-//                // wrap it in a jQuery object and then invoke ajaxSubmit
-//                $(this).ajaxSubmit({
-//                    beforeSubmit : function(formData, jqForm, options){
-//                        //                if (lv.validateForm() == false){
-//                        //                    return false;
-//                        //                } 	else{
-//                        //                    // append 'remember-me' option to formData to write local cookie //
-//                        //                    formData.push({name:'remember-me', value:$("input:checkbox:checked").length == 1})
-//                        //                    return true;
-//                        //                }
-//                        formData.push({name:'remember-me', value:$("input:checkbox:checked").length == 1})
-//                        return true;
-//                    },
-//                    success	: function(data, status, xhr, $form){
-//                        SR.app.navigate("posts", {trigger: true});
-//                        return false;
-//                    },
-//                    error : function(e){
-//                        //                lv.showLoginError('Login Failure', 'Please check your username and/or password');
-//                    }
-//                });
-//
-//                // !!! Important !!!
-//                // always return false to prevent standard browser submit and page navigation
-//                return false;
-//            });
-//    }
-
 });
