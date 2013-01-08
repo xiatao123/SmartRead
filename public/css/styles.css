@@ -67,7 +67,8 @@ a.plain:hover {
 /*}*/
 
 .thumbnail {
-    min-height: 450px;
+    /*min-height: 450px;*/ /*include description*/
+    min-height: 320px;
     background-color: #FFFFFF;
     border: medium none;
     border-radius: 4px 4px 4px 4px;
@@ -76,6 +77,18 @@ a.plain:hover {
     line-height: 20px;
     padding: 25px;
     transition: all 0.2s ease-in-out 0s;
+}
+
+.from_source{
+    font-size: 10px;
+}
+
+.story_image_container{
+    height: 200px;
+}
+
+.story_image{
+    max-height: 240px;
 }
 
 /*.thumbnails li {*/
@@ -204,4 +217,9 @@ label {
     right: 10px;
     top: 45px;
     min-width: 250px;
+}
+
+/* hide scroll bar when model dialog is open.*/
+body.modal-open {
+    overflow: hidden;
 }
