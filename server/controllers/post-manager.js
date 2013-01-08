@@ -16,7 +16,7 @@ PM.db.open(function(err, db){
         PM.db.collection('posts', {safe:true}, function(err, collection) {
             if (err) {
                 console.log("The 'posts' collection doesn't exist. Creating it with sample data...");
-                populateDB();
+//                populateDB();
             }
         });
     }else{
@@ -38,7 +38,7 @@ PM.findById = function(req, res) {
 
 PM.findAll = function(req, res) {
     PM.db.collection('posts', function(err, collection) {
-        collection.find().toArray(function(err, items) {
+        collection.find().sort({pubDate:-1}).toArray(function(err, items) {
 //            console.log("Frank","Wang",items);
             res.send(items);
         });

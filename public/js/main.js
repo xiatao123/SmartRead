@@ -4,12 +4,13 @@ SR.AppRouter = Backbone.Router.extend({
 
     routes: {
         ""                  : "list",
-        "home"                  : "home",
+        "home"              : "home",
+        "signup/:email"     : "signup",
         "posts"	            : "list",
         "posts/page/:page"	: "list",
         "posts/add"         : "addPost",
         "posts/:id"         : "postDetails",
-        "admin-invite"         : "adminInviteList",
+        "admin-invite"      : "adminInviteList",
         "about"             : "about"
     },
 
@@ -38,6 +39,23 @@ SR.AppRouter = Backbone.Router.extend({
         this.headerView.selectMenuItem('home-menu');
         $.backstretch("../css/img/bg2.jpg");
 //        $('body').addClass("homeView");
+    },
+
+    signup: function(email){
+        this.renderHeader();
+        if(!this.signupView){
+            this.signupView = new SR.SignupView(email);
+        }
+        $('#content').html(this.signupView.el);
+
+        $('#name-tf').focus();
+        this.signupView.bindSignupjQueryForm();
+
+        $('.modal-alert').modal({ show : false, keyboard : false, backdrop : 'static' });
+        $('.modal-alert .modal-header h3').text('Success!');
+        $('.modal-alert .modal-body p').html('Your account has been created.</br>Click OK to return to the login page.');
+
+        $.backstretch("../css/img/bg2.jpg");
     },
 
 	list: function(page) {
@@ -111,7 +129,7 @@ SR.AppRouter = Backbone.Router.extend({
 
 });
 
-SR.utils.loadTemplate(['HomeView', 'HeaderView', 'PostView', 'PostListItemView', 'AboutView','PostModalView','AdminInviteUsersView'], function() {
+SR.utils.loadTemplate(['HomeView', 'HeaderView', 'PostView', 'PostListItemView', 'AboutView','PostModalView','SignupView','AdminInviteUsersView'], function() {
     SR.app = new SR.AppRouter();
     Backbone.history.start();
 });

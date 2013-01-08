@@ -1,6 +1,6 @@
 var feedparser = require('feedparser'),
     cheerio = require('cheerio'),
-    request = require('request'),
+	request = require('request'),
 	mongo = require('mongodb'),
 	gridstore = mongo.GridStore,
 	config = require('./config.js'),
@@ -8,7 +8,6 @@ var feedparser = require('feedparser'),
 	port = require('./config.js').port,
 	db = new mongo.Db("smartreaddb", new mongo.Server(host, port, {}), {safe:false});
 
-//var tags;
 function getTags(link, fn){
 
 	request(link, function(error, response, body) {
@@ -31,6 +30,8 @@ function callback(error, meta, articles){
 		db.collection("posts", function(error, collection){
 			
 		    articles.forEach(function (article){
+
+                console.log(article);
 
 		  //   	request(article.link, function(error, response, body) {
     //     			var $ = cheerio.load(body);

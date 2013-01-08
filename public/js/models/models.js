@@ -63,11 +63,6 @@ SR.PostCollection = Backbone.Collection.extend({
 
 });
 
-//SR.Account = Backbone.Model.extend({
-//    urlRoot: "/"
-//
-//});
-
 SR.Invite = Backbone.Model.extend({
     urlRoot: "/invite-users",
     idAttribute: "_id",

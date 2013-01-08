@@ -50,6 +50,38 @@ module.exports = function(app) {
         });
     });
 
+    app.post('/signup', function(req, res){
+        IM.getEmail(req.param('email'), function(o){
+            if (o){
+                if(o.isInvited){
+                    AM.signup({
+                        name 	: req.param('name'),
+                        email 	: req.param('email'),
+                        user 	: req.param('user'),
+                        pass	: req.param('pass')
+                    }, function(e, o){
+                        if (e){
+                            res.send(e, 400);
+                        }	else{
+                            AM.manualLogin(req.param('user'), req.param('pass'), function(e, o){
+                                if (!o){
+                                    res.send(e, 400);
+                                }	else{
+                                    req.session.user = o;
+                                    res.send(200, o);
+                                }
+                            });
+                        }
+                    });
+                }else{
+                    res.send('email-not-invited-yet', 400);
+                }
+            }	else{
+                res.send('email-not-found-in-invite', 400);
+            }
+        });
+    });
+
     app.get('/lost-password', function(req, res){
         // look up the user's account via their email //
 //        AM.getEmail(req.param('email'), function(o){
@@ -74,7 +106,7 @@ module.exports = function(app) {
     app.post('/require-invite', function(req,res){
         IM.requireInvite(req.param('email'),function(e){
             if(e){
-                res.send('already_registered_for_invite',200);
+                res.send(e,400);
             }else{
                 res.send('ok',200);
             }

@@ -35,6 +35,7 @@ SR.HeaderView = Backbone.View.extend({
     openModal: function(evt){
         evt.preventDefault();
         $('#loginModal').modal({backdrop:false});
+        $('#user-tf').focus();
     },
 
     logout: function(evt){
@@ -45,7 +46,12 @@ SR.HeaderView = Backbone.View.extend({
         });
 
         request.done(function(data) {
-            SR.app.navigate("home",{trigger: true});
+            var navTo = "home";
+            //hack to navigate to same URL with a refresh.
+            if(Backbone.history.fragment === "home"){
+                navTo = "";
+            }
+            SR.app.navigate(navTo,{trigger: true});
         });
     },
 

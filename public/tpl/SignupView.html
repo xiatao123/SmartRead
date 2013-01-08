@@ -1,0 +1,49 @@
+<form class="form-horizontal well span8" id="signup-form" method="post" action="signup">
+<h1>个人注册</h1>
+
+<p class="subheading" id="sub1">简单介绍下你自己吧！</p>
+<hr>
+<fieldset>
+<div class="control-group" id="name-cg">
+    <label class="control-label" for="name-tf">姓名昵称</label>
+
+    <div class="controls">
+        <input type="text" class="input-xlarge" name="name" id="name-tf">
+    </div>
+</div>
+<div class="control-group" id="email-cg">
+    <label class="control-label" for="email-tf">邮箱</label>
+
+    <div class="controls">
+        <input type="text" class="input-xlarge" name="email" id="email-tf" value="<%= email%>" readonly>
+    </div>
+</div>
+<hr>
+<p class="subheading" id="sub2">选择您的登陆名和密码</p>
+
+<div class="control-group" id="user-cg">
+    <label class="control-label" for="user-tf">登陆名</label>
+
+    <div class="controls">
+        <input type="text" class="input-xlarge disabled" name="user" id="user-tf">
+    </div>
+</div>
+<div class="control-group" id="pass-cg">
+    <label class="control-label" for="pass-tf">密码</label>
+
+    <div class="controls">
+        <input type="password" class="input-xlarge" value="" name="pass" id="pass-tf">
+    </div>
+</div>
+<div class="control-group" id="vpass-cg">
+    <label class="control-label" for="vpass-tf">确认密码</label>
+
+    <div class="controls">
+        <input type="password" class="input-xlarge" value="" name="vpass" id="vpass-tf">
+    </div>
+</div>
+<div class="form-actions">
+    <button class="btn btn-primary" id="account-form-btn2" type="submit">立即注册</button>
+</div>
+</fieldset>
+</form>

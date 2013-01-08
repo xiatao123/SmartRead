@@ -191,12 +191,22 @@ label {
 
 #remember-me{
     float: right;
-    margin-right: 40px;
+    margin-right: 70px;
     margin-top: 5px;
+}
+
+.loginError{
+    color: red;
 }
 
 /*overwrite notification*/
 .notifications.top-right {
     right: 10px;
     top: 45px;
+    min-width: 250px;
+}
+
+/* hide scroll bar when model dialog is open.*/
+body.modal-open {
+    overflow: hidden;
 }
