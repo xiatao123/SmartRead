@@ -1,5 +1,5 @@
 <div href="#posts/<%= _id %>" class="thumbnail plain">
-    <a class="sr_thumbnail" href="javascript:void(0)" id="<%= _id %>"><img src="<%= picture %>" alt=""></a>
+    <div class="story_image_container"><a class="sr_thumbnail" href="javascript:void(0)" id="<%= _id %>"><img class="story_image" src="<%= picture %>" alt=""></a></div>
     <!--<a class="sr_thumbnail" href="javascript:void(0)" id="<%= _id %>"><img src="<%= picture === null ? 'pics/generic.jpg' : 'pics/' + picture %>" alt=""></a>-->
     <!--<a href="#posts/<%= _id %>"><img src="<%= picture === null ? 'pics/generic.jpg' : 'pics/' + picture %>" alt=""></a>-->
     <h4><a class="sr_thumbnail" href="javascript:void(0)" id="<%= _id %>"><%= name %></a></h4>
