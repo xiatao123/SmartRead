@@ -25,7 +25,7 @@ SR.HomeView = Backbone.View.extend({
                 }
             },
             success	: function(data, status, xhr, $form){
-                $('#loginModal').hide();
+                $('#loginModal').modal('hide');
                 SR.app.navigate("posts", {trigger: true});
             },
             error : function(e){
