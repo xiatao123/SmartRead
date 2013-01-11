@@ -1,14 +1,8 @@
 var feedparser = require('feedparser'),
     cheerio = require('cheerio'),
 	request = require('request'),
-	mongo = require('mongodb'),
 	gridstore = mongo.GridStore,
 	config = require('./config.js');
-
-
-//	var host = require('./config.js').host,
-//	port = require('./config.js').port,
-//	db = new mongo.Db("smartreaddb", new mongo.Server(host, port, {}), {safe:false});
 
 var DataProvider = require('../server/db-provider').DataProvider;
 var options = require('../server/db-settings');
@@ -23,7 +17,7 @@ function getTags(link, fn){
         fn($('meta[name=keywords]').attr('content'));       
     });
 
-};
+}
 
 function callback(error, meta, articles){
   if (error) {
@@ -127,8 +121,6 @@ function callback(error, meta, articles){
         });
     });
       dataProvider.db.close();
-
-//			db.close();
   }//else
 }//callback
 
