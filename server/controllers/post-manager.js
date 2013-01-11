@@ -1,15 +1,5 @@
-var mongo = require('mongodb');
-
 var DataProvider = require('../db-provider').DataProvider;
 var options = require('../db-settings');
-
-var Server = mongo.Server,
-    Db = mongo.Db,
-    BSON = mongo.BSONPure;
-
-var dbPort = global.port;
-var dbHost = global.host;
-var dbName = global.dbname;
 
 var PM = {};
 
