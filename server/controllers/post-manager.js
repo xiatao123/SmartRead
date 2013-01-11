@@ -1,5 +1,8 @@
 var mongo = require('mongodb');
 
+var DataProvider = require('../db-provider').DataProvider;
+var options = require('../db-settings');
+
 var Server = mongo.Server,
     Db = mongo.Db,
     BSON = mongo.BSONPure;
@@ -9,54 +12,38 @@ var dbHost = global.host;
 var dbName = global.dbname;
 
 var PM = {};
-PM.db = new Db(dbName, new Server(dbHost, dbPort, {auto_reconnect: true}, {}));
-PM.db.open(function(err, db){
-    if(!err) {
-        console.log("Connected to 'smartreaddb' database");
-        PM.db.collection('posts', {safe:true}, function(err, collection) {
-            if (err) {
-                console.log("The 'posts' collection doesn't exist. Creating it with sample data...");
-//                populateDB();
-            }
-        });
-    }else{
-        console.log(err);
-    }
-});
+
+var dp = new DataProvider(options);
+
+PM.db = dp.db;
+PM.posts =  PM.db.collection('posts');
 
 module.exports = PM;
 
 PM.findById = function(req, res) {
     var id = req.params.id;
     console.log('Retrieving post: ' + id);
-    PM.db.collection('posts', function(err, collection) {
-        collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, item) {
-            res.send(item);
-        });
+    PM.posts.findOne({'_id':new BSON.ObjectID(id)}, function(err, item) {
+        res.send(item);
     });
 };
 
 PM.findAll = function(req, res) {
-    PM.db.collection('posts', function(err, collection) {
-        collection.find().sort({pubDate:-1}).toArray(function(err, items) {
-//            console.log("Frank","Wang",items);
-            res.send(items);
-        });
+    PM.posts.find().sort({pubDate:-1}).toArray(function(err, items) {
+        res.send(items);
     });
 };
 
 PM.addPost = function(req, res) {
     var post = req.body;
     console.log('Adding post: ' + JSON.stringify(post));
-    PM.db.collection('posts', function(err, collection) {
-        collection.insert(post, {safe:true}, function(err, result) {
-            if (err) {
-                res.send({'error':'An error has occurred'});
-            } else {
-                console.log('Success: ' + JSON.stringify(result[0]));
-                res.send(result[0]);
-            }
-        });
+    PM.posts.insert(post, {safe:true}, function(err, result) {
+        if (err) {
+            res.send({'error':'An error has occurred'});
+        } else {
+            console.log('Success: ' + JSON.stringify(result[0]));
+            res.send(result[0]);
+        }
     });
 };
 
@@ -66,31 +53,27 @@ PM.updatePost = function(req, res) {
     delete post._id;
     console.log('Updating post: ' + id);
     console.log(JSON.stringify(post));
-    PM.db.collection('posts', function(err, collection) {
-        collection.update({'_id':new BSON.ObjectID(id)}, post, {safe:true}, function(err, result) {
-            if (err) {
-                console.log('Error updating post: ' + err);
-                res.send({'error':'An error has occurred'});
-            } else {
-                console.log('' + result + ' document(s) updated');
-                res.send(post);
-            }
-        });
+    PM.posts.update({'_id':new BSON.ObjectID(id)}, post, {safe:true}, function(err, result) {
+        if (err) {
+            console.log('Error updating post: ' + err);
+            res.send({'error':'An error has occurred'});
+        } else {
+            console.log('' + result + ' document(s) updated');
+            res.send(post);
+        }
     });
 };
 
 PM.deletePost = function(req, res) {
     var id = req.params.id;
     console.log('Deleting post: ' + id);
-    PM.db.collection('posts', function(err, collection) {
-        collection.remove({'_id':new BSON.ObjectID(id)}, {safe:true}, function(err, result) {
-            if (err) {
-                res.send({'error':'An error has occurred - ' + err});
-            } else {
-                console.log('' + result + ' document(s) deleted');
-                res.send(req.body);
-            }
-        });
+    PM.posts.remove({'_id':new BSON.ObjectID(id)}, {safe:true}, function(err, result) {
+        if (err) {
+            res.send({'error':'An error has occurred - ' + err});
+        } else {
+            console.log('' + result + ' document(s) deleted');
+            res.send(req.body);
+        }
     });
 };
 

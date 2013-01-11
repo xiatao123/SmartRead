@@ -11,23 +11,26 @@ var dbName = global.dbname;
 
 var moment = require('moment');
 
+var DataProvider = require('../db-provider').DataProvider;
+var options = require('../db-settings');
+
+
 var AM = {};
 
-AM.db = new Db(dbName, new Server(dbHost, dbPort, {auto_reconnect: true}, {}));
-AM.db.open(function(err, db){
-    if(!err) {
-        console.log("Connected to 'smartreaddb' database");
-        AM.db.collection('accounts', {safe:true}, function(err, collection) {
-            if (err) {
-                populateDB();
-            }
-        });
-    }else{
-        console.log(err);
-    }
-
-    AM.accounts =  AM.db.collection('accounts');
+var dp = new DataProvider(options, function(){
+    //Initialization if account collection not existed.
+    console.log("initialize here ... ");
+    AM.db.collection('accounts', {safe:true}, function(err, collection) {
+        if (err) {
+            console.log("The 'accounts' collection doesn't exist. Creating it with sample data...");
+            populateDB();
+        }
+    });
 });
+
+
+AM.db = dp.db;
+AM.accounts =  AM.db.collection('accounts');
 
 module.exports = AM;
 

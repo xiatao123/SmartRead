@@ -1,5 +1,8 @@
 var mongo = require('mongodb');
 
+var DataProvider = require('../db-provider').DataProvider;
+var options = require('../db-settings');
+
 var bcrypt = require('bcrypt');
 var Server = mongo.Server,
     Db = mongo.Db,
@@ -13,16 +16,10 @@ var moment = require('moment');
 
 var IM = {};
 
-IM.db = new Db(dbName, new Server(dbHost, dbPort, {auto_reconnect: true}, {}));
-IM.db.open(function(err, db){
-    if(!err) {
-        console.log("Connected to 'smartreaddb' database");
-    }else{
-        console.log(err);
-    }
+var dp = new DataProvider(options);
+IM.db = dp.db;
 
-    IM.invites =  IM.db.collection('invites');
-});
+IM.invites =  IM.db.collection('invites');
 
 module.exports = IM;
 

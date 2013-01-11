@@ -5,4 +5,4 @@ module.exports = {
     password 	: 'yuedu2012',
     sender		: '悦读 <smart.read.inc@gmail.com>'
 
-}
+};
