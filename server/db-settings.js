@@ -1,7 +1,15 @@
+//module.exports = {
+//    host: 'linus.mongohq.com',
+//    port: 10064,
+//    db: 'smartreaddb',
+//    username: 'smartread',
+//    password: 'yuedu2012'
+//};
+
 module.exports = {
-    host: 'linus.mongohq.com',
-    port: 10064,
+    host: 'localhost',
+    port: 27017,
     db: 'smartreaddb',
-    username: 'smartread',
-    password: 'yuedu2012'
+    username: '',
+    password: ''
 };
