@@ -33,7 +33,7 @@ module.exports = {
                         }else{
                             console.log("Connected to 'smartreaddb' database");
                             if(callback){
-                                callback();
+                                callback.call(_parent);
                             }
                         }
                     }
@@ -42,7 +42,7 @@ module.exports = {
                 if (err) {
                     console.log(err);
                 }else{
-                    console.log("Connected to 'smartreaddb' database");
+                    console.log("Connected to 'smartreaddb' database, no username provided.");
                     if(callback){
                         callback.call(_parent);
                     }
