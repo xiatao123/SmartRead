@@ -3,9 +3,9 @@ if(process.env.NODE_ENV === "production"){
     module.exports = {
         host: 'linus.mongohq.com',
         port: 10064,
-        db: 'smartreaddb',
-        username: 'smartread',
-        password: 'yuedu2012'
+        db: process.env.DB,
+        username: process.env.DB_USER,
+        password: process.env.DB_PASSWORD
     };
 }else{
     console.log("use dev db settings");
