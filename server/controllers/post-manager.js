@@ -15,7 +15,6 @@ PM.findById = function(req, res) {
     var id = req.params.id;
     console.log('Retrieving post: ' + id);
     PM.posts.findOne({'_id':new BSON.ObjectID(id)}, function(err, item) {
-        console.log("post: ", item);
         res.send(item);
     });
 };
