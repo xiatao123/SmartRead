@@ -32,13 +32,17 @@ SR.PostListView = Backbone.View.extend({
     },
 
     openModal: function(evt){
-        var post = this.model._byId[evt.currentTarget.id];
-        $(this.el).append(new SR.PostModalView({model: post}).render().el);
-        $('#myModal').modal({backdrop:true});
+//        var post = this.model._byId[evt.currentTarget.id];
+        var post = new SR.Post({_id: evt.currentTarget.id});
+        var postListView = this;
+        post.fetch({success: function(model, response, options){
+            $(postListView.el).append(new SR.PostModalView({model: model}).render().el);
+            $('#myModal').modal({backdrop:true});
 
-        $('#myModal').on('hidden', function () {
-            $(this).remove();
-        })
+            $('#myModal').on('hidden', function () {
+                $(this).remove();
+            })
+        }});
     }
 });
 

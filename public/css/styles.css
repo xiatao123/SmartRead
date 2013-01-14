@@ -84,7 +84,8 @@ a.plain:hover {
 }
 
 .story_image_container{
-    height: 200px;
+    margin-bottom: 20px;
+    max-height: 200px;
 }
 
 .story_image{
