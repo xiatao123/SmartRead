@@ -46,11 +46,14 @@ SR.Post = Backbone.Model.extend({
     defaults: {
         _id: null,
         name: "",
-        grapes: "",
-        country: "USA",
-        region: "California",
-        year: "",
+        author: "",
+        comments: "",
+        content: "",
         description: "",
+        link: "",
+        pubDate: "",
+        source: "",
+        tags: [],
         picture: null
     }
 });
