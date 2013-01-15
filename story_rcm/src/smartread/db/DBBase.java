@@ -27,9 +27,9 @@ public abstract class DBBase {
     static final String DB_HOST = prop.getProperty("host");
     static final int DB_PORT = Integer.parseInt(prop.getProperty("port"));
     
-    static final String DB_NAME = prop.getProperty("db");;
-    static final String DB_USERNAME = prop.getProperty("username");;
-    static final char[] DB_PASSWORD = prop.getProperty("password").toCharArray();
+    static final String DB_NAME = System.getenv("DB");
+    static final String DB_USERNAME = System.getenv("DB_USER");
+    static final char[] DB_PASSWORD = System.getenv("DB_PASSWORD").toCharArray();
     
     static final String DB_USER_TABLE = "users";
     static final String DB_STORY_TABLE = "stories";
