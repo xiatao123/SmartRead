@@ -4,6 +4,8 @@ var PM = require('./controllers/post-manager');
 var AM = require('./controllers/account-manager');
 var EM = require('./controllers/email-manager');
 var IM = require('./controllers/invitation-manager');
+var EventMgr = require('./controllers/event-manager');
+
 var Utils = require('./server_utils');
 var ADMIN_USER = require('./admin-users').adminUsers;
 
@@ -16,7 +18,26 @@ module.exports = function(app) {
     });
 
 
-    app.get('/posts/:id', PM.findById);
+//    app.get('/posts/:id', PM.findById);
+    app.get('/posts/:id', function(req, res){
+        authenticate(req, res, function(){
+            var storyId = req.params.id;
+            PM.findById(storyId, function(err, story){
+//                console.log(req.session.user);
+//                console.log("Story: ", story);
+                var userId = req.session.user._id;
+                var userName = req.session.user.user;
+                var tags = story.tags;
+                EventMgr.insert(userId, userName, storyId, tags, function(){
+                    //don't care for now success or fail.
+                });
+                res.send(200, story);
+            });
+        });
+    });
+
+
+
     app.post('/posts', PM.addPost);
     app.put('/posts/:id', PM.updatePost);
     app.delete('/posts/:id', PM.deletePost);

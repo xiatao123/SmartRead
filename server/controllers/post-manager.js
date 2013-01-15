@@ -11,11 +11,13 @@ PM.posts =  PM.db.collection('posts');
 
 module.exports = PM;
 
-PM.findById = function(req, res) {
-    var id = req.params.id;
-    console.log('Retrieving post: ' + id);
-    PM.posts.findOne({'_id':new BSON.ObjectID(id)}, function(err, item) {
-        res.send(item);
+PM.findById = function(storyId, callback) {
+    PM.posts.findOne({'_id':new BSON.ObjectID(storyId)}, function(err, item) {
+        if (err){
+            callback('story-not-found');
+        }	else{
+            callback(null, item);
+        }
     });
 };
 
