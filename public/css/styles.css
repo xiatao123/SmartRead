@@ -68,7 +68,7 @@ a.plain:hover {
 
 .thumbnail {
     /*min-height: 450px;*/ /*include description*/
-    min-height: 320px;
+    min-height: 330px;
     background-color: #FFFFFF;
     border: medium none;
     border-radius: 4px 4px 4px 4px;
