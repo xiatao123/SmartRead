@@ -48,8 +48,8 @@ module.exports = {
                             console.log(err);
                         }else{
                             console.log("Connected to 'smartreaddb' database");
-                            if(callback){
-                                callback.call(_parent);
+                            if(callback && typeof callback === "function"){
+                                callback.call(_parent, _parent);
                             }
                         }
                     }
@@ -59,8 +59,8 @@ module.exports = {
                     console.log(err);
                 }else{
                     console.log("Connected to 'smartreaddb' database, no username provided.");
-                    if(callback){
-                        callback.call(_parent);
+                    if(callback && typeof callback === "function"){
+                        callback.call(_parent,_parent);
                     }
                 }
             }
