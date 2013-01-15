@@ -69,6 +69,7 @@ SR.AppRouter = Backbone.Router.extend({
             success: function(model, response, options){
                 $("#content").html(new SR.PostListView({model: postList, page: p}).el);
 
+                SR.utils.hideNotification();
                 SR.app.headerView.selectMenuItem('home-menu');
                 $.backstretch("../css/img/paper.jpg");
 
