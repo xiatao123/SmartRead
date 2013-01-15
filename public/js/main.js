@@ -68,6 +68,10 @@ SR.AppRouter = Backbone.Router.extend({
         postList.fetch({
             success: function(model, response, options){
                 $("#content").html(new SR.PostListView({model: postList, page: p}).el);
+
+                SR.app.headerView.selectMenuItem('home-menu');
+                $.backstretch("../css/img/paper.jpg");
+
             },
             error: function(model, xhr, options){
                 if(xhr.status === 401){
@@ -76,10 +80,6 @@ SR.AppRouter = Backbone.Router.extend({
             }
 
         });
-        this.headerView.selectMenuItem('home-menu');
-//        $('body').addClass("listView");
-//        $('.backstretch').remove();
-        $.backstretch("../css/img//paper.jpg");
     },
 
     postDetails: function (id) {
