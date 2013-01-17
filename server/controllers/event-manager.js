@@ -3,12 +3,10 @@ var bcrypt = require('bcrypt');
 var moment = require('moment');
 
 var DataProvider = require('../db-provider').DataProvider;
-var options = require('../db-settings');
-
 
 var EventMgr = {};
 
-var dp = new DataProvider(options);
+var dp = new DataProvider();
 
 EventMgr.db = dp.db;
 

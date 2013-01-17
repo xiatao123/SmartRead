@@ -11,8 +11,6 @@ var feedparser = require('feedparser'),
 var Iconv  = require('iconv-jp').Iconv;
 
 var DataProvider = require('../server/db-provider').DataProvider;
-var options = require('../server/db-settings');
-
 
 var CATEGORY_MAP = {
     news:"新闻",
@@ -28,7 +26,7 @@ var CATEGORY_MAP = {
 //// UTF8 Regular RSS Sites
 _.each(config.sites, function (value, key) {
     _.each(value, function (element, index) {
-        new DataProvider(options, function(dataProvider){
+        new DataProvider({auto_reconnect: false}, function(dataProvider){
             parseFeed(element, dataProvider, CATEGORY_MAP[key]);
             console.log(CATEGORY_MAP[key], element);
         });
@@ -37,7 +35,7 @@ _.each(config.sites, function (value, key) {
 
 // Baidu RSS feed sites
 _.each(config.baidu_feeds, function (value, key) {
-    new DataProvider(options, function(dataProvider){
+    new DataProvider({auto_reconnect: false}, function(dataProvider){
         parseFeedBaidu(key, dataProvider, value);
         console.log(value, key);
     });
@@ -289,7 +287,14 @@ function getImageUrl($){
     //get embeded img url.
     imageUrl = imageUrl.split("&")[0].split("=")[1];
     //decode it.
-    return decodeURIComponent(imageUrl);
+    try {
+        imageUrl = decodeURIComponent(imageUrl);
+    }catch(Err){
+        console.log(Err);
+        console.log(imageUrl);
+        return undefined;
+    }
+    return imageUrl;
 }
 
 function getCleanDescription($,article){
