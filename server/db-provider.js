@@ -23,6 +23,7 @@ module.exports = {
 
         //open the db connection and then authenticate
         this.db.open(function(err) {
+
             if(options.username !== undefined && options.username.length > 0){
                 _parent.db.authenticate(
                     options.username,
