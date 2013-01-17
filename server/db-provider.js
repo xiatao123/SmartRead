@@ -36,10 +36,13 @@ module.exports = {
                     function(err) {
                         if (err) {
                             console.log(err);
+                            if(callback && typeof callback === "function"){
+                                callback.call(_parent, "Open DB connection failed!");
+                            }
                         }else{
                             console.log("Connected to 'smartreaddb' database");
                             if(callback && typeof callback === "function"){
-                                callback.call(_parent, _parent);
+                                callback.call(_parent, null, _parent);
                             }
                         }
                     }
@@ -47,10 +50,13 @@ module.exports = {
             }else{
                 if (err) {
                     console.log(err);
+                    if(callback && typeof callback === "function"){
+                        callback.call(_parent, "Open DB connection failed!");
+                    }
                 }else{
                     console.log("Connected to 'smartreaddb' database, no username provided.");
                     if(callback && typeof callback === "function"){
-                        callback.call(_parent,_parent);
+                        callback.call(_parent,null,_parent);
                     }
                 }
             }

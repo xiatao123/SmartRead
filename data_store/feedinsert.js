@@ -26,18 +26,26 @@ var CATEGORY_MAP = {
 //// UTF8 Regular RSS Sites
 _.each(config.sites, function (value, key) {
     _.each(value, function (element, index) {
-        new DataProvider({auto_reconnect: false}, function(dataProvider){
-            parseFeed(element, dataProvider, CATEGORY_MAP[key]);
-            console.log(CATEGORY_MAP[key], element);
+        new DataProvider({auto_reconnect: false}, function(err, dataProvider){
+            if(err){
+                console.log(err, " Exit!");
+            }else{
+                parseFeed(element, dataProvider, CATEGORY_MAP[key]);
+                console.log(CATEGORY_MAP[key], element);
+            }
         });
     });
 });
 
 // Baidu RSS feed sites
 _.each(config.baidu_feeds, function (value, key) {
-    new DataProvider({auto_reconnect: false}, function(dataProvider){
-        parseFeedBaidu(key, dataProvider, value);
-        console.log(value, key);
+    new DataProvider({auto_reconnect: false}, function(err, dataProvider){
+        if(err){
+            console.log(err, " Exit!");
+        }else{
+            parseFeedBaidu(key, dataProvider, value);
+            console.log(value, key);
+        }
     });
 });
 
