@@ -31,7 +31,7 @@ public class DBStory extends DBBase{
             }
         }
         
-        DBCollection coll = db.getCollection(DB_STORY_TABLE);
+        DBCollection coll = db.getCollection(DB_TOP_STORY_TABLE);
 
         DBCursor cursor = coll.find();
         List<Story> stories = new ArrayList<Story>();
@@ -65,7 +65,7 @@ public class DBStory extends DBBase{
             }
         }
 
-        DBCollection coll = db.getCollection(DB_STORY_TABLE);
+        DBCollection coll = db.getCollection(DB_TOP_STORY_TABLE);
 
         DBObject q = new BasicDBObject(DB_OID_FIELD, new ObjectId(storyID));
         
