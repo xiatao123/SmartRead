@@ -35,14 +35,23 @@ SR.PostListView = Backbone.View.extend({
 //        var post = this.model._byId[evt.currentTarget.id];
         var post = new SR.Post({_id: evt.currentTarget.id});
         var postListView = this;
-        post.fetch({success: function(model, response, options){
-            $(postListView.el).append(new SR.PostModalView({model: model}).render().el);
-            $('#myModal').modal({backdrop:true});
+        post.fetch({
+            success: function(model, response, options){
+                $(postListView.el).append(new SR.PostModalView({model: model}).render().el);
+                $('#myModal').modal({backdrop:true});
 
-            $('#myModal').on('hidden', function () {
-                $(this).remove();
-            })
-        }});
+                $('#myModal').on('hidden', function () {
+                    $(this).remove();
+                });
+            },
+            error: function(model, xhr, options){
+                console.log(xhr);
+                if(xhr.status === 401 || xhr.responseText() === "unauthorized"){
+                    SR.app.navigate("", {trigger: true});
+                    SR.utils.showError({message: '用户会话超时，为了您的安全，请从新登录。'});
+                }
+            }
+        });
     }
 });
 
@@ -58,7 +67,7 @@ SR.PostListItemView = Backbone.View.extend({
 
     render: function () {
         var item = this.model.toJSON();
-        item['description'] = item['description'].substr(0,150) + " 。。。";
+//        item['description'] = item['description'].substr(0,150) + " 。。。";
         $(this.el).html(this.template(item));
         return this;
     }

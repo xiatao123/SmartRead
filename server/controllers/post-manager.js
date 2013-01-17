@@ -11,17 +11,19 @@ PM.posts =  PM.db.collection('posts');
 
 module.exports = PM;
 
-PM.findById = function(req, res) {
-    var id = req.params.id;
-    console.log('Retrieving post: ' + id);
-    PM.posts.findOne({'_id':new BSON.ObjectID(id)}, function(err, item) {
-        res.send(item);
+PM.findById = function(storyId, callback) {
+    PM.posts.findOne({'_id':new BSON.ObjectID(storyId)}, function(err, item) {
+        if (err){
+            callback('story-not-found');
+        }	else{
+            callback(null, item);
+        }
     });
 };
 
 PM.findAll = function(req, res) {
-//    PM.posts.find().sort({pubDate:-1}).toArray(function(err, items) {
-    PM.posts.find({},{source:1,name:1,link:1,pubDate:1,guid:1,author:1,tags:1,picture:1,source:1}).sort({pubDate:-1}).toArray(function(err, items) {
+    PM.posts.find().sort({pubDate:-1}).toArray(function(err, items) {
+//    PM.posts.find({},{source:1,name:1,link:1,pubDate:1,guid:1,author:1,tags:1,picture:1,source:1}).sort({pubDate:-1}).toArray(function(err, items) {
         res.send(items);
     });
 };
