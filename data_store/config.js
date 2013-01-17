@@ -1,17 +1,17 @@
 var config = {};
 module.exports = config;
 
-// Test individual purpose
+//Test individual purpose
 //config.sites = {
 //    news:[
-//        "http://www.ifanr.com/feed"
+//        "http://www.madimalo.com"
 //    ]
 //};
 
 config.sites = {
 
     news:[
-        "http://nbweekly.feedsportal.com/c/34905/f/643776/index.rss"
+        "http://nbweekly.feedsportal.com/c/34905/f/643776/index.rss",
     ],
 
     sports:[],
@@ -19,7 +19,8 @@ config.sites = {
     tech:[
         "http://tech2ipo.com/feed",
         "http://www.ifanr.com/feed",
-        "http://www.36kr.com/feed"
+        "http://www.36kr.com/feed",
+        "http://feed.feedsky.com/pingwest"
 //		"http://www.leiphone.com/feed", //not working with image and link
 //		"http://feeds.geekpark.net" //not working with image
     ],
