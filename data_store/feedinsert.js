@@ -61,7 +61,12 @@ function getTags(link, fn) {
 
 function parseFeed(feedurl, dataProvider, category) {
 
-    request(feedurl, function (error, response, body) {
+    request(
+        {   method: "GET",
+            uri: feedurl,
+            timeout: 60000
+        },
+        function (error, response, body) {
 
         if (!error && response.statusCode == 200) {
 
@@ -138,7 +143,7 @@ function parseFeedBaidu(feedurl, dataProvider, category) {
     request(
         {   method: "GET",
             uri: feedurl,
-            timeout: 120000,
+            timeout: 60000,
             encoding: null
         },
         function (error, response, body) {
