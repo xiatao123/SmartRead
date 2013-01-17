@@ -1,22 +1,27 @@
+var _ = require('underscore');
 var mongo = require('mongodb');
 
 var Server = mongo.Server,
     Db = mongo.Db,
     BSON = mongo.BSONPure;
 
+var options = require('./db-settings');
+
 module.exports = {
 
-    DataProvider : function(options, callback) {
+    DataProvider : function(serverOptions, callback) {
+        var DEFAULT_SERVER_OPTION = {auto_reconnect: true};
+        _.extend(DEFAULT_SERVER_OPTION,serverOptions);
         //store this for later use
         var _parent = this;
-
+        console.log("auto_reconnect: ", DEFAULT_SERVER_OPTION);
         //connect to the db
         this.db = new Db(
             options.db,
             new Server(
                 options.host,
                 options.port,
-                {auto_reconnect: true},
+                {auto_reconnect: DEFAULT_SERVER_OPTION['auto_reconnect']},
                 {}
             )
         );

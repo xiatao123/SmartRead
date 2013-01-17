@@ -3,12 +3,10 @@ var bcrypt = require('bcrypt');
 var moment = require('moment');
 
 var DataProvider = require('../db-provider').DataProvider;
-var options = require('../db-settings');
-
 
 var AM = {};
 
-var dp = new DataProvider(options, function(){
+var dp = new DataProvider(null, function(){
     //Initialization if account collection not existed.
     console.log("initialize here ... ");
     AM.db.collection('accounts', {safe:true}, function(err, collection) {
