@@ -22,7 +22,7 @@ PM.findById = function(storyId, callback) {
 };
 
 PM.findAll = function(req, res) {
-    PM.posts.find().sort({pubDate:-1}).toArray(function(err, items) {
+    PM.posts.find().sort({pubDate:-1}).limit(24).toArray(function(err, items) {
 //    PM.posts.find({},{source:1,name:1,link:1,pubDate:1,guid:1,author:1,tags:1,picture:1,source:1}).sort({pubDate:-1}).toArray(function(err, items) {
         res.send(items);
     });
