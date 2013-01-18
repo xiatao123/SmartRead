@@ -32,6 +32,7 @@ EventMgr.insert = function(userId, userName, storyId, tags, callback){
     }, function(err, result){
         if (err) {
             //TODO log it.
+            console.log("failed to update event table: ", err);
             callback(err);
         } else {
             callback(null);
