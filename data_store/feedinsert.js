@@ -80,53 +80,56 @@ function parseFeed(feedurl, dataProvider, category) {
                     //console.log(meta);
                     console.log("category", category);
 
-                    dataProvider.db.collection("posts", function (error, collection) {
+                    dataProvider.db.collection("posts", function (err, collection) {
+                        if(err){
+                            console.log("query posts collection failed.", err);
+                        }else{
+                            articles.forEach(function (article) {
 
-                        articles.forEach(function (article) {
 
+                                var $ = cheerio.load(article.description);
+                                var imgurl = $('img').first().attr('src');
+                                var id = new mongo.ObjectID();
 
-                            var $ = cheerio.load(article.description);
-                            var imgurl = $('img').first().attr('src');
-                            var id = new mongo.ObjectID();
+                                var filename;
+                                if (imgurl) {
+                                    filename = id + '.' + imgurl.split('.').pop();
+                                }
 
-                            var filename;
-                            if (imgurl) {
-                                filename = id + '.' + imgurl.split('.').pop();
-                            }
+                                var tags = _.union([category],article.categories);
+                                //console.log(tags);
 
-                            var tags = _.union([category],article.categories);
-                            //console.log(tags);
+                                //console.log(meta.link + "\n\n\n")
+                                var content = contentFilter(article.description, meta.link);
 
-                            //console.log(meta.link + "\n\n\n")
-                            var content = contentFilter(article.description, meta.link);
+                                collection.update({
+                                    guid:article.guid
+                                }, {
+                                    _id:id,
+                                    source:meta.title,
+                                    name:article.title,
+                                    link:article.link,
+                                    description:content.summary,
+                                    content:content.body,
+                                    wordcount:content.wordcount,
+                                    pubDate:article.pubdate,
+                                    date:article.date,
+                                    guid:article.guid,
+                                    author:article.author,
+                                    comments:article.comments,
+                                    tags:tags,
+                                    picture:imgurl
+                                }, {
+                                    upsert:true
+                                }, function () {
+                                    console.log(id + " with url=" + article.guid + " successfully inserted or updated!");
+                                });
 
-                            collection.update({
-                                guid:article.guid
-                            }, {
-                                _id:id,
-                                source:meta.title,
-                                name:article.title,
-                                link:article.link,
-                                description:content.summary,
-                                content:content.body,
-                                wordcount:content.wordcount,
-                                pubDate:article.pubdate,
-                                date:article.date,
-                                guid:article.guid,
-                                author:article.author,
-                                comments:article.comments,
-                                tags:tags,
-                                picture:imgurl
-                            }, {
-                                upsert:true
-                            }, function () {
-                                console.log(id + " with url=" + article.guid + " successfully inserted or updated!");
                             });
-
-                        });
+                        }
+                        dataProvider.db.close();
+                        console.log("close db connection");
                     });
-                    dataProvider.db.close();
-                    console.log("close db connection");
                 }
             });
         } else{
