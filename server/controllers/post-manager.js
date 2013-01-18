@@ -1,10 +1,10 @@
 var DataProvider = require('../db-provider').DataProvider;
-var options = require('../db-settings');
+
 var BSON = require('mongodb').BSONPure;
 
 var PM = {};
 
-var dp = new DataProvider(options);
+var dp = new DataProvider();
 
 PM.db = dp.db;
 PM.posts =  PM.db.collection('posts');

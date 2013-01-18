@@ -1,11 +1,10 @@
 var DataProvider = require('../db-provider').DataProvider;
-var options = require('../db-settings');
 
 var moment = require('moment');
 
 var IM = {};
 
-var dp = new DataProvider(options);
+var dp = new DataProvider();
 IM.db = dp.db;
 
 IM.invites =  IM.db.collection('invites');
