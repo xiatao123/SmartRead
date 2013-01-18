@@ -82,6 +82,14 @@ a.plain:hover {
 
 .from_source{
     font-size: 10px;
+    font-weight: bold;
+}
+
+.pubdate{
+    float: right;
+    font-size: 10px;
+    font-weight: bold;
+    margin-right: 12px;
 }
 
 .story_image_container{

@@ -16,9 +16,10 @@ module.exports = EventMgr;
 
 EventMgr.insert = function(userId, userName, storyId, tags, callback){
     var createTime = new Date().getTime();
-//    var createTimeUTC = moment.utc();
+//    var createTimeUTC = moment();
 //    console.log("createTime", createTime.getTime());
-//    console.log("createTime moment", createTimeUTC);
+//    console.log("createTime moment", createTimeUTC.unix());
+//    console.log("createTime moment", createTimeUTC.valueOf());
 //    console.log("createTime in long", new Date().getTime());
 //    console.log("createTime in Date", new Date());
 
