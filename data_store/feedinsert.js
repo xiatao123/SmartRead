@@ -1,12 +1,13 @@
-var _ = require('underscore');
-var Utils = require('../server/server_utils');
+var _       = require('underscore');
+var Utils   = require('../server/server_utils');
 
-var feedparser = require('feedparser'),
-    cheerio = require('cheerio'),
-    request = require('request'),
-    mongo = require('mongodb'),
-    gridstore = mongo.GridStore,
-    config = require('./config.js');
+var feedparser  = require('feedparser'),
+    cheerio     = require('cheerio'),
+    request     = require('request'),
+    mongo       = require('mongodb'),
+    gridstore   = mongo.GridStore,
+    config      = require('./config.js'),
+    XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 var Iconv  = require('iconv-jp').Iconv;
 
@@ -24,19 +25,19 @@ var CATEGORY_MAP = {
 };
 
 //// UTF8 Regular RSS Sites
-_.each(config.sites, function (value, key) {
-    _.each(value, function (element, index) {
-        new DataProvider({auto_reconnect: false}, function(dataProvider){
-            parseFeed(element, dataProvider, CATEGORY_MAP[key]);
-            console.log(CATEGORY_MAP[key], element);
-        });
-    });
-});
+//_.each(config.sites, function (value, key) {
+//    _.each(value, function (element, index) {
+//        new DataProvider({auto_reconnect: false}, function(dataProvider){
+//            parseFeed(element, dataProvider, CATEGORY_MAP[key]);
+//            console.log(CATEGORY_MAP[key], element);
+//        });
+//    });
+//});
 
 // Baidu RSS feed sites
 _.each(config.baidu_feeds, function (value, key) {
     new DataProvider({auto_reconnect: false}, function(dataProvider){
-        parseFeedBaidu(key, dataProvider, value);
+        parseFeedBaidu(key, dataProvider, value.split(', '));
         console.log(value, key);
     });
 });
@@ -156,7 +157,11 @@ function parseFeedBaidu(feedurl, dataProvider, category) {
                                 var $ = cheerio.load(article.description);
                                 var imageUrl = getImageUrl($);
 
+
                                 if(imageUrl === undefined){
+                                    return false;
+                                }
+                                if(UrlBroken(imageUrl)){
                                     return false;
                                 }
 
@@ -184,7 +189,7 @@ function parseFeedBaidu(feedurl, dataProvider, category) {
                                 }, {
                                     upsert:true
                                 }, function () {
-                                    console.log(id + " with url=" + article.guid + " successfully inserted or updated!");
+                                    console.log(id + " with url=" + article.guid + " successfully inserted!");
                                 });
 
                             });
@@ -300,10 +305,6 @@ function getImageUrl($){
     return imageUrl;
 }
 
-function requestImageUrl(imageUrl){
-    request({uri: imageUrl, timeout: 30000});
-}
-
 function getCleanDescription($,article){
     var root = $.root();
 
@@ -317,4 +318,11 @@ function getCleanDescription($,article){
     description = description.split('...')[0] + "... [更多]";
 
     return description;
+}
+
+function UrlBroken(url) {
+    var http = new XMLHttpRequest();
+    http.open('HEAD', url, false);
+    http.send();
+    return http.status != 200;
 }
