@@ -25,20 +25,28 @@ var CATEGORY_MAP = {
 };
 
 //// UTF8 Regular RSS Sites
-//_.each(config.sites, function (value, key) {
-//    _.each(value, function (element, index) {
-//        new DataProvider({auto_reconnect: false}, function(dataProvider){
-//            parseFeed(element, dataProvider, CATEGORY_MAP[key]);
-//            console.log(CATEGORY_MAP[key], element);
-//        });
-//    });
-//});
+_.each(config.sites, function (value, key) {
+    _.each(value, function (element, index) {
+        new DataProvider({auto_reconnect: false}, function(err, dataProvider){
+            if(err){
+                console.log(err, " Exit!");
+            }else{
+                parseFeed(element, dataProvider, CATEGORY_MAP[key]);
+                console.log(CATEGORY_MAP[key], element);
+            }
+        });
+    });
+});
 
 // Baidu RSS feed sites
 _.each(config.baidu_feeds, function (value, key) {
-    new DataProvider({auto_reconnect: false}, function(dataProvider){
-        parseFeedBaidu(key, dataProvider, value.split(', '));
-        console.log(value, key);
+    new DataProvider({auto_reconnect: false}, function(err, dataProvider){
+        if(err){
+            console.log(err, " Exit!");
+        }else{
+            parseFeedBaidu(key, dataProvider, value.split(', '));
+            console.log(value, key);
+        }
     });
 });
 
@@ -54,9 +62,12 @@ function getTags(link, fn) {
 
 function parseFeed(feedurl, dataProvider, category) {
 
-    request({ uri: feedurl,
-              timeout: 120000
-    }, function (error, response, body) {
+    request(
+        {   method: "GET",
+            uri: feedurl,
+            timeout: 60000
+        },
+        function (error, response, body) {
 
         if (!error && response.statusCode == 200) {
 
@@ -70,53 +81,56 @@ function parseFeed(feedurl, dataProvider, category) {
                     //console.log(meta);
                     console.log("category", category);
 
-                    dataProvider.db.collection("posts", function (error, collection) {
+                    dataProvider.db.collection("posts", function (err, collection) {
+                        if(err){
+                            console.log("query posts collection failed.", err);
+                        }else{
+                            articles.forEach(function (article) {
 
-                        articles.forEach(function (article) {
 
+                                var $ = cheerio.load(article.description);
+                                var imgurl = $('img').first().attr('src');
+                                var id = new mongo.ObjectID();
 
-                            var $ = cheerio.load(article.description);
-                            var imgurl = $('img').first().attr('src');
-                            var id = new mongo.ObjectID();
+                                var filename;
+                                if (imgurl) {
+                                    filename = id + '.' + imgurl.split('.').pop();
+                                }
 
-                            var filename;
-                            if (imgurl) {
-                                filename = id + '.' + imgurl.split('.').pop();
-                            }
+                                var tags = _.union([category],article.categories);
+                                //console.log(tags);
 
-                            var tags = _.union([category],article.categories);
-                            //console.log(tags);
+                                //console.log(meta.link + "\n\n\n")
+                                var content = contentFilter(article.description, meta.link);
 
-                            //console.log(meta.link + "\n\n\n")
-                            var content = contentFilter(article.description, meta.link);
+                                collection.update({
+                                    guid:article.guid
+                                }, {
+                                    _id:id,
+                                    source:meta.title,
+                                    name:article.title,
+                                    link:article.link,
+                                    description:content.summary,
+                                    content:content.body,
+                                    wordcount:content.wordcount,
+                                    pubDate:article.pubdate,
+                                    date:article.date,
+                                    guid:article.guid,
+                                    author:article.author,
+                                    comments:article.comments,
+                                    tags:tags,
+                                    picture:imgurl
+                                }, {
+                                    upsert:true
+                                }, function () {
+                                    console.log(id + " with url=" + article.guid + " successfully inserted or updated!");
+                                });
 
-                            collection.update({
-                                guid:article.guid
-                            }, {
-                                _id:id,
-                                source:meta.title,
-                                name:article.title,
-                                link:article.link,
-                                description:content.summary,
-                                content:content.body,
-                                wordcount:content.wordcount,
-                                pubDate:article.pubdate,
-                                date:article.date,
-                                guid:article.guid,
-                                author:article.author,
-                                comments:article.comments,
-                                tags:tags,
-                                picture:imgurl
-                            }, {
-                                upsert:true
-                            }, function () {
-                                console.log(id + " with url=" + article.guid + " successfully inserted or updated!");
                             });
-
-                        });
+                        }
+                        dataProvider.db.close();
+                        console.log("close db connection");
                     });
-                    dataProvider.db.close();
-                    console.log("close db connection");
                 }
             });
         } else{
@@ -134,7 +148,7 @@ function parseFeedBaidu(feedurl, dataProvider, category) {
     request(
         {   method: "GET",
             uri: feedurl,
-            timeout: 120000,
+            timeout: 60000,
             encoding: null
         },
         function (error, response, body) {
