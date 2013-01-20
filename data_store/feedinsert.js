@@ -13,43 +13,6 @@ var Iconv  = require('iconv-jp').Iconv;
 
 var DataProvider = require('../server/db-provider').DataProvider;
 
-var CATEGORY_MAP = {
-    news:"新闻",
-    sports:"体育",
-    tech:"科技",
-    web:"互联网",
-    fashion:"时尚",
-    education:"教育",
-    movie:"电影，电视",
-    finance:"财经"
-};
-
-//// UTF8 Regular RSS Sites
-_.each(config.sites, function (value, key) {
-    _.each(value, function (element, index) {
-        new DataProvider({auto_reconnect: false}, function(err, dataProvider){
-            if(err){
-                console.log(err, " Exit!");
-            }else{
-                parseFeed(element, dataProvider, CATEGORY_MAP[key]);
-                console.log(CATEGORY_MAP[key], element);
-            }
-        });
-    });
-});
-
-// Baidu RSS feed sites
-_.each(config.baidu_feeds, function (value, key) {
-    new DataProvider({auto_reconnect: false}, function(err, dataProvider){
-        if(err){
-            console.log(err, " Exit!");
-        }else{
-            parseFeedBaidu(key, dataProvider, value.split(', '));
-            console.log(value, key);
-        }
-    });
-});
-
 function getTags(link, fn) {
 
     request(link, function (error, response, body) {
@@ -60,7 +23,7 @@ function getTags(link, fn) {
 
 }
 
-function parseFeed(feedurl, dataProvider, category) {
+function parseFeed(feedurl, dataProvider, category, callback) {
 
     request(
         {   method: "GET",
@@ -69,81 +32,83 @@ function parseFeed(feedurl, dataProvider, category) {
         },
         function (error, response, body) {
 
-        if (!error && response.statusCode == 200) {
+            if (!error && response.statusCode == 200) {
 
-            feedparser.parseString(body, function(error, meta, articles){
+                feedparser.parseString(body, function(error, meta, articles){
 
-                if (error) {
-                    console.error(error);
-                    console.log("close db connection");
-                    dataProvider.db.close();
-                } else {
-                    //console.log(meta);
-                    console.log("category", category);
+                    if (error) {
+                        console.error(error);
+                        callback("parse-feed-failed");
+                    } else {
+                        //console.log(meta);
+                        console.log("category", category);
 
-                    dataProvider.db.collection("posts", function (err, collection) {
-                        if(err){
-                            console.log("query posts collection failed.", err);
-                        }else{
-                            articles.forEach(function (article) {
+                        dataProvider.db.collection("posts", function (err, collection) {
+                            if(err){
+                                console.log("query posts collection failed.", err);
+                            }else{
+                                articles.forEach(function (article) {
 
 
-                                var $ = cheerio.load(article.description);
-                                var imgurl = $('img').first().attr('src');
-                                var id = new mongo.ObjectID();
+                                    var $ = cheerio.load(article.description);
+                                    var imgurl = $('img').first().attr('src');
+                                    var id = new mongo.ObjectID();
 
-                                var filename;
-                                if (imgurl) {
-                                    filename = id + '.' + imgurl.split('.').pop();
-                                }
+                                    var filename;
+                                    if (imgurl) {
+                                        filename = id + '.' + imgurl.split('.').pop();
+                                    }
 
-                                var tags = _.union([category],article.categories);
-                                //console.log(tags);
+                                    var tags = _.union(category,article.categories);
+                                    //console.log(tags);
 
-                                //console.log(meta.link + "\n\n\n")
-                                var content = contentFilter(article.description, meta.link);
+                                    //console.log(meta.link + "\n\n\n")
+                                    var content = contentFilter(article.description, meta.link);
 
-                                collection.update({
-                                    guid:article.guid
-                                }, {
-                                    _id:id,
-                                    source:meta.title,
-                                    name:article.title,
-                                    link:article.link,
-                                    description:content.summary,
-                                    content:content.body,
-                                    wordcount:content.wordcount,
-                                    pubDate:article.pubdate,
-                                    date:article.date,
-                                    guid:article.guid,
-                                    author:article.author,
-                                    comments:article.comments,
-                                    tags:tags,
-                                    picture:imgurl
-                                }, {
-                                    upsert:true
-                                }, function () {
-                                    console.log(id + " with url=" + article.guid + " successfully inserted or updated!");
+                                    collection.update({
+                                        guid:article.guid
+                                    }, {
+                                        _id:id,
+                                        source:meta.title,
+                                        name:article.title,
+                                        link:article.link,
+                                        description:content.summary,
+                                        content:content.body,
+                                        wordcount:content.wordcount,
+                                        pubDate:article.pubdate,
+                                        date:article.date,
+                                        guid:article.guid,
+                                        author:article.author,
+                                        comments:article.comments,
+                                        category: category,
+                                        tags:tags,
+                                        picture:imgurl
+                                    }, {
+                                        upsert:true
+                                    }, function (err) {
+                                        if(err){
+                                            console.log("upsert story failed");
+                                        }else{
+                                            console.log(id + " with url=" + article.guid + " successfully inserted or updated!");
+                                        }
+                                    });
+
                                 });
-
-                            });
-                        }
-                        dataProvider.db.close();
-                        console.log("close db connection");
-                    });
-                }
-            });
-        } else{
-            dataProvider.db.close();
-            console.log("request failed.");
-            console.log("close db connection");
-
+                            }
+                            callback();
+                        });
+                    }
+                });
+            } else{
+                console.log("request failed.");
+                callback("request-failed");
+            }
         }
-    });
+    );
 }
 
 
-function parseFeedBaidu(feedurl, dataProvider, category) {
+function parseFeedBaidu(feedurl, dataProvider, category, callback) {
 
     request(
         {   method: "GET",
@@ -161,8 +126,7 @@ function parseFeedBaidu(feedurl, dataProvider, category) {
 
                     if (error) {
                         console.error(error);
-                        console.log("close db connection");
-                        dataProvider.db.close();
+                        callback("parse-feed-failed");
                     } else {
                         dataProvider.db.collection("posts", function (error, collection) {
 
@@ -175,13 +139,13 @@ function parseFeedBaidu(feedurl, dataProvider, category) {
                                 if(imageUrl === undefined){
                                     return false;
                                 }
-                                if(UrlBroken(imageUrl)){
-                                    return false;
-                                }
+//                                if(UrlBroken(imageUrl)){
+//                                    return false;
+//                                }
 
                                 var id = new mongo.ObjectID();
 
-                                var tags = _.union([category],article.categories);
+                                var tags = _.union(category,article.categories);
                                 //console.log(tags);
 
                                 collection.update({
@@ -198,24 +162,27 @@ function parseFeedBaidu(feedurl, dataProvider, category) {
                                     guid : article.guid,
                                     author : article.author,
                                     comments : article.comments,
+                                    category: category,
                                     tags:  tags,
                                     picture : imageUrl
                                 }, {
                                     upsert:true
-                                }, function () {
-                                    console.log(id + " with url=" + article.guid + " successfully inserted!");
+                                }, function (err) {
+                                    if(err){
+                                        console.log("Upsert story: ", article.guid, " failed");
+                                    }else{
+                                        console.log(id + " with url=" + article.guid + " successfully inserted or updated!");
+                                    }
                                 });
 
                             });
-                            dataProvider.db.close();
-                            console.log("close db connection");
+                            callback();
                         });
                     }
                 });
             } else{
-                dataProvider.db.close();
                 console.log("request failed.");
-                console.log("close db connection");
+                callback("request-failed");
             }
         }
     );
@@ -340,3 +307,46 @@ function UrlBroken(url) {
     http.send();
     return http.status != 200;
 }
+
+// insert feed.
+(function(){
+
+    var dataProvider = new DataProvider();
+    var counter = 0;
+
+////// UTF8 Regular RSS Sites
+    _.each(config.sites, function (value, key) {
+        _.each(value, function (element, index) {
+            counter++;
+            console.log("callback counter: ", counter);
+            parseFeed(element, dataProvider, config.CATEGORY_MAP[key], function(){
+                counter--;
+                if(counter === 0){
+                    dataProvider.db.close();
+                    console.log("db connection closed.");
+                }
+                console.log("callback counter: ", counter);
+            });
+            console.log(config.CATEGORY_MAP[key], element);
+        });
+    });
+
+    var dataProviderBaidu = new DataProvider();
+    var counterBaidu = 0;
+
+//////// Baidu RSS Sites
+    _.each(config.baidu_feeds, function (value, key) {
+        counterBaidu++;
+        console.log("counter: ", counterBaidu);
+        parseFeedBaidu(key, dataProviderBaidu, value, function(){
+            counterBaidu--;
+            if(counterBaidu === 0){
+                dataProviderBaidu.db.close();
+                console.log("Baidu db connection closed.");
+            }
+            console.log("callback counter: ", counterBaidu);
+        });
+        console.log(value, key);
+    });
+
+})();
