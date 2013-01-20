@@ -1,3 +1,6 @@
+var INIT_SCORE = 100;
+
+
 var _       = require('underscore');
 var Utils   = require('../server/server_utils');
 
@@ -47,9 +50,9 @@ function parseFeed(feedurl, dataProvider, category, callback) {
                             if(err){
                                 console.log("query posts collection failed.", err);
                             }else{
+                                var initScore = INIT_SCORE;
+
                                 articles.forEach(function (article) {
-
-
                                     var $ = cheerio.load(article.description);
                                     var imgurl = $('img').first().attr('src');
                                     var id = new mongo.ObjectID();
@@ -82,6 +85,7 @@ function parseFeed(feedurl, dataProvider, category, callback) {
                                         comments:article.comments,
                                         category: category,
                                         tags:tags,
+                                        score: initScore--,
                                         picture:imgurl
                                     }, {
                                         upsert:true
@@ -130,6 +134,8 @@ function parseFeedBaidu(feedurl, dataProvider, category, callback) {
                     } else {
                         dataProvider.db.collection("posts", function (error, collection) {
 
+                            var initScore = INIT_SCORE;
+
                             articles.forEach(function (article) {
 
                                 var $ = cheerio.load(article.description);
@@ -164,6 +170,7 @@ function parseFeedBaidu(feedurl, dataProvider, category, callback) {
                                     comments : article.comments,
                                     category: category,
                                     tags:  tags,
+                                    score: initScore--,
                                     picture : imageUrl
                                 }, {
                                     upsert:true
