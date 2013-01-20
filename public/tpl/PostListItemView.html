@@ -1,6 +1,6 @@
 <div href="#posts/<%= _id %>" class="thumbnail plain">
 
-    <% if (content !== null) { %>
+    <% if (!SR.NO_POPUP && content !== null) { %>
         <div class="story_image_container">
             <a class="sr_thumbnail" href="javascript:void(0)" id="<%= _id %>">
                 <img class="story_image" src="<%= picture %>" alt="">
