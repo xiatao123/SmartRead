@@ -290,6 +290,12 @@ function getImageUrl($){
         console.log(imageUrl);
         return undefined;
     }
+
+    var domain = imageUrl.split(/\/+/g)[1];
+    if(_.contains(config.forbiddenImageDomain, domain)){
+        return undefined;
+    }
+
     return imageUrl;
 }
 

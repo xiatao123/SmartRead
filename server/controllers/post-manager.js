@@ -26,7 +26,8 @@ PM.findById = function(storyId, callback) {
 };
 
 PM.findAll = function(req, res) {
-    PM.topStories.find().sort({score:-1,pubDate:-1}).limit(48).toArray(function(err, items) {
+//    PM.posts.find().sort({score:-1,pubDate:-1}).limit(500).toArray(function(err, items) {
+    PM.topStories.find().sort({score:-1,pubDate:-1}).limit(500).toArray(function(err, items) {
 //    PM.posts.find({},{source:1,name:1,link:1,pubDate:1,guid:1,author:1,tags:1,picture:1,source:1}).sort({pubDate:-1}).toArray(function(err, items) {
         _.each(items, function(value, index){
             value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
