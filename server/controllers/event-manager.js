@@ -26,7 +26,7 @@ EventMgr.insert = function(userId, userName, storyId, tags, callback){
 
     EventMgr.events.insert({
         userId: userId,
-        userName: userName,
+        user: userName,
         storyId: storyId,
         timespend: 300,
         tags: tags,
