@@ -38,12 +38,14 @@ PM.findAll = function(req, res) {
             });
         }else{
 //            console.log("index : ", item.index);
+//            console.log("index : ", item.list);
             var ids = _.map(item.index, function(score, storyId){ return new BSON.ObjectID(storyId); });
 //            console.log("ids : ", ids);
-            PM.topStories.find({_id: {$in: ids}}).limit(300).toArray(function(err, items) {
+            PM.topStories.find({_id: {$in: ids}}).sort({pubDate: -1}).limit(300).toArray(function(err, items) {
                 _.each(items, function(value, index){
                     value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
                     value['score'] = item.index[value['_id']];
+//                    console.log(value['_id']);
                 });
                 res.send(items);
             });
@@ -79,7 +81,7 @@ PM.findAll = function(req, res) {
 //    delete post._id;
 //    console.log('Updating post: ' + id);
 //    console.log(JSON.stringify(post));
-//    PM.posts.update({'_id':new BSON.ObjectID(id)}, post, {safe:true}, function(err, result) {
+    //    PM.posts.update({'_id':new BSON.ObjectID(id)}, post, {safe:true}, function(err, result) {
 //        if (err) {
 //            console.log('Error updating post: ' + err);
 //            res.send({'error':'An error has occurred'});

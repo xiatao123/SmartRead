@@ -26,7 +26,9 @@ config.forbiddenImageDomain = [
     "i1.chinamil.com.cn",
     "www.3dmgame.com",
     "img0.pcgames.com.cn",
-    "img0.pclady.com.cn"
+    "img0.pclady.com.cn",
+    "pic.enorth.com.cn",
+    "img.mycar168.com"
 ];
 
 config.sites = {
