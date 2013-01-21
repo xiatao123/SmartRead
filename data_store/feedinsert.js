@@ -83,7 +83,7 @@ function parseFeed(feedurl, dataProvider, category, callback) {
                                         guid:article.guid,
                                         author:article.author,
                                         comments:article.comments,
-                                        category: category,
+                                        category: _.first(category),
                                         tags:tags,
                                         score: initScore--,
                                         picture:imgurl
@@ -168,7 +168,7 @@ function parseFeedBaidu(feedurl, dataProvider, category, callback) {
                                     guid : article.guid,
                                     author : article.author,
                                     comments : article.comments,
-                                    category: category,
+                                    category: _.first(category),
                                     tags:  tags,
                                     score: initScore--,
                                     picture : imageUrl

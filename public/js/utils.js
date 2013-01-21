@@ -1,5 +1,22 @@
 var SR = SR || {};
 
+var CATEGORY_MAPPING = {
+    "新闻"    : "news",
+    "军事"    : "military",
+    "财经"    : "finance",
+    "互联网"  : "web",
+    "房产"    : "realesate",
+    "汽车"    : "car",
+    "体育"    : "sports",
+    "娱乐"    : "entertain",
+    "游戏"    : "game",
+    "教育"    : "education",
+    "女人"    : "women",
+    "科技"    : "tech",
+    "社会"    : "social",
+    "时尚"    : "fasion"
+};
+
 SR.utils = {
 
     // Asynchronously load templates located in separate .html files
@@ -99,5 +116,11 @@ SR.utils = {
 
     hideAlert: function() {
         $('.alert').hide();
+    },
+
+    getColorMappingClass: function(category){
+        var colorMap = CATEGORY_MAPPING[category];
+
+        return colorMap ? "color-" + colorMap : undefined;
     }
 };

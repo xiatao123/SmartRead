@@ -11,6 +11,7 @@ var dp = new DataProvider();
 PM.db = dp.db;
 PM.posts =  PM.db.collection('posts');
 PM.topStories =  PM.db.collection('top_stories');
+PM.userStories =  PM.db.collection('user_stories');
 
 
 module.exports = PM;
@@ -26,14 +27,37 @@ PM.findById = function(storyId, callback) {
 };
 
 PM.findAll = function(req, res) {
-//    PM.posts.find().sort({score:-1,pubDate:-1}).limit(500).toArray(function(err, items) {
-    PM.topStories.find().sort({score:-1,pubDate:-1}).limit(500).toArray(function(err, items) {
-//    PM.posts.find({},{source:1,name:1,link:1,pubDate:1,guid:1,author:1,tags:1,picture:1,source:1}).sort({pubDate:-1}).toArray(function(err, items) {
-        _.each(items, function(value, index){
-            value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
-        });
-        res.send(items);
+    console.log("user: ", req.session.user.user);
+    PM.userStories.findOne({user: req.session.user.user}, function(err, item) {
+        if(item === null){
+            PM.topStories.find().sort({score:-1,pubDate:-1}).limit(300).toArray(function(err, items) {
+                _.each(items, function(value, index){
+                    value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
+                });
+                res.send(items);
+            });
+        }else{
+//            console.log("index : ", item.index);
+            var ids = _.map(item.index, function(score, storyId){ return new BSON.ObjectID(storyId); });
+//            console.log("ids : ", ids);
+            PM.topStories.find({_id: {$in: ids}}).limit(300).toArray(function(err, items) {
+                _.each(items, function(value, index){
+                    value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
+                    value['score'] = item.index[value['_id']];
+                });
+                res.send(items);
+            });
+        }
     });
+
+
+//    PM.posts.find().sort({score:-1,pubDate:-1}).limit(500).toArray(function(err, items) {
+////    PM.topStories.find().sort({score:-1,pubDate:-1}).limit(500).toArray(function(err, items) {
+//        _.each(items, function(value, index){
+//            value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
+//        });
+//        res.send(items);
+//    });
 };
 
 //PM.addPost = function(req, res) {

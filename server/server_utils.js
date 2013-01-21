@@ -15,6 +15,5 @@ Utils.stringTrim =  function(str){
 };
 
 Utils.getTimeAgo = function(date){
-    console.log(moment(date).fromNow());
     return moment(date).fromNow();
 };

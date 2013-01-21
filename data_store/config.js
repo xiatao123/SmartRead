@@ -15,7 +15,7 @@ config.CATEGORY_MAP = {
     web:        ["互联网"],
     fashion:    ["时尚"],
     education:  ["教育"],
-    movie:      ["电影","电视"],
+    entertain:  ["娱乐"],
     finance:    ["财经"]
 };
 
@@ -24,7 +24,9 @@ config.forbiddenImageDomain = [
     "pic.hsw.cn",
     "img.autohome.com.cn",
     "i1.chinamil.com.cn",
-    "www.3dmgame.com"
+    "www.3dmgame.com",
+    "img0.pcgames.com.cn",
+    "img0.pclady.com.cn"
 ];
 
 config.sites = {
@@ -52,7 +54,7 @@ config.sites = {
 
     education:[],
 
-    movie:[
+    entertain:[
         "http://smweekly.feedsportal.com/c/35020/f/646841/index.rss"
 //        "http://news.baidu.com/n?cmd=1&class=enternews&tn=rss"
     ],
