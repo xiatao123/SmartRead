@@ -25,12 +25,15 @@ public class DBUserStoryIndex extends DBBase{
         Collections.sort(stories, new StoryComparator());
         
         BasicDBObject userStories = new BasicDBObject(DB_UID_FIELD,uid);
-        BasicDBList storyIndex = new BasicDBList();
+        BasicDBObject storyIndex = new BasicDBObject();
+        BasicDBList storyList = new BasicDBList();
         
         for(Story s: stories){
-            storyIndex.add(new BasicDBObject(s.getStoryID(), s.getScore()));
+            storyIndex.append(s.getStoryID(), s.getScore());
+            storyList.add(s.getStoryID());
         }
         userStories.append(DB_INDEX_FIELD, storyIndex);
+        userStories.append(DB_LIST_FIELD, storyList);
         
         DBCollection coll = db.getCollection(DB_USER_STORY_TABLE);
         DBObject query = new BasicDBObject(DB_UID_FIELD, uid);
