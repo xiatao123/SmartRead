@@ -80,9 +80,9 @@ public class PersonalizationAPI {
         if (interest.size() == 0)
             return stories;
 
-        for (Story s : stories) {
+        for (Story s: stories) {
             List<String> tags = s.getTags();
-            s.setScore(s.getScore()*Utils.evaluateInterest(interest, tags));
+            s.setNScore(s.getBScore()*Utils.evaluateInterest(interest, tags));
         }
         Long endtime = System.currentTimeMillis();
         logger.debug("Time(ms) taken to calculate story point for user "+user.getUid()+": "+ String.valueOf(endtime-starttime));
@@ -103,6 +103,13 @@ public class PersonalizationAPI {
 
         switch(freq){
             case 5: updatedUsers = api.updateUserInterestsRaw(freq);
+                api.updateUserStoryForAll();
+                //if (updatedUsers != null) {
+                //    for (String uid : updatedUsers) {
+                //        List<Story> stories = api.getUserStory(uid);
+                //         api.storeUserStory(uid, stories);
+                //    }
+                //}
                 break;
             case 60: api.updateUserInterests("1h");
                 break;
@@ -114,12 +121,17 @@ public class PersonalizationAPI {
                 break;
         }
 
-        if (updatedUsers != null) {
-            for (String uid : updatedUsers) {
-                List<Story> stories = api.getUserStory(uid);
-                api.storeUserStory(uid, stories);
-            }
+    }
+
+    private void updateUserStoryForAll() {
+        Long starttime = System.currentTimeMillis();
+        List<Story> stories = DBStory.retrieveDefaultStory();
+        List<User> users = DBUser.retrieveAllUser();
+        for(User u: users){
+            storeUserStory(u.getUid(), calcualte(u, stories));
         }
+        Long endtime = System.currentTimeMillis();
+        logger.debug("Time(ms) taken to refresh all users' story score: "+ String.valueOf(endtime-starttime));        
     }
 
     private void storeUserStory(String uid, List<Story> stories) {
