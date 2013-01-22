@@ -1,5 +1,6 @@
 package smartread;
 
+import java.util.Date;
 import java.util.List;
 
 public class Story {
@@ -7,12 +8,14 @@ public class Story {
     private List<String> tags;
     private Double bScore;
     private Double nScore;
+    private Date pubDate;
 
-    public Story(String storyID, Double score, List<String> tags) {
+    public Story(String storyID, Double score, List<String> tags, Date pubDate) {
         super();
         this.storyID = storyID;
         this.tags = tags;
         this.bScore = score;
+        this.pubDate = pubDate;
     }
 
     public List<String> getTags() {
@@ -51,5 +54,13 @@ public class Story {
 
     public void setNScore(Double nScore) {
         this.nScore = nScore;
+    }
+
+    public Date getPubDate() {
+        return pubDate;
+    }
+
+    public void setPubDate(Date pubDate) {
+        this.pubDate = pubDate;
     }
 }

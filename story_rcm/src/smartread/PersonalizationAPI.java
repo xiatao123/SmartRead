@@ -1,6 +1,7 @@
 package smartread;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,7 +101,6 @@ public class PersonalizationAPI {
         
         PersonalizationAPI api = new PersonalizationAPI();
         Set<String> updatedUsers = null;
-
         switch(freq){
             case 5: updatedUsers = api.updateUserInterestsRaw(freq);
                 api.updateUserStoryForAll();
@@ -126,6 +126,7 @@ public class PersonalizationAPI {
     private void updateUserStoryForAll() {
         Long starttime = System.currentTimeMillis();
         List<Story> stories = DBStory.retrieveDefaultStory();
+        timelineFactor(stories);
         List<User> users = DBUser.retrieveAllUser();
         for(User u: users){
             storeUserStory(u.getUid(), calcualte(u, stories));
@@ -136,5 +137,18 @@ public class PersonalizationAPI {
 
     private void storeUserStory(String uid, List<Story> stories) {
         DBUserStoryIndex.storeUserStory(uid, stories);
+    }
+    
+    private void timelineFactor(List<Story> stories){
+        Long starttime = System.currentTimeMillis();
+
+        Date date = new Date(System.currentTimeMillis());
+        for(Story s: stories){
+            Date sDate = s.getPubDate();
+            double factor = 1-(date.getTime()-sDate.getTime())/1000/60/60/24*0.05;
+            s.setBScore(s.getBScore()*factor);
+        }
+        Long endtime = System.currentTimeMillis();
+        logger.debug("Time(ms) taken to update story score based on timeline: "+ String.valueOf(endtime-starttime));                
     }
 }
