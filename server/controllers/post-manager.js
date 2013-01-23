@@ -1,3 +1,5 @@
+var NUM_STORIES = 100;
+
 var _ = require('underscore');
 var DataProvider = require('../db-provider').DataProvider;
 var Utils = require('../server_utils');
@@ -26,40 +28,45 @@ PM.findById = function(storyId, callback) {
     });
 };
 
-PM.findAll = function(req, res) {
-    console.log("user: ", req.session.user.user);
-    PM.userStories.findOne({user: req.session.user.user}, function(err, item) {
-        if(item === null){
-            PM.topStories.find().sort({score:-1,pubDate:-1}).limit(300).toArray(function(err, items) {
-                _.each(items, function(value, index){
-                    value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
-                });
-                res.send(items);
-            });
+//PM.findAll = function(req, res) {
+PM.findAll = function(userName, callback) {
+    PM.userStories.findOne({user: userName}, function(err, item) {
+        if(err){
+            console.log("query user_stories collection failed: ", err);
+            callback("query_failed");
         }else{
+            if(item === null){
+                PM.topStories.find().sort({score:-1,pubDate:-1}).limit(NUM_STORIES).toArray(function(err, items) {
+                    _.each(items, function(value, index){
+                        value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
+                    });
+                    callback(null, items);
+                });
+            }else{
 //            console.log("index : ", item.index);
 //            console.log("index : ", item.list);
-            var ids = _.map(item.index, function(score, storyId){ return new BSON.ObjectID(storyId); });
+                var ids = _.map(item.index, function(score, storyId){ return new BSON.ObjectID(storyId); });
 //            console.log("ids : ", ids);
-            PM.topStories.find({_id: {$in: ids}}).sort({pubDate: -1}).limit(300).toArray(function(err, items) {
-                _.each(items, function(value, index){
-                    value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
-                    value['score'] = item.index[value['_id']];
+                PM.topStories.find({_id: {$in: ids}}).sort({pubDate: -1}).limit(NUM_STORIES).toArray(function(err, items) {
+                    _.each(items, function(value, index){
+                        value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
+                        value['score'] = item.index[value['_id']];
 //                    console.log(value['_id']);
+                    });
+                    callback(null, items);
                 });
-                res.send(items);
-            });
+            }
         }
     });
+};
 
-
-//    PM.posts.find().sort({score:-1,pubDate:-1}).limit(500).toArray(function(err, items) {
-////    PM.topStories.find().sort({score:-1,pubDate:-1}).limit(500).toArray(function(err, items) {
-//        _.each(items, function(value, index){
-//            value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
-//        });
-//        res.send(items);
-//    });
+PM.findByCategory = function(category, callback){
+    PM.topStories.find({category: category}).sort({score:-1,pubDate:-1}).limit(NUM_STORIES).toArray(function(err, items) {
+        _.each(items, function(value, index){
+            value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
+        });
+        callback(null, items);
+    });
 };
 
 //PM.addPost = function(req, res) {

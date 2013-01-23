@@ -11,15 +11,31 @@ var ADMIN_USER = require('./admin-users').adminUsers;
 
 module.exports = function(app) {
 
-    app.get('/posts', function(req, res){
+    app.get('/stories', function(req, res){
+        var category = Utils.getCategoryMapping()[req.query['category']];
+        console.log("category: ", category);
         authenticate(req, res, function(){
-            PM.findAll(req, res);
+            if(category){
+                PM.findByCategory(category, function(err, items){
+                    if(err){
+                        console.log(err);
+                    }else{
+                        res.send(items);
+                    }
+                });
+            }else{
+                PM.findAll(req.session.user.user, function(err, items){
+                    if(err){
+                        console.log(err);
+                    }else{
+                        res.send(items);
+                    }
+                });
+            }
         });
     });
 
-
-//    app.get('/posts/:id', PM.findById);
-    app.get('/posts/:id', function(req, res){
+    app.get('/stories/:id', function(req, res){
         authenticate(req, res, function(){
             var storyId = req.params.id;
             PM.findById(storyId, function(err, story){
@@ -35,8 +51,6 @@ module.exports = function(app) {
             });
         });
     });
-
-
 
 //    app.post('/posts', PM.addPost);
 //    app.put('/posts/:id', PM.updatePost);

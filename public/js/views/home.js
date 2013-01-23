@@ -26,7 +26,7 @@ SR.HomeView = Backbone.View.extend({
             },
             success	: function(data, status, xhr, $form){
                 $('#loginModal').modal('hide');
-                SR.app.navigate("posts", {trigger: true});
+                SR.app.navigate("stories", {trigger: true});
             },
             error : function(e){
                 if(e.responseText === "user-not-found" || e.responseText === "invalid-password"){

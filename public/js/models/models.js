@@ -2,7 +2,7 @@ var SR = SR || {};
 
 SR.Post = Backbone.Model.extend({
 
-    urlRoot: "/posts",
+    urlRoot: "/stories",
 
     idAttribute: "_id",
 
@@ -11,14 +11,6 @@ SR.Post = Backbone.Model.extend({
 
         this.validators.name = function (value) {
             return value.length > 0 ? {isValid: true} : {isValid: false, message: "You must enter a name"};
-        };
-
-        this.validators.grapes = function (value) {
-            return value.length > 0 ? {isValid: true} : {isValid: false, message: "You must enter a grape variety"};
-        };
-
-        this.validators.country = function (value) {
-            return value.length > 0 ? {isValid: true} : {isValid: false, message: "You must enter a country"};
         };
     },
 
@@ -64,7 +56,7 @@ SR.PostCollection = Backbone.Collection.extend({
     comparator: function(item) {
         return -item.get('score');
     },
-    url: "/posts"
+    url: "/stories"
 
 });
 
