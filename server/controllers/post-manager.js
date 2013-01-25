@@ -36,6 +36,7 @@ PM.findAll = function(userName, callback) {
             callback("query_failed");
         }else{
             if(item === null){
+                console.log("find by regular top_stories!");
                 PM.topStories.find().sort({score:-1,pubDate:-1}).limit(NUM_STORIES).toArray(function(err, items) {
                     _.each(items, function(value, index){
                         value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
@@ -43,16 +44,22 @@ PM.findAll = function(userName, callback) {
                     callback(null, items);
                 });
             }else{
+                console.log("find by user own top_stories!");
 //            console.log("index : ", item.index);
 //            console.log("index : ", item.list);
                 var ids = _.map(item.index, function(score, storyId){ return new BSON.ObjectID(storyId); });
 //            console.log("ids : ", ids);
-                PM.topStories.find({_id: {$in: ids}}).sort({pubDate: -1}).limit(NUM_STORIES).toArray(function(err, items) {
+                PM.topStories.find({_id: {$in: ids}}).limit(NUM_STORIES).toArray(function(err, items) {
                     _.each(items, function(value, index){
                         value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
                         value['score'] = item.index[value['_id']];
 //                    console.log(value['_id']);
                     });
+
+                    items = _.sortBy(items, function(item){
+                        return -item['score'];
+                    });
+
                     callback(null, items);
                 });
             }

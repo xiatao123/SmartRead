@@ -53,9 +53,9 @@ SR.Post = Backbone.Model.extend({
 SR.PostCollection = Backbone.Collection.extend({
 
     model: SR.Post,
-    comparator: function(item) {
-        return -item.get('score');
-    },
+//    comparator: function(item) {
+//        return -item.get('score');
+//    },
     url: "/stories"
 
 });
