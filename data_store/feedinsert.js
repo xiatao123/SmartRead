@@ -127,7 +127,8 @@ function parseFeedBaidu(feedurl, dataProvider, category, callback) {
                     body = new Iconv('gb2312', 'utf8').convert(body).toString();
                 }catch(err){
                     console.log("encoding convert failed: ", err);
-                    callback("encoding-convert-failed");
+//                    callback("encoding-convert-failed");
+//                    return false;
                 }
 
                 feedparser.parseString(body, function(error, meta, articles){
