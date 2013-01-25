@@ -323,25 +323,25 @@ function UrlBroken(url) {
 // insert feed.
 (function(){
 
-    var dataProvider = new DataProvider();
-    var counter = 0;
-
-////// UTF8 Regular RSS Sites
-    _.each(config.sites, function (value, key) {
-        _.each(value, function (element, index) {
-            counter++;
-            console.log("callback counter: ", counter);
-            parseFeed(element, dataProvider, config.CATEGORY_MAP[key], function(){
-                counter--;
-                if(counter === 0){
-                    dataProvider.db.close();
-                    console.log("db connection closed.");
-                }
-                console.log("callback counter: ", counter);
-            });
-            console.log(config.CATEGORY_MAP[key], element);
-        });
-    });
+//    var dataProvider = new DataProvider();
+//    var counter = 0;
+//
+//////// UTF8 Regular RSS Sites
+//    _.each(config.sites, function (value, key) {
+//        _.each(value, function (element, index) {
+//            counter++;
+//            console.log("callback counter: ", counter);
+//            parseFeed(element, dataProvider, config.CATEGORY_MAP[key], function(){
+//                counter--;
+//                if(counter === 0){
+//                    dataProvider.db.close();
+//                    console.log("db connection closed.");
+//                }
+//                console.log("callback counter: ", counter);
+//            });
+//            console.log(config.CATEGORY_MAP[key], element);
+//        });
+//    });
 
     var dataProviderBaidu = new DataProvider();
     var counterBaidu = 0;
