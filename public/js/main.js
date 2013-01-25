@@ -45,7 +45,7 @@ SR.AppRouter = Backbone.Router.extend({
     signup: function(email){
         this.renderHeader();
         if(!this.signupView){
-            this.signupView = new SR.SignupView(email);
+            this.signupView = new SR.SignupView(decodeURIComponent(email));
         }
         $('#content').html(this.signupView.el);
 
