@@ -122,7 +122,12 @@ function parseFeedBaidu(feedurl, dataProvider, category, callback) {
 
             if (!error && response.statusCode == 200) {
 
-                var covertedBody = new Iconv('gb2312', 'utf8').convert(body);
+                try{
+                    var covertedBody = new Iconv('gb2312', 'utf8').convert(body);
+                }catch(err){
+                    console.log("encoding convert failed: ", err);
+                    return false;
+                }
 
                 feedparser.parseString(covertedBody, function(error, meta, articles){
 
