@@ -145,7 +145,8 @@ public class PersonalizationAPI {
         Date date = new Date(System.currentTimeMillis());
         for(Story s: stories){
             Date sDate = s.getPubDate();
-            double factor = 1-(date.getTime()-sDate.getTime())/1000/60/60/24*0.05;
+            double factor = 1-(date.getTime()-sDate.getTime())*0.05/1000/60/60/24;
+            logger.trace("Timeline factor for story "+s.getStoryID()+"is "+factor);
             s.setBScore(s.getBScore()*factor);
         }
         Long endtime = System.currentTimeMillis();
