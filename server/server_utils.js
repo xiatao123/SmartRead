@@ -26,8 +26,12 @@ var CATEGORY_MAPPING = {
 
 var CATEGORY_MAPPING_REVERSE = _.invert(CATEGORY_MAPPING);
 
-Utils.log = function(data){
-    console.log("*****: ", data);
+Utils.log = function(){
+    console.log.apply(null,arguments);
+};
+
+Utils.logTime = function(msg, startTime){
+    console.log(msg,": ",new Date().getTime()-startTime, "ms");
 };
 
 Utils.stringTrim =  function(str){
