@@ -44,21 +44,29 @@ PM.findAll = function(userName, callback) {
                     callback(null, items);
                 });
             }else{
+
+                var startTime = new Date().getTime();
                 console.log("find by user own top_stories!");
 //            console.log("index : ", item.index);
 //            console.log("index : ", item.list);
                 var ids = _.map(item.index, function(score, storyId){ return new BSON.ObjectID(storyId); });
 //            console.log("ids : ", ids);
-                PM.topStories.find({_id: {$in: ids}}).limit(NUM_STORIES).toArray(function(err, items) {
+                PM.topStories.find({_id: {$in: ids}}).toArray(function(err, items) {
                     _.each(items, function(value, index){
                         value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
                         value['score'] = item.index[value['_id']];
+                        value['content'] = null;
 //                    console.log(value['_id']);
                     });
 
                     items = _.sortBy(items, function(item){
                         return -item['score'];
                     });
+
+                    items = _.first(items, NUM_STORIES);
+
+                    var endTime = new Date().getTime();
+                    console.log("fetch stories time: ", endTime - startTime, "ms");
 
                     callback(null, items);
                 });
