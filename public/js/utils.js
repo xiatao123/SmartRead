@@ -40,12 +40,23 @@ SR.utils = {
         $.when.apply(null, deferreds).done(callback);
     },
 
-    showNotification: function(option){
+    showSuccess: function(option){
         var DEFAULT_OPTION = {
             message: { text: 'Operation executed successfully!' },
             type: "success",
             fadeOut: { enabled: true, delay: 3000 }
             };
+
+        var newOption = $.extend({},DEFAULT_OPTION,option);
+        $('.notifications').notify(newOption).show();
+    },
+
+    showInfo: function(option){
+        var DEFAULT_OPTION = {
+            message: { text: 'Loading ...' },
+            type: "info",
+            fadeOut: { enabled: true, delay: 2000 }
+        };
 
         var newOption = $.extend({},DEFAULT_OPTION,option);
         $('.notifications').notify(newOption).show();
@@ -136,6 +147,6 @@ SR.utils = {
             "../css/img/bing_bg1.jpg",
             "../css/img/bing_bg2.jpg",
             "../css/img/bg2.jpg"
-        ], {duration: 5000});
+        ], {duration: 5000, fade: 1000});
     }
 };

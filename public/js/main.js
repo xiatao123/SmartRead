@@ -39,9 +39,6 @@ SR.AppRouter = Backbone.Router.extend({
 
 
     home: function (id) {
-//        this.headerView = new SR.HeaderView();
-//        $('.header').html(this.headerView.el);
-
         this.renderHeader();
         if (!this.homeView) {
             this.homeView = new SR.HomeView();
@@ -50,10 +47,9 @@ SR.AppRouter = Backbone.Router.extend({
         this.homeView.bindLogonjQueryForm();
         this.homeView.bindInvitejQueryForm();
 
-        this.headerView.selectMenuItem('home-menu');
-//        $.backstretch("../css/img/bing_bg.jpg");
+//        this.headerView.selectMenuItem('home-menu');
+
         SR.utils.setBackgroundImage();
-//        $('body').addClass("homeView");
     },
 
     signup: function(email){
@@ -70,14 +66,13 @@ SR.AppRouter = Backbone.Router.extend({
         $('.modal-alert .modal-header h3').text('Success!');
         $('.modal-alert .modal-body p').html('Your account has been created.</br>Click OK to return to the login page.');
 
-//        $.backstretch("../css/img/bg2.jpg");
         SR.utils.setBackgroundImage();
     },
 
 	list: function(page) {
-//        this.headerView = new SR.HeaderView();
-//        $('.header').html(this.headerView.el);
+        SR.utils.showInfo({message: "努力为您加载..."});
         this.renderHeader();
+        $("#categoryName").html("智能" + ' <b class="caret">');
 
         var p = page ? parseInt(page, 10) : 1;
         var postList = new SR.PostCollection();
@@ -100,14 +95,15 @@ SR.AppRouter = Backbone.Router.extend({
     },
 
     listCategory: function(name){
+        SR.utils.showInfo({message: "努力为您加载..."});
         this.renderHeader();
+        $("#categoryName").html(SR.utils.getCategoryMapping()[name] + ' <b class="caret">');
 
         var postList = new SR.PostCollection();
         postList.fetch({
             data: $.param({ category: name}),
             success: function(model, response, options){
                 $("#content").html(new SR.PostListView({model: postList}).el);
-                $("#categoryName").html(SR.utils.getCategoryMapping()[name] + ' <b class="caret">');
             },
             error: function(model, xhr, options){
                 if(xhr.status === 401){
