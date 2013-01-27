@@ -1,3 +1,5 @@
+var NUM_STORIES = 100;
+
 var _ = require('underscore');
 var DataProvider = require('../db-provider').DataProvider;
 var Utils = require('../server_utils');
@@ -26,40 +28,69 @@ PM.findById = function(storyId, callback) {
     });
 };
 
-PM.findAll = function(req, res) {
-    console.log("user: ", req.session.user.user);
-    PM.userStories.findOne({user: req.session.user.user}, function(err, item) {
-        if(item === null){
-            PM.topStories.find().sort({score:-1,pubDate:-1}).limit(300).toArray(function(err, items) {
-                _.each(items, function(value, index){
-                    value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
-                });
-                res.send(items);
-            });
+//PM.findAll = function(req, res) {
+PM.findAll = function(userName, callback) {
+    var startTime = new Date().getTime();
+    PM.userStories.findOne({user: userName}, function(err, item) {
+        if(err){
+            console.log("query user_stories collection failed: ", err);
+            callback("query_failed");
         }else{
+            Utils.logTime("query user stories", startTime);
+            if(item === null){
+                console.log("find by regular top_stories!");
+                PM.topStories.find().sort({score:-1,pubDate:-1}).limit(NUM_STORIES).toArray(function(err, items) {
+                    Utils.logTime("query top stories", startTime);
+                    _.each(items, function(value, index){
+                        value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
+                    });
+                    Utils.logTime("modify each story", startTime);
+                    callback(null, items);
+                    Utils.logTime("Total FindAll time spent", startTime);
+                });
+            }else{
+                console.log("find by user own top_stories!");
 //            console.log("index : ", item.index);
 //            console.log("index : ", item.list);
-            var ids = _.map(item.index, function(score, storyId){ return new BSON.ObjectID(storyId); });
-//            console.log("ids : ", ids);
-            PM.topStories.find({_id: {$in: ids}}).sort({pubDate: -1}).limit(300).toArray(function(err, items) {
-                _.each(items, function(value, index){
-                    value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
-                    value['score'] = item.index[value['_id']];
+                var ids = _.map(item.index, function(score, storyId){ return new BSON.ObjectID(storyId); });
+                Utils.logTime("map ids to BSON objectID", startTime);
+
+                ids = _.first(ids, NUM_STORIES);
+                Utils.logTime("chop first num stories", startTime);
+//                console.log("ids : ", ids);
+
+                PM.topStories.find({_id: {$in: ids}}).limit(100).toArray(function(err, items) {
+                    Utils.logTime("query top stories", startTime);
+                    _.each(items, function(value, index){
+                        value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
+                        value['score'] = item.index[value['_id']];
+                        value['content'] = null;
 //                    console.log(value['_id']);
+                    });
+                    Utils.logTime("modify each story", startTime);
+                    items = _.sortBy(items, function(item){
+                        return -item['score'];
+                    });
+                    Utils.logTime("sort story by score", startTime);
+                    callback(null, items);
+                    Utils.logTime("Total FindAll time spent", startTime);
                 });
-                res.send(items);
-            });
+            }
         }
     });
+};
 
-
-//    PM.posts.find().sort({score:-1,pubDate:-1}).limit(500).toArray(function(err, items) {
-////    PM.topStories.find().sort({score:-1,pubDate:-1}).limit(500).toArray(function(err, items) {
-//        _.each(items, function(value, index){
-//            value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
-//        });
-//        res.send(items);
-//    });
+PM.findByCategory = function(category, callback){
+    var startTime = new Date().getTime();
+    PM.topStories.find({category: category}).sort({score:-1,pubDate:-1}).limit(NUM_STORIES).toArray(function(err, items) {
+        Utils.logTime("query top stories by category", startTime);
+        _.each(items, function(value, index){
+            value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
+        });
+        Utils.logTime("modify each story", startTime);
+        callback(null, items);
+        Utils.logTime("Total findByCategory time spent", startTime);
+    });
 };
 
 //PM.addPost = function(req, res) {

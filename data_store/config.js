@@ -28,7 +28,9 @@ config.forbiddenImageDomain = [
     "img0.pcgames.com.cn",
     "img0.pclady.com.cn",
     "pic.enorth.com.cn",
-    "img.mycar168.com"
+    "img.mycar168.com",
+    "img1.ifensi.com",
+    "img.guhantai.com"
 ];
 
 var INIT_SCORE = 100;

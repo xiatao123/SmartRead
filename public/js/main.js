@@ -3,15 +3,16 @@ var SR = SR || {};
 SR.AppRouter = Backbone.Router.extend({
 
     routes: {
-        ""                  : "list",
-        "home"              : "home",
-        "signup/:email"     : "signup",
-        "posts"	            : "list",
-        "posts/page/:page"	: "list",
-        "posts/add"         : "addPost",
-        "posts/:id"         : "postDetails",
-        "admin-invite"      : "adminInviteList",
-        "about"             : "about"
+        ""                      : "list",
+        "home"                  : "home",
+        "signup/:email"         : "signup",
+        "stories"	            : "list",
+        "stories/page/:page"	: "list",
+        "stories/add"           : "addPost",
+        "stories/:id"           : "postDetails",
+        "categories/:name"     : "listCategory",
+        "admin-invite"          : "adminInviteList",
+        "about"                 : "about"
     },
 
     initialize: function () {
@@ -44,7 +45,7 @@ SR.AppRouter = Backbone.Router.extend({
     signup: function(email){
         this.renderHeader();
         if(!this.signupView){
-            this.signupView = new SR.SignupView(email);
+            this.signupView = new SR.SignupView(decodeURIComponent(email));
         }
         $('#content').html(this.signupView.el);
 
@@ -70,7 +71,7 @@ SR.AppRouter = Backbone.Router.extend({
                 $("#content").html(new SR.PostListView({model: postList, page: p}).el);
 
                 SR.utils.hideNotification();
-                SR.app.headerView.selectMenuItem('home-menu');
+//                SR.app.headerView.selectMenuItem('dropdown-menu');
                 $.backstretch("../css/img/paper.jpg");
 
             },
@@ -83,13 +84,32 @@ SR.AppRouter = Backbone.Router.extend({
         });
     },
 
-    postDetails: function (id) {
-        var post = new SR.Post({_id: id});
-        post.fetch({success: function(){
-            $("#content").html(new SR.PostView({model: post}).el);
-        }});
-        this.headerView.selectMenuItem();
+    listCategory: function(name){
+        this.renderHeader();
+
+        var postList = new SR.PostCollection();
+        postList.fetch({
+            data: $.param({ category: name}),
+            success: function(model, response, options){
+                $("#content").html(new SR.PostListView({model: postList}).el);
+                $("#categoryName").html(SR.utils.getCategoryMapping()[name] + ' <b class="caret">');
+            },
+            error: function(model, xhr, options){
+                if(xhr.status === 401){
+                    SR.app.navigate("home", {trigger: true});
+                }
+            }
+        });
+
     },
+
+//    postDetails: function (id) {
+//        var post = new SR.Post({_id: id});
+//        post.fetch({success: function(){
+//            $("#content").html(new SR.PostView({model: post}).el);
+//        }});
+//        this.headerView.selectMenuItem();
+//    },
 
 	addPost: function() {
         var post = new SR.Post();

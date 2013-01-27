@@ -122,9 +122,16 @@ function parseFeedBaidu(feedurl, dataProvider, category, callback) {
 
             if (!error && response.statusCode == 200) {
 
-                var covertedBody = new Iconv('gb2312', 'utf8').convert(body);
+                try{
+                    body = new Buffer(body, 'binary');
+                    body = new Iconv('gb2312', 'utf8').convert(body).toString();
+                }catch(err){
+                    console.log("encoding convert failed: ", err);
+                    callback("encoding-convert-failed");
+                    return false;
+                }
 
-                feedparser.parseString(covertedBody, function(error, meta, articles){
+                feedparser.parseString(body, function(error, meta, articles){
 
                     if (error) {
                         console.error(error);

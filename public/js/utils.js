@@ -1,21 +1,23 @@
 var SR = SR || {};
 
 var CATEGORY_MAPPING = {
-    "新闻"    : "news",
-    "军事"    : "military",
-    "财经"    : "finance",
-    "互联网"  : "web",
-    "房产"    : "realesate",
-    "汽车"    : "car",
-    "体育"    : "sports",
-    "娱乐"    : "entertain",
-    "游戏"    : "game",
-    "教育"    : "education",
-    "女人"    : "women",
-    "科技"    : "tech",
-    "社会"    : "social",
-    "时尚"    : "fasion"
+    news:       "新闻",
+    military:   "军事",
+    finance:    "财经",
+    web:        "互联网",
+    realesate:  "房产",
+    car:        "汽车",
+    sports:     "体育",
+    entertain:  "娱乐",
+    game:       "游戏",
+    education:  "教育",
+    women:      "女人",
+    tech:       "科技",
+    social:     "社会",
+    fasion:     "时尚"
 };
+
+var CATEGORY_MAPPING_REVERSE = _.invert(CATEGORY_MAPPING);
 
 SR.utils = {
 
@@ -119,8 +121,12 @@ SR.utils = {
     },
 
     getColorMappingClass: function(category){
-        var colorMap = CATEGORY_MAPPING[category];
+        var colorMap = CATEGORY_MAPPING_REVERSE[category];
 
         return colorMap ? "color-" + colorMap : undefined;
+    },
+
+    getCategoryMapping: function(){
+        return CATEGORY_MAPPING;
     }
 };

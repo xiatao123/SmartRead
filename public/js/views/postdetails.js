@@ -54,7 +54,7 @@ SR.PostView = Backbone.View.extend({
         this.model.save(null, {
             success: function (model) {
                 self.render();
-                SR.app.navigate('posts/' + model.id, false);
+                SR.app.navigate('stories/' + model.id, false);
                 SR.utils.showAlert('Success!', 'Post saved successfully', 'alert-success');
             },
             error: function () {
