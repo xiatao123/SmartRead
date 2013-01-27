@@ -146,7 +146,9 @@ config.sites = {
 //		"http://feeds.geekpark.net" //not working with image
     ],
 
-    web:[],
+    web:[
+        "http://feeds.feedburner.com/yseeker"
+    ],
 
     fashion:[
         "http://www.fashiondes.com/rss"
