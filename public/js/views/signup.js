@@ -30,7 +30,7 @@ SR.Signup = SR.Signup || {};
                     }
                 },
                 success	: function(data, status, xhr, $form){
-                    SR.app.navigate("", {trigger: true});
+                    SR.app.navigate("stories", {trigger: true});
                     SR.utils.enableButton(button ,buttonLabel);
                     SR.hideNotification();
 

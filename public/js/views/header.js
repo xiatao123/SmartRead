@@ -1,5 +1,18 @@
 var SR = SR || {};
 
+
+SR.setUserCache = function(user){
+    SR.user = user;
+};
+
+SR.clearUserCache = function(){
+    SR.user = undefined;
+};
+
+SR.getUserCache = function(){
+    return SR.user;
+};
+
 SR.HeaderView = Backbone.View.extend({
 
     initialize: function () {
@@ -17,6 +30,7 @@ SR.HeaderView = Backbone.View.extend({
             that = this;
         request.done(function(data) {
             account['user'] = data;
+            SR.setUserCache(data);
             $(that.el).html(that.template(account));
             return that;
         });
@@ -46,6 +60,7 @@ SR.HeaderView = Backbone.View.extend({
         });
 
         request.done(function(data) {
+            SR.clearUserCache();
             var navTo = "home";
             //hack to navigate to same URL with a refresh.
             if(Backbone.history.fragment === "home"){
@@ -61,5 +76,26 @@ SR.HeaderView = Backbone.View.extend({
             $('.' + menuItem).addClass('active');
         }
     }
+
+//    setHeader: function(){
+//        var request = $.ajax({
+//            url: "session",
+//            type: "GET",
+//            dataType: "json"
+//        });
+//
+//        var account={},
+//            that = this;
+//        request.done(function(data) {
+//            account['user'] = data;
+//            $(that.el).html(that.template(account));
+//            return that;
+//        });
+//        request.fail(function(jqXHR, textStatus) {
+//            account['user'] = undefined;
+//            $(that.el).html(that.template(account));
+//            return that;
+//        });
+//    }
 
 });

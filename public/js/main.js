@@ -1,5 +1,10 @@
 var SR = SR || {};
 
+SR.navigateHome = function(){
+    SR.clearUserCache();
+    SR.app.navigate("home",{trigger:true});
+};
+
 SR.AppRouter = Backbone.Router.extend({
 
     routes: {
@@ -20,10 +25,18 @@ SR.AppRouter = Backbone.Router.extend({
 //        $('.header').html(this.headerView.el);
     },
 
-    renderHeader: function(){
+    renderHeader: function(noCache){
+        if(!SR.getUserCache() || noCache === true){
+            this.headerView = new SR.HeaderView();
+            $('.header').html(this.headerView.el);
+        }
+    },
+
+    setLoggedInHeader: function(){
         this.headerView = new SR.HeaderView();
         $('.header').html(this.headerView.el);
     },
+
 
     home: function (id) {
 //        this.headerView = new SR.HeaderView();
@@ -38,7 +51,8 @@ SR.AppRouter = Backbone.Router.extend({
         this.homeView.bindInvitejQueryForm();
 
         this.headerView.selectMenuItem('home-menu');
-        $.backstretch("../css/img/bg2.jpg");
+//        $.backstretch("../css/img/bing_bg.jpg");
+        SR.utils.setBackgroundImage();
 //        $('body').addClass("homeView");
     },
 
@@ -56,7 +70,8 @@ SR.AppRouter = Backbone.Router.extend({
         $('.modal-alert .modal-header h3').text('Success!');
         $('.modal-alert .modal-body p').html('Your account has been created.</br>Click OK to return to the login page.');
 
-        $.backstretch("../css/img/bg2.jpg");
+//        $.backstretch("../css/img/bg2.jpg");
+        SR.utils.setBackgroundImage();
     },
 
 	list: function(page) {
@@ -77,7 +92,7 @@ SR.AppRouter = Backbone.Router.extend({
             },
             error: function(model, xhr, options){
                 if(xhr.status === 401){
-                    SR.app.navigate("home", {trigger: true});
+                    SR.navigateHome();
                 }
             }
 
@@ -96,7 +111,7 @@ SR.AppRouter = Backbone.Router.extend({
             },
             error: function(model, xhr, options){
                 if(xhr.status === 401){
-                    SR.app.navigate("home", {trigger: true});
+                    SR.navigateHome();
                 }
             }
         });
@@ -140,7 +155,7 @@ SR.AppRouter = Backbone.Router.extend({
             },
             error: function(model, xhr, options){
                 if(xhr.status === 401){
-                    SR.app.navigate("", {trigger: true});
+                    SR.navigateHome();
                 }
             }
 

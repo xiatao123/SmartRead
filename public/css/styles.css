@@ -1,23 +1,19 @@
-/*body.listView{*/
-    /*background: url('../css/img/paper.jpg') repeat scroll 0 0 #F7F5F5;*/
-    /*-moz-background-size: cover;*/
-    /*-webkit-background-size: cover;*/
-    /*-o-background-size: cover;*/
-    /*background-size: cover;*/
-/*}*/
-
-/*body.homeView{*/
-    /*background: url('../css/img/bg2.jpg') repeat scroll 0 0 #F7F5F5;*/
-    /*-moz-background-size: cover;*/
-    /*-webkit-background-size: cover;*/
-    /*-o-background-size: cover;*/
-    /*background-size: cover;*/
-/*}*/
-
-
-/*.brand {*/
-    /*font-family: 'Arvo';*/
-/*}*/
+body {
+    background-color: #FFFFFF;
+    color: #333333;
+    font-family: "Helvetica Neue",Helvetica,Arial,"Hiragino Sans GB",sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    margin: 20px 0 0;
+}
+a {
+    color: #4879BA;
+    text-decoration: none;
+}
+a:hover {
+    color: #325584;
+    text-decoration: underline;
+}
 
 a.plain:link {
     color: #333;

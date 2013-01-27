@@ -128,5 +128,14 @@ SR.utils = {
 
     getCategoryMapping: function(){
         return CATEGORY_MAPPING;
+    },
+
+    setBackgroundImage: function(){
+        $.backstretch([
+            "../css/img/bing_bg.jpg",
+            "../css/img/bing_bg1.jpg",
+            "../css/img/bing_bg2.jpg",
+            "../css/img/bg2.jpg"
+        ], {duration: 5000});
     }
 };
