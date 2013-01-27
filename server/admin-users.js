@@ -1,3 +1,3 @@
 module.exports = {
-    adminUsers: ['frankyanwang@gmail.com','leon1.qi@gmail.com']
+    adminUsers: ['frankyanwang@gmail.com','qi.leon@gmail.com','xiatao123@hotmail.com']
 };

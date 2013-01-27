@@ -185,11 +185,19 @@ var populateDB = function() {
         },
         {
             name: "Leon QI",
-            email: "leon.qi@gmail.com",
+            email: "qi.leon@gmail.com",
             user: "leonqi",
             pass: "abc123",
             date: new Date()
-        }];
+        },
+        {
+            name: "Tao Xia",
+            email: "xiatao123@hotmail.com",
+            user: "xiatao123",
+            pass: "abc123",
+            date: new Date()
+        }
+    ];
 
 //        collection.insert(accounts, {safe:true}, function(err, result) {});
 

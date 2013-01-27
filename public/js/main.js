@@ -17,6 +17,7 @@ SR.AppRouter = Backbone.Router.extend({
         "stories/:id"           : "postDetails",
         "categories/:name"     : "listCategory",
         "admin-invite"          : "adminInviteList",
+        "admin-stories"          : "adminStories",
         "about"                 : "about"
     },
 
@@ -157,11 +158,30 @@ SR.AppRouter = Backbone.Router.extend({
 
         });
         $('.backstretch').remove();
+    },
+
+    adminStories: function(){
+        this.renderHeader();
+
+        var postList = new SR.PostCollection();
+        postList.fetch({
+            success: function(model, response, options){
+                $("#content").html(new SR.AdminStoriesView({model: postList}).el);
+                SR.utils.hideNotification();
+
+            },
+            error: function(model, xhr, options){
+                if(xhr.status === 401){
+                    SR.navigateHome();
+                }
+            }
+
+        });
     }
 
 });
 
-SR.utils.loadTemplate(['HomeView', 'HeaderView', 'PostView', 'PostListItemView', 'AboutView','PostModalView','SignupView','AdminInviteUsersView'], function() {
+SR.utils.loadTemplate(['HomeView', 'HeaderView', 'PostView', 'PostListItemView', 'AboutView','PostModalView','SignupView','AdminInviteUsersView','AdminStoriesView'], function() {
     SR.app = new SR.AppRouter();
     Backbone.history.start();
 });

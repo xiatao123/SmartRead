@@ -1,0 +1,24 @@
+<div class="row-fluid">
+    <table  class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Score</th>
+            <th>Operation</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% _.each(action, function(story) { %>
+        <tr>
+            <td><%= story._id%></td>
+            <td><%= story.name%></td>
+            <td><%= story.description%></td>
+            <td><%= story.score%></td>
+            <td><button class="btn btn-primary">Edit</button></td>
+        </tr>
+        <% }); %>
+        </tbody>
+    </table>
+</div>
