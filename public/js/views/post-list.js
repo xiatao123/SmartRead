@@ -50,7 +50,7 @@ SR.PostListView = Backbone.View.extend({
                 error: function(model, xhr, options){
                     console.log(xhr);
                     if(xhr.status === 401 || xhr.responseText() === "unauthorized"){
-                        SR.app.navigate("", {trigger: true});
+                        SR.navigateHome();
                         SR.utils.showError({message: '用户会话超时，为了您的安全，请从新登录。'});
                     }
                 }
@@ -62,7 +62,7 @@ SR.PostListView = Backbone.View.extend({
                 error: function(model, xhr, options){
                     console.log(xhr);
                     if(xhr.status === 401 || xhr.responseText() === "unauthorized"){
-                        SR.app.navigate("", {trigger: true});
+                        SR.navigateHome();
                         SR.utils.showError({message: '用户会话超时，为了您的安全，请从新登录。'});
                     }
                 }

@@ -32,12 +32,12 @@ SR.AdminInviteUsersView = Backbone.View.extend({
         request.done(function(data) {
             $(evt.target).removeAttr("disabled");
             $(evt.target).parent().prev().text("true");
-            SR.utils.showNotification({message: "email has been sent out!"});
+            SR.utils.showSuccess({message: "email has been sent out!"});
 
         });
         request.fail(function(jqXHR, textStatus) {
             $(evt.target).removeAttr("disabled");
-            SR.utils.showNotification({message: "failed to sent out the invitation email!"});
+            SR.utils.showSuccess({message: "failed to sent out the invitation email!"});
         });
     }
 });

@@ -52,7 +52,7 @@ SR.HomeView = Backbone.View.extend({
                 return true;
             },
             success	: function(data, status, xhr, $form){
-                SR.utils.showNotification({message: "欢迎申请悦读体验，我们会尽快并通知您！"});
+                SR.utils.showSuccess({message: "欢迎申请悦读体验，我们会尽快并通知您！"});
             },
             error : function(e){
                 if(e.responseText === "email-already-register"){

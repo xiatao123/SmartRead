@@ -1,5 +1,10 @@
 var SR = SR || {};
 
+SR.navigateHome = function(){
+    SR.clearUserCache();
+    SR.app.navigate("home",{trigger:true});
+};
+
 SR.AppRouter = Backbone.Router.extend({
 
     routes: {
@@ -12,6 +17,7 @@ SR.AppRouter = Backbone.Router.extend({
         "stories/:id"           : "postDetails",
         "categories/:name"     : "listCategory",
         "admin-invite"          : "adminInviteList",
+        "admin-stories"          : "adminStories",
         "about"                 : "about"
     },
 
@@ -20,15 +26,20 @@ SR.AppRouter = Backbone.Router.extend({
 //        $('.header').html(this.headerView.el);
     },
 
-    renderHeader: function(){
+    renderHeader: function(noCache){
+        if(!SR.getUserCache() || noCache === true){
+            this.headerView = new SR.HeaderView();
+            $('.header').html(this.headerView.el);
+        }
+    },
+
+    setLoggedInHeader: function(){
         this.headerView = new SR.HeaderView();
         $('.header').html(this.headerView.el);
     },
 
-    home: function (id) {
-//        this.headerView = new SR.HeaderView();
-//        $('.header').html(this.headerView.el);
 
+    home: function (id) {
         this.renderHeader();
         if (!this.homeView) {
             this.homeView = new SR.HomeView();
@@ -37,9 +48,9 @@ SR.AppRouter = Backbone.Router.extend({
         this.homeView.bindLogonjQueryForm();
         this.homeView.bindInvitejQueryForm();
 
-        this.headerView.selectMenuItem('home-menu');
-        $.backstretch("../css/img/bg2.jpg");
-//        $('body').addClass("homeView");
+//        this.headerView.selectMenuItem('home-menu');
+
+        SR.utils.setBackgroundImage();
     },
 
     signup: function(email){
@@ -56,13 +67,13 @@ SR.AppRouter = Backbone.Router.extend({
         $('.modal-alert .modal-header h3').text('Success!');
         $('.modal-alert .modal-body p').html('Your account has been created.</br>Click OK to return to the login page.');
 
-        $.backstretch("../css/img/bg2.jpg");
+        SR.utils.setBackgroundImage();
     },
 
 	list: function(page) {
-//        this.headerView = new SR.HeaderView();
-//        $('.header').html(this.headerView.el);
+        SR.utils.showInfo({message: "努力为您加载..."});
         this.renderHeader();
+        $("#categoryName").html("智能" + ' <b class="caret">');
 
         var p = page ? parseInt(page, 10) : 1;
         var postList = new SR.PostCollection();
@@ -77,7 +88,7 @@ SR.AppRouter = Backbone.Router.extend({
             },
             error: function(model, xhr, options){
                 if(xhr.status === 401){
-                    SR.app.navigate("home", {trigger: true});
+                    SR.navigateHome();
                 }
             }
 
@@ -85,18 +96,19 @@ SR.AppRouter = Backbone.Router.extend({
     },
 
     listCategory: function(name){
+        SR.utils.showInfo({message: "努力为您加载..."});
         this.renderHeader();
+        $("#categoryName").html(SR.utils.getCategoryMapping()[name] + ' <b class="caret">');
 
         var postList = new SR.PostCollection();
         postList.fetch({
             data: $.param({ category: name}),
             success: function(model, response, options){
                 $("#content").html(new SR.PostListView({model: postList}).el);
-                $("#categoryName").html(SR.utils.getCategoryMapping()[name] + ' <b class="caret">');
             },
             error: function(model, xhr, options){
                 if(xhr.status === 401){
-                    SR.app.navigate("home", {trigger: true});
+                    SR.navigateHome();
                 }
             }
         });
@@ -140,17 +152,36 @@ SR.AppRouter = Backbone.Router.extend({
             },
             error: function(model, xhr, options){
                 if(xhr.status === 401){
-                    SR.app.navigate("", {trigger: true});
+                    SR.navigateHome();
                 }
             }
 
         });
         $('.backstretch').remove();
+    },
+
+    adminStories: function(){
+        this.renderHeader();
+
+        var postList = new SR.PostCollection();
+        postList.fetch({
+            success: function(model, response, options){
+                $("#content").html(new SR.AdminStoriesView({model: postList}).el);
+                SR.utils.hideNotification();
+
+            },
+            error: function(model, xhr, options){
+                if(xhr.status === 401){
+                    SR.navigateHome();
+                }
+            }
+
+        });
     }
 
 });
 
-SR.utils.loadTemplate(['HomeView', 'HeaderView', 'PostView', 'PostListItemView', 'AboutView','PostModalView','SignupView','AdminInviteUsersView'], function() {
+SR.utils.loadTemplate(['HomeView', 'HeaderView', 'PostView', 'PostListItemView', 'AboutView','PostModalView','SignupView','AdminInviteUsersView','AdminStoriesView'], function() {
     SR.app = new SR.AppRouter();
     Backbone.history.start();
 });

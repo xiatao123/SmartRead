@@ -43,6 +43,7 @@ PM.findAll = function(userName, callback) {
                     Utils.logTime("query top stories", startTime);
                     _.each(items, function(value, index){
                         value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
+                        value['content'] = null;
                     });
                     Utils.logTime("modify each story", startTime);
                     callback(null, items);
@@ -86,6 +87,7 @@ PM.findByCategory = function(category, callback){
         Utils.logTime("query top stories by category", startTime);
         _.each(items, function(value, index){
             value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
+            value['content'] = null;
         });
         Utils.logTime("modify each story", startTime);
         callback(null, items);

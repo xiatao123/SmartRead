@@ -32,7 +32,8 @@ config.forbiddenImageDomain = [
     "img1.ifensi.com",
     "img.guhantai.com",
     "img0.pconline.com.cn",
-    "epaper.bjnews.com.cn"
+    "epaper.bjnews.com.cn",
+    "imgs.focus.cn"
 ];
 
 var INIT_SCORE = 100;
