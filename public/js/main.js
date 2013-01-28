@@ -22,14 +22,33 @@ SR.AppRouter = Backbone.Router.extend({
     },
 
     initialize: function () {
-//        this.headerView = new SR.HeaderView();
-//        $('.header').html(this.headerView.el);
     },
 
-    renderHeader: function(noCache){
+    renderHeader: function(curCategory, noCache){
+        curCategory = curCategory || "智能";
         if(!SR.getUserCache() || noCache === true){
-            this.headerView = new SR.HeaderView();
-            $('.header').html(this.headerView.el);
+            var request = $.ajax({
+                url: "session",
+                type: "GET",
+                dataType: "json"
+            });
+
+            var headerData={curCategory: curCategory};
+            var that = this;
+            request.done(function(data) {
+                headerData['user'] = data;
+                SR.setUserCache(data);
+                that.headerView = new SR.HeaderView({data: headerData});
+                $('.header').html(that.headerView.el);
+            });
+            request.fail(function(jqXHR, textStatus) {
+                headerData['user'] = undefined;
+                that.headerView = new SR.HeaderView({data: headerData});
+                $('.header').html(that.headerView.el);
+            });
+
+        }else{
+            $("#categoryName").html(curCategory + ' <b class="caret">');
         }
     },
 
@@ -73,7 +92,7 @@ SR.AppRouter = Backbone.Router.extend({
 	list: function(page) {
         SR.utils.showInfo({message: "努力为您加载..."});
         this.renderHeader();
-        $("#categoryName").html("智能" + ' <b class="caret">');
+//        $("#categoryName").html("智能" + ' <b class="caret">');
 
         var p = page ? parseInt(page, 10) : 1;
         var postList = new SR.PostCollection();
@@ -97,8 +116,7 @@ SR.AppRouter = Backbone.Router.extend({
 
     listCategory: function(name){
         SR.utils.showInfo({message: "努力为您加载..."});
-        this.renderHeader();
-        $("#categoryName").html(SR.utils.getCategoryMapping()[name] + ' <b class="caret">');
+        this.renderHeader(SR.utils.getCategoryMapping()[name]);
 
         var postList = new SR.PostCollection();
         postList.fetch({

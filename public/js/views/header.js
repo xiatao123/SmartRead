@@ -20,25 +20,7 @@ SR.HeaderView = Backbone.View.extend({
     },
 
     render: function () {
-        var request = $.ajax({
-            url: "session",
-            type: "GET",
-            dataType: "json"
-        });
-
-        var account={},
-            that = this;
-        request.done(function(data) {
-            account['user'] = data;
-            SR.setUserCache(data);
-            $(that.el).html(that.template(account));
-            return that;
-        });
-        request.fail(function(jqXHR, textStatus) {
-            account['user'] = undefined;
-            $(that.el).html(that.template(account));
-            return that;
-        });
+        $(this.el).html(this.template(this.options.data));
     },
 
     events: {
