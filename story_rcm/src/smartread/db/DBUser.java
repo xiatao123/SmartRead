@@ -46,16 +46,25 @@ public class DBUser extends DBBase{
 
         String[] int_info = { "interests_5m", "interests_1h", "interests_1d", "interests_7d" };
         for (String s : int_info) {
+            double factor = 1.0;
+            if(s.equalsIgnoreCase("interests_1h")){
+                factor = 0.8;
+            }else if (s.equalsIgnoreCase("interests_1d")){
+                factor = 0.6;
+            }else if (s.equalsIgnoreCase("interests_7d")){
+                factor = 0.4;
+            }
+            
             interests = (DBObject) userInfo.get(s);
             for (String key : interests.keySet()) {
                 if (maps.containsKey(key)) {
                     maps.put(
                             key,
                             maps.get(key)
-                                    + Double.valueOf(interests.get(key)
+                                    + factor*Double.valueOf(interests.get(key)
                                             .toString()));
                 } else {
-                    maps.put(key, Double.valueOf(interests.get(key).toString()));
+                    maps.put(key, factor*Double.valueOf(interests.get(key).toString()));
                 }
             }
         }
