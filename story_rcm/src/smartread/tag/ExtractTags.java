@@ -41,8 +41,15 @@ public class ExtractTags {
     public static void main(String[] args) {
         ExtractTags et = new ExtractTags();
         
-        String str = "两性养生：女人初夜后的得与失（组图）";
+        String str = "南空航空兵某师在东海战备巡航 战机挂载实弹(组图)";
+        System.out.println("Title: "+str);
         List<String> tags = et.getTags(str);
+        for(String s:tags)
+            System.out.println(s);
+        
+        str = "解放军战机东海上空战备巡航 挂实弹(图)";
+        System.out.println("Title: "+str);
+        tags = et.getTags(str);
         for(String s:tags)
             System.out.println(s);
     }
