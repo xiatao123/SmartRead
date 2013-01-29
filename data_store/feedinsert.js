@@ -60,7 +60,8 @@ function parseFeed(feedurl, dataProvider, category, callback) {
                                         filename = id + '.' + imgurl.split('.').pop();
                                     }
 
-                                    var tags = _.union(category,article.categories);
+//                                    var tags = _.union(category,article.categories);
+                                    var tags = article.categories || [];
                                     //console.log(tags);
 
                                     //console.log(meta.link + "\n\n\n")
@@ -81,7 +82,7 @@ function parseFeed(feedurl, dataProvider, category, callback) {
                                         guid:article.guid,
                                         author:article.author,
                                         comments:article.comments,
-                                        category: _.first(category),
+                                        category: category,
                                         tags:tags,
                                         score: initScore--,
                                         picture:imgurl
@@ -157,7 +158,9 @@ function parseFeedBaidu(feedurl, dataProvider, category, callback) {
 
                                 var id = new mongo.ObjectID();
 
-                                var tags = _.union(category,article.categories);
+//                                var tags = _.union(category,article.categories);
+                                var tags = article.categories || [];
+
                                 //console.log(tags);
 
                                 collection.update({
@@ -174,7 +177,7 @@ function parseFeedBaidu(feedurl, dataProvider, category, callback) {
                                     guid : article.guid,
                                     author : article.author,
                                     comments : article.comments,
-                                    category: _.first(category),
+                                    category: category,
                                     tags:  tags,
                                     score: initScore--,
                                     picture : imageUrl
