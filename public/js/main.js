@@ -122,6 +122,7 @@ SR.AppRouter = Backbone.Router.extend({
         postList.fetch({
             data: $.param({ category: name}),
             success: function(model, response, options){
+                $(document).scrollTop(0);
                 $("#content").html(new SR.PostListView({model: postList}).el);
             },
             error: function(model, xhr, options){
