@@ -1,5 +1,7 @@
 var SR = SR || {};
 
+(function(){
+
 var CATEGORY_MAPPING = {
     news:       "新闻",
     military:   "军事",
@@ -150,3 +152,5 @@ SR.utils = {
         ], {duration: 5000, fade: 1000});
     }
 };
+
+})();

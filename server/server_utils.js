@@ -46,3 +46,7 @@ Utils.getTimeAgo = function(date){
 Utils.getCategoryMapping = function(){
     return CATEGORY_MAPPING;
 };
+
+Utils.filterSessionUser = function(user){
+    return _.omit(user, 'pass','user');
+};

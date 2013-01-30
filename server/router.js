@@ -57,18 +57,18 @@ module.exports = function(app) {
     app.delete('/stories/:id', PM.deletePost);
 
     app.post('/login', function(req, res){
-        AM.manualLogin(req.param('user'), req.param('pass'), function(e, o){
-            if (!o){
+        AM.manualLogin(req.param('user'), req.param('pass'), function(e, account){
+            if (!account){
                 console.log("*****",req.param('user'));
                 res.send(e, 400);
             }	else{
                 console.log("*****","login success");
-                req.session.user = o;
+                req.session.user = account;
                 if (req.param('remember-me') == 'true'){
-                    res.cookie('user', o.user, { maxAge: 900000 });
-                    res.cookie('pass', o.pass, { maxAge: 900000 });
+                    res.cookie('user', account.user, { maxAge: 900000 });
+                    res.cookie('pass', account.pass, { maxAge: 900000 });
                 }
-                res.send(200, o);
+                res.send(200, Utils.filterSessionUser(req.session.user));
             }
         });
     });
@@ -81,7 +81,7 @@ module.exports = function(app) {
 
     app.get('/session', function(req, res){
         authenticate(req, res, function(){
-            res.send(200,req.session.user);
+            res.send(200,Utils.filterSessionUser(req.session.user));
         });
     });
 
@@ -94,16 +94,16 @@ module.exports = function(app) {
                         email 	: req.param('email'),
                         user 	: req.param('user'),
                         pass	: req.param('pass')
-                    }, function(e, o){
+                    }, function(e){
                         if (e){
                             res.send(e, 400);
                         }	else{
-                            AM.manualLogin(req.param('user'), req.param('pass'), function(e, o){
-                                if (!o){
+                            AM.manualLogin(req.param('user'), req.param('pass'), function(e, account){
+                                if (!account){
                                     res.send(e, 400);
                                 }	else{
-                                    req.session.user = o;
-                                    res.send(200, o);
+                                    req.session.user = account;
+                                    res.send(200, Utils.filterSessionUser(req.session.user));
                                 }
                             });
                         }
