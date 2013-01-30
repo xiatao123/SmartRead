@@ -14,10 +14,10 @@ SR.AppRouter = Backbone.Router.extend({
         "stories"	            : "list",
         "stories/page/:page"	: "list",
         "stories/add"           : "addPost",
-        "stories/:id"           : "postDetails",
-        "categories/:name"     : "listCategory",
+        "admin-stories/:id"     : "postDetails",
+        "categories/:name"      : "listCategory",
         "admin-invite"          : "adminInviteList",
-        "admin-stories"          : "adminStories",
+        "admin-stories"         : "adminStories",
         "about"                 : "about"
     },
 
@@ -135,7 +135,7 @@ SR.AppRouter = Backbone.Router.extend({
     },
 
     postDetails: function (id) {
-        var post = new SR.Post({_id: id});
+        var post = new SR.PostForAdmin({_id: id});
         post.fetch({success: function(){
             $("#content").html(new SR.PostView({model: post}).el);
         }});
@@ -182,7 +182,7 @@ SR.AppRouter = Backbone.Router.extend({
     adminStories: function(){
         //this.renderHeader();
 
-        var postList = new SR.PostCollection();
+        var postList = new SR.PostCollectionForAdmin();
         postList.fetch({
             success: function(model, response, options){
                 $("#content").html(new SR.AdminStoriesView({model: postList}).el);

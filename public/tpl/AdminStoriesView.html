@@ -19,9 +19,7 @@
             <td><%= story.description.substr(0,120) + "..."%></td>
             <td><%= story.tags.toString().split(',').join(' ') %></td>
             <td><%= story.score%></td>
-            <td>
-                <button data-id="<%= story._id%>" class="edit btn btn-primary">Edit</button>
-            </td>
+            <td><button data-id="<%= story._id%>" class="edit btn btn-primary">Edit</button></td>
             <td><button data-id="<%= story._id%>" class="btn delete">Delete</button></td>
         </tr>
         <% }); %>
