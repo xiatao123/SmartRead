@@ -24,11 +24,13 @@ SR.PostView = Backbone.View.extend({
 
         // Apply the change to the model
         var target = event.target;
-        if (target.name === "tags") {
-            target.value = target.value.split(" ");
-        }
         var change = {};
-        change[target.name] = target.value;
+        if (target.name === "tags") {
+            var tags = target.value.split(",");
+            change["tags"] = tags;
+        } else{
+            change[target.name] = target.value;
+        }
         this.model.set(change);
 
         // Run validation rule (if any) on changed item
