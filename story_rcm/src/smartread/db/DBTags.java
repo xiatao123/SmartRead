@@ -12,7 +12,7 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 
 public class DBTags extends DBBase {
-    private static final Logger logger = LogManager.getLogger(DBStory.class);
+    private static final Logger logger = LogManager.getLogger(DBTags.class);
 
     public static void addTag(String tag){
     }
