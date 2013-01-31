@@ -111,6 +111,24 @@ PM.findAllForAdmin = function(callback) {
         Utils.logTime("ADMIN: Total FindAllForAdmin time spent", startTime);
     });
 };
+
+PM.findByCategoryForAdmin = function(category, callback){
+    var startTime = new Date().getTime();
+    if (category){
+        PM.topStories.find({category: category}).sort({score:-1,pubDate:-1}).toArray(function(err, items) {
+            Utils.logTime("ADMIN: Query top stories by category", startTime);
+            _.each(items, function(value, index){
+                value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
+                value['content'] = null;
+            });
+            Utils.logTime("ADMIN: Modify each story", startTime);
+            callback(null, items);
+            Utils.logTime("ADMIN: Total findByCategory time spent", startTime);
+        });
+    } else{
+        this.PM.findAllForAdmin(callback);
+    }
+};
 //PM.addPost = function(req, res) {
 //    var post = req.body;
 //    console.log('Adding post: ' + JSON.stringify(post));

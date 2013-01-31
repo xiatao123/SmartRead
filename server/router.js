@@ -59,7 +59,7 @@ module.exports = function(app) {
         console.log("category: ", category);
         authenticate(req, res, function(){
             if(category){
-                PM.findByCategory(category, function(err, items){
+                PM.findByCategoryForAdmin(category, function(err, items){
                     if(err){
                         console.log(err);
                     }else{
