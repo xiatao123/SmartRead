@@ -190,7 +190,7 @@ public class DBStory extends DBBase{
         double f_similarity = 0;
         int f_count = 0;
 
-        if(fTags.size()<=3||sTags.size()<=3)
+        if(fTags.size()<3||sTags.size()<3)
             return 0;
         
         for(Object s: fTags){
