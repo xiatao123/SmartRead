@@ -26,7 +26,7 @@ SR.AppRouter = Backbone.Router.extend({
     },
 
     renderHeader: function(curCategory, noCache){
-        var curCategory = curCategory || "智能";
+        curCategory = curCategory || "智能";
         if(!SR.getUserCache() || noCache === true){
             var request = $.ajax({
                 url: "session",
@@ -197,7 +197,7 @@ SR.AppRouter = Backbone.Router.extend({
     },
 
     adminStories: function(){
-        //this.renderHeader();
+        this.renderHeader();
 
         var postList = new SR.PostCollectionForAdmin();
         postList.fetch({
