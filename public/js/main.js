@@ -208,6 +208,7 @@ SR.AppRouter = Backbone.Router.extend({
         var postList = new SR.PostCollectionForAdmin();
         postList.fetch({
             success: function(model, response, options){
+                $(document).scrollTop(0);
                 $("#content").html(new SR.AdminStoriesView({model: postList, page: p, origin: "admin-stories"}).el);
                 SR.utils.hideNotification();
 
