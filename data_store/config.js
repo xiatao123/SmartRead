@@ -36,6 +36,8 @@ config.forbiddenImageDomain = [
     "imgs.focus.cn"
 ];
 
+config.DEFAULT_INIT_SCORE = 100;
+
 var INIT_SCORE = 100;
 config.intialScore = {
 

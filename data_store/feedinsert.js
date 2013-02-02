@@ -47,7 +47,7 @@ function parseFeed(feedurl, dataProvider, category, callback) {
                             if(err){
                                 console.log("query posts collection failed.", err);
                             }else{
-                                var initScore = config.intialScore[feedurl];
+                                var initScore = config.intialScore[feedurl] || config.DEFAULT_INIT_SCORE;
                                 console.log("init score: ", initScore);
 
                                 articles.forEach(function (article) {
@@ -140,7 +140,7 @@ function parseFeedBaidu(feedurl, dataProvider, category, callback) {
                     } else {
                         dataProvider.db.collection("posts", function (error, collection) {
 
-                            var initScore = config.intialScore[feedurl];
+                            var initScore = config.intialScore[feedurl] || config.DEFAULT_INIT_SCORE;;
                             console.log("init score: ", initScore);
 
                             articles.forEach(function (article) {
