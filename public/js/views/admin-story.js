@@ -17,7 +17,7 @@ SR.AdminStoriesView = Backbone.View.extend({
             action: this.model.toJSON().slice(startPos, endPos)
         }));
 
-        $(this.el).append(new SR.Paginator({model: this.model, page: this.options.page}).render().el);
+        $(this.el).append(new SR.Paginator({model: this.model, extras: this.options }).render().el);
 
         return this;
     },
