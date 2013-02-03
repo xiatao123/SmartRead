@@ -98,13 +98,18 @@ PM.findByCategory = function(category, callback){
 
 //===================================================================
 // Admin functions
-PM.findAllForAdmin = function(callback) {
+PM.findAllForAdmin = function(page, limit, callback) {
     var startTime = new Date().getTime();
-    PM.topStories.find().sort({score:-1,pubDate:-1}).toArray(function(err, items) {
+    PM.resetTopStoriesCount();
+    var _page = parseInt(page, 10) ? parseInt(page, 10) : 0;
+    var _limit = parseInt(limit, 10) ? parseInt(limit, 10) : 0;
+    PM.topStories.find().sort({score:-1,pubDate:-1}).skip(_limit*(_page-1)).limit(_limit).toArray(function(err, items) {
         Utils.logTime("ADMIN: Query top stories", startTime);
         _.each(items, function(value, index){
             value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
             value['content'] = null;
+            value['storyCount'] = Utils.getTopStoriesCount();
+            value['categoryCount'] = Utils.getCategoryCount();
         });
         Utils.logTime("ADMIN: Modify each story", startTime);
         callback(null, items);
@@ -112,21 +117,27 @@ PM.findAllForAdmin = function(callback) {
     });
 };
 
-PM.findByCategoryForAdmin = function(category, callback){
+PM.findByCategoryForAdmin = function(category, page, limit, callback){
     var startTime = new Date().getTime();
+    PM.resetTopStoriesCount();
+    var _page = parseInt(page, 10) ? parseInt(page, 10) : 0;
+    var _limit = parseInt(limit, 10) ? parseInt(limit, 10) : 0;
     if (category){
-        PM.topStories.find({category: category}).sort({score:-1,pubDate:-1}).toArray(function(err, items) {
+        PM.resetCategoryCount(category);
+        PM.topStories.find({category: category}).sort({score:-1,pubDate:-1}).skip(_limit*(_page-1)).limit(_limit).toArray(function(err, items) {
             Utils.logTime("ADMIN: Query top stories by category", startTime);
             _.each(items, function(value, index){
                 value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
                 value['content'] = null;
+                value['storyCount'] = Utils.getTopStoriesCount();
+                value['categoryCount'] = Utils.getCategoryCount();
             });
             Utils.logTime("ADMIN: Modify each story", startTime);
             callback(null, items);
             Utils.logTime("ADMIN: Total findByCategory time spent", startTime);
         });
     } else{
-        this.PM.findAllForAdmin(callback);
+        this.PM.findAllForAdmin(page, limit, callback);
     }
 };
 //PM.addPost = function(req, res) {
@@ -171,3 +182,29 @@ PM.deletePost = function(req, res) {
         }
     });
 };
+
+PM.resetTopStoriesCount = function() {
+    PM.topStories.count(
+        function(err, count) {
+            if (err) {
+                res.send({'error':'ADMIN: An error has occurred - ' + err});
+            } else {
+                console.log('ADMIN: ' + count + ' document(s) in total.');
+                Utils.setTopStoriesCount(count);
+            }
+        }
+    );
+}
+
+PM.resetCategoryCount = function(category) {
+    PM.topStories.count({category: category},
+        function(err, count) {
+            if (err) {
+                res.send({'error':'ADMIN: An error has occurred - ' + err});
+            } else {
+                console.log('ADMIN: ' + count + ' document(s) in this category.');
+                Utils.setCategoryCount(category, count);
+            }
+        }
+    );
+}
