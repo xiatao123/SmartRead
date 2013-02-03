@@ -8,9 +8,19 @@ SR.AdminStoriesView = Backbone.View.extend({
 
     render:function () {
         var stories = this.model.models;
+        var category = this.options['category'];
+        var storyCount = parseInt(stories.pop().get("storyCount"), 10);
+        var catCount = parseInt(stories.pop().get("categoryCount")[category], 10);
+        //var num = SR.utils.getNumberPerPage();
+        //var startPos = (this.options.page-1)*num;
+        //var endPos = Math.min(startPos + num, len);
+
         $(this.el).html(this.template({
             action: this.model.toJSON()
         }));
+
+        $(this.el).append(new SR.Paginator({model: this.model, extras: this.options, sCount: storyCount, cCount: catCount }).render().el);
+
         return this;
     },
 
@@ -21,8 +31,7 @@ SR.AdminStoriesView = Backbone.View.extend({
 
     editStory: function(evt){
         var id = $(evt.target).data('id');
-        var router = new SR.AppRouter;
-        router.navigate("stories/" + id, {trigger: true});
+        SR.app.navigate("admin-stories/" + id, {trigger: true});
     },
 
     deleteStory: function (evt) {

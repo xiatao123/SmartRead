@@ -7,7 +7,7 @@ var CATEGORY_MAPPING = {
     military:   "军事",
     finance:    "财经",
     web:        "互联网",
-    realestate:  "房产",
+    realestate: "房产",
     car:        "汽车",
     sports:     "体育",
     entertain:  "娱乐",
@@ -16,10 +16,12 @@ var CATEGORY_MAPPING = {
     women:      "女人",
     tech:       "科技",
     social:     "社会",
-    fashion:     "时尚"
+    fashion:    "时尚"
 };
 
 var CATEGORY_MAPPING_REVERSE = _.invert(CATEGORY_MAPPING);
+
+var NUM_PER_PAGE = 100;
 
 SR.utils = {
 
@@ -150,6 +152,10 @@ SR.utils = {
             "../css/img/bing_bg2.jpg",
             "../css/img/bg2.jpg"
         ], {duration: 5000, fade: 1000});
+    },
+
+    getNumberPerPage: function(){
+        return NUM_PER_PAGE;
     }
 };
 

@@ -8,17 +8,20 @@ SR.navigateHome = function(){
 SR.AppRouter = Backbone.Router.extend({
 
     routes: {
-        ""                      : "list",
-        "home"                  : "home",
-        "signup/:email"         : "signup",
-        "stories"	            : "list",
-        "stories/page/:page"	: "list",
-        "stories/add"           : "addPost",
-        "stories/:id"           : "postDetails",
-        "categories/:name"     : "listCategory",
-        "admin-invite"          : "adminInviteList",
-        "admin-stories"          : "adminStories",
-        "about"                 : "about"
+        ""                          : "list",
+        "home"                      : "home",
+        "signup/:email"             : "signup",
+        "stories"	                : "list",
+        "stories/page/:page"	    : "list",
+        "stories/add"               : "addPost",
+        "admin-stories/:id"         : "postDetails",
+        "categories/:name"          : "listCategory",
+        "admin-invite"              : "adminInviteList",
+        "admin-stories"             : "adminStories",
+        "admin-stories/page/:page"  : "adminStories",
+        "admin-categories/:name"    : "adminCategory",
+        "admin-categories/:name/page/:page"    : "adminCategory",
+        "about"                     : "about"
     },
 
     initialize: function () {
@@ -134,8 +137,27 @@ SR.AppRouter = Backbone.Router.extend({
 
     },
 
+    adminCategory: function(name, page){
+        this.renderHeader();
+
+        var p = page ? parseInt(page, 10) : 1;
+        var postList = new SR.PostCollectionForAdmin();
+        postList.fetch({
+            data: $.param({ category: name, page: p, limit: SR.utils.getNumberPerPage()}),
+            success: function(model, response, options){
+                $(document).scrollTop(0);
+                $("#content").html(new SR.AdminStoriesView({model: postList, page: p, origin: "admin-categories", category: name}).el);
+            },
+            error: function(model, xhr, options){
+                if(xhr.status === 401){
+                    SR.navigateHome();
+                }
+            }
+        });
+    },
+
     postDetails: function (id) {
-        var post = new SR.Post({_id: id});
+        var post = new SR.PostForAdmin({_id: id});
         post.fetch({success: function(){
             $("#content").html(new SR.PostView({model: post}).el);
         }});
@@ -179,13 +201,16 @@ SR.AppRouter = Backbone.Router.extend({
         $('.backstretch').remove();
     },
 
-    adminStories: function(){
-        //this.renderHeader();
+    adminStories: function(page){
+        this.renderHeader();
 
-        var postList = new SR.PostCollection();
+        var p = page ? parseInt(page, 10) : 1;
+        var postList = new SR.PostCollectionForAdmin();
         postList.fetch({
+            data: $.param({ page: p, limit: SR.utils.getNumberPerPage()}),
             success: function(model, response, options){
-                $("#content").html(new SR.AdminStoriesView({model: postList}).el);
+                $(document).scrollTop(0);
+                $("#content").html(new SR.AdminStoriesView({model: postList, page: p, origin: "admin-stories"}).el);
                 SR.utils.hideNotification();
 
             },

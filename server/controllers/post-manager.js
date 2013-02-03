@@ -98,7 +98,49 @@ PM.findByCategory = function(category, callback){
 
 //===================================================================
 // Admin functions
+PM.findAllForAdmin = function(page, limit, callback) {
+    var startTime = new Date().getTime();
+    var _page = parseInt(page, 10) ? parseInt(page, 10) : 0;
+    var _limit = parseInt(limit, 10) ? parseInt(limit, 10) : 0;
+    PM.resetTopStoriesCount(
+        PM.topStories.find().sort({score:-1,pubDate:-1}).skip(_limit*(_page-1)).limit(_limit).toArray(function(err, items) {
+            Utils.logTime("ADMIN: Query top stories", startTime);
+            _.each(items, function(value, index){
+                value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
+                value['content'] = null;
+                value['storyCount'] = Utils.getTopStoriesCount();
+                value['categoryCount'] = Utils.getCategoryCount();
+            });
+            Utils.logTime("ADMIN: Modify each story", startTime);
+            callback(null, items);
+            Utils.logTime("ADMIN: Total FindAllForAdmin time spent", startTime);
+        })
+    );
+};
 
+PM.findByCategoryForAdmin = function(category, page, limit, callback){
+    var startTime = new Date().getTime();
+    var _page = parseInt(page, 10) ? parseInt(page, 10) : 0;
+    var _limit = parseInt(limit, 10) ? parseInt(limit, 10) : 0;
+    if (category){
+        PM.resetCategoryCount(category,
+            PM.topStories.find({category: category}).sort({score:-1,pubDate:-1}).skip(_limit*(_page-1)).limit(_limit).toArray(function(err, items) {
+                Utils.logTime("ADMIN: Query top stories by category", startTime);
+                _.each(items, function(value, index){
+                    value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
+                    value['content'] = null;
+                    value['storyCount'] = Utils.getTopStoriesCount();
+                    value['categoryCount'] = Utils.getCategoryCount();
+                });
+                Utils.logTime("ADMIN: Modify each story", startTime);
+                callback(null, items);
+                Utils.logTime("ADMIN: Total findByCategory time spent", startTime);
+            })
+        );
+    } else{
+        this.PM.findAllForAdmin(page, limit, callback);
+    }
+};
 //PM.addPost = function(req, res) {
 //    var post = req.body;
 //    console.log('Adding post: ' + JSON.stringify(post));
@@ -116,12 +158,12 @@ PM.updatePost = function(req, res) {
     var id = req.params.id;
     var post = req.body;
     delete post._id;
-    console.log('Updating story: ' + id);
+    console.log('ADMIN: Updating story: ' + id);
     console.log(JSON.stringify(post));
         PM.topStories.update({'_id':new BSON.ObjectID(id)}, post, {safe:true}, function(err, result) {
         if (err) {
-            console.log('Error updating story: ' + err);
-            res.send({'error':'An error has occurred'});
+            console.log('ADMIN: Error updating story: ' + err);
+            res.send({'error':'ADMIN: An error has occurred'});
         } else {
             console.log('' + result + ' document(s) updated');
             res.send(post);
@@ -131,13 +173,41 @@ PM.updatePost = function(req, res) {
 
 PM.deletePost = function(req, res) {
     var id = req.params.id;
-    console.log('Deleting story: ' + id);
+    console.log('ADMIN: Deleting story: ' + id);
     PM.topStories.remove({'_id':new BSON.ObjectID(id)}, {safe:true}, function(err, result) {
         if (err) {
-            res.send({'error':'An error has occurred - ' + err});
+            res.send({'error':'ADMIN: An error has occurred - ' + err});
         } else {
-            console.log('' + result + ' document(s) deleted');
+            console.log('ADMIN: ' + result + ' document(s) deleted');
             res.send(req.body);
         }
     });
 };
+
+PM.resetTopStoriesCount = function(callback) {
+    PM.topStories.count(
+        function(err, count) {
+            if (err) {
+                res.send({'error':'ADMIN: An error has occurred - ' + err});
+            } else {
+                console.log('ADMIN: ' + count + ' document(s) in total.');
+                Utils.setTopStoriesCount(count);
+                callback;
+            }
+        }
+    );
+}
+
+PM.resetCategoryCount = function(category, callback) {
+    PM.topStories.count({category: category},
+        function(err, count) {
+            if (err) {
+                res.send({'error':'ADMIN: An error has occurred - ' + err});
+            } else {
+                console.log('ADMIN: ' + count + ' document(s) in this category.');
+                Utils.setCategoryCount(category, count);
+                callback;
+            }
+        }
+    );
+}
