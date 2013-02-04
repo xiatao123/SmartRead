@@ -28,6 +28,7 @@
             <th style="width: 34%">Description</th>
             <th style="width: 10%">Tags</th>
             <th style="width: 5%">Score</th>
+            <th style="width: 5%">Pubdate</th>
             <th style="width: 8%">Delete</th>
         </tr>
         </thead>
@@ -40,6 +41,7 @@
             <td><%= story.description.substr(0,120) + "..."%></td>
             <td><%= story.tags.toString().split(',').join(' ') %></td>
             <td><%= story.score%></td>
+            <td><%= story.pubDate%></td>
             <td><button data-id="<%= story._id%>" class="btn btn-small btn-danger delete"><i class="icon-trash icon-white"></i> 删除</button></td>
         </tr>
         <% }); %>
