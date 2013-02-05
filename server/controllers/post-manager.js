@@ -196,7 +196,7 @@ PM.resetTopStoriesCount = function(callback) {
             }
         }
     );
-}
+};
 
 PM.resetCategoryCount = function(category, callback) {
     PM.topStories.count({category: category},
@@ -210,4 +210,4 @@ PM.resetCategoryCount = function(category, callback) {
             }
         }
     );
-}
+};
