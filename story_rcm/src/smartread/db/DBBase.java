@@ -9,25 +9,27 @@ import com.mongodb.MongoClient;
 public abstract class DBBase {
     static DB db = null;
     static final String DB_CATEGORY_FIELD = "tags";
+    static final String DB_DATE_FIELD = "pubDate";
+
     static final String DB_EVENT_TIME_CREATE_FIELD = "createTimeLong";
-
     static final String DB_EVENT_TIME_SPEND_FIELD = "timespend";
-    static String DB_HOST = "localhost";
 
+    static String DB_HOST = "localhost";
     static final String DB_INDEX_FIELD = "index";
     static final String DB_INTEREST_FIELD = "interests_";
+
     static final String DB_LIST_FIELD = "list";
 
     static String DB_NAME = "smartreaddb";
-
     static final String DB_OID_FIELD = "_id";
     static char[] DB_PASSWORD = new char[0];
     static int DB_PORT = 27017;
     static final String DB_POSTS_TABLE = "posts";
     static final String DB_SCORE_FIELD = "score";
-    static final String DB_SERVE_EVENT_TABLE = "events";
 
+    static final String DB_SERVE_EVENT_TABLE = "events";
     static final String DB_TAG_FIELD = "tags";
+
     static final String DB_TAGS_TABLE = "tags";
     static final String DB_TOP_STORY_TABLE = "top_stories";
     static final String DB_UID_FIELD = "user";

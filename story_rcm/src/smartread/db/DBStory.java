@@ -69,25 +69,24 @@ public class DBStory extends DBBase {
         // remove stories are older than 7 days
         Date date = new Date(System.currentTimeMillis() - 1000 * 60 * 60 * 24
                 * LOOKBACK_DAYS);
-        DBObject query = new BasicDBObject("pubDate", new BasicDBObject("$lt",
-                date));
+        DBObject query = new BasicDBObject(DB_DATE_FIELD, new BasicDBObject(
+                "$lt", date));
         topStoryColl.remove(query);
         logger.debug("Total top stories after clean up 7 days old: "
                 + topStoryColl.count());
 
         // remove stories over the TOP_STORY_SIZE
-        DBCursor cursor = topStoryColl.find().sort(
-                new BasicDBObject("score", -1).append("pubDate", -1));
+        DBCursor cursor = topStoryColl.find()
+                .sort(new BasicDBObject(DB_SCORE_FIELD, -1).append(
+                        DB_DATE_FIELD, -1));
         try {
             if (cursor.size() > TOP_STORY_SIZE) {
                 cursor = cursor.skip(TOP_STORY_SIZE);
                 DBObject obj = cursor.next();
-                date = (Date) obj.get("pubDate");
-                Double score = (Double) obj.get("score");
-                // query = new BasicDBObject("pubDate", new BasicDBObject("$lt",
-                // date)).append("score", new BasicDBObject("$lt", score));
-                query = new BasicDBObject("score", new BasicDBObject("$lt",
-                        score));
+                date = (Date) obj.get(DB_DATE_FIELD);
+                Double score = (Double) obj.get(DB_SCORE_FIELD);
+                query = new BasicDBObject(DB_SCORE_FIELD, new BasicDBObject(
+                        "$lt", score));
                 logger.debug("topStoryColl remove query: " + query);
                 topStoryColl.remove(query);
             }
@@ -99,7 +98,7 @@ public class DBStory extends DBBase {
 
         // remove duplicate
         List<DBObject> stories = topStoryColl.find()
-                .sort(new BasicDBObject("pubDate", 1)).toArray();
+                .sort(new BasicDBObject(DB_DATE_FIELD, 1)).toArray();
         for (int i = 0; i < stories.size(); i++) {
             DBObject fStory = stories.get(i);
             BasicDBList f_tags = (BasicDBList) fStory.get(DB_TAG_FIELD);
@@ -108,8 +107,8 @@ public class DBStory extends DBBase {
 
                 BasicDBList s_tags = (BasicDBList) sStory.get(DB_TAG_FIELD);
                 if (checkSimilar(f_tags, s_tags) > 0.5) {
-                    int x = ((Double) fStory.get("score") >= (Double) sStory
-                            .get("score")) ? j : i;
+                    int x = ((Double) fStory.get(DB_SCORE_FIELD) >= (Double) sStory
+                            .get(DB_SCORE_FIELD)) ? j : i;
                     topStoryColl.remove(stories.remove(x));
                     j--;
                     logger.debug("These two stories are simiar:\n1: "
@@ -145,7 +144,7 @@ public class DBStory extends DBBase {
         DBObject story = coll.findOne(q);
 
         Double score = (Double) story.get(DB_SCORE_FIELD);
-        Date date = (Date) story.get("pubDate");
+        Date date = (Date) story.get(DB_DATE_FIELD);
         List<String> tags = new ArrayList<String>();
         BasicDBList tagList = (BasicDBList) story.get(DB_CATEGORY_FIELD);
         for (Object o : tagList) {
@@ -186,7 +185,7 @@ public class DBStory extends DBBase {
                 Double score = Double.valueOf(obj.get(DB_SCORE_FIELD)
                         .toString());
                 String id = obj.get(DB_OID_FIELD).toString();
-                Date date = (Date) obj.get("pubDate");
+                Date date = (Date) obj.get(DB_DATE_FIELD);
                 List<String> tags = new ArrayList<String>();
 
                 BasicDBList tagList = (BasicDBList) obj.get(DB_CATEGORY_FIELD);
@@ -222,15 +221,15 @@ public class DBStory extends DBBase {
                 * LOOKBACK_DAYS);
 
         // remove posts 7 days old
-        storyColl.remove(new BasicDBObject("pubDate", new BasicDBObject("$lt",
-                date)));
+        storyColl.remove(new BasicDBObject(DB_DATE_FIELD, new BasicDBObject(
+                "$lt", date)));
 
-        BasicDBObject query = new BasicDBObject("pubDate", new BasicDBObject(
-                "$gte", date));
+        BasicDBObject query = new BasicDBObject(DB_DATE_FIELD,
+                new BasicDBObject("$gte", date));
 
         DBCursor cursor = storyColl.find(query)
-                .sort(new BasicDBObject("score", -1))
-                .sort(new BasicDBObject("pubDate", -1));
+                .sort(new BasicDBObject(DB_SCORE_FIELD, -1))
+                .sort(new BasicDBObject(DB_DATE_FIELD, -1));
 
         ExtractTags et = new ExtractTags();
 
