@@ -15,14 +15,14 @@ public class ExtractTags {
     public static void main(String[] args) {
         ExtractTags et = new ExtractTags();
 
-        String str = "施密特在新书中描绘了怎样的数字未来？";
+        String str = "中芯国际第四季度净利润3970万美元 同比扭亏";
         System.out.println("Title: " + str);
         List<String> tags = et.getTags(str);
         for (String s : tags) {
             System.out.println(s);
         }
 
-        str = "美国人也不知道“数字钱包”是啥";
+        str = "时代华纳第四季度净利润11.7亿美元 同比增51%";
         System.out.println("Title: " + str);
         tags = et.getTags(str);
         for (String s : tags) {
