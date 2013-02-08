@@ -1,4 +1,4 @@
 module.exports = {
-    PROVIDE_CONTENT: true,
+    PROVIDE_CONTENT: false,
     NUM_STORIES: 100
 };
