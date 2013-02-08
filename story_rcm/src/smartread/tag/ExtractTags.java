@@ -44,12 +44,16 @@ public class ExtractTags {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
         String[] lists = { "名词", "实体名", "机构名", "网址", "事件名", "品牌名", "地名", "人名",
-                "品牌" };
+                "品牌", "数词" };
         type = Arrays.asList(lists);
     }
 
     public List<String> getTags(String input) {
+        
+        System.out.println("Debug: "+tag.tag(input));
+
         String[][] tagArray = tag.tag2Array(input);
         List<String> tags = new ArrayList<String>();
         for (int i = 0; i < tagArray[0].length; i++) {
