@@ -186,10 +186,10 @@ a.plain:hover {
 }
 
 /*override bootstrap css*/
-.modal {
-    margin: -380px 0 0 -380px;
-    width: 760px;
-}
+/*.modal {*/
+    /*margin: -380px 0 0 -380px;*/
+    /*width: 760px;*/
+/*}*/
 
 .modal-body {
     max-height: 600px;
@@ -210,11 +210,16 @@ label {
 
 #loginModal{
     font-size: 13px;
-    margin-left: -200px;
-    margin-top: -250px;
+    /*margin-left: -200px;*/
+    /*margin-top: -250px;*/
     text-align: left;
     text-shadow: 0 0 0;
     width: 380px;
+}
+
+#myModal{
+    margin: -380px 0 0 -380px;
+    width: 760px;
 }
 
 #remember-me{

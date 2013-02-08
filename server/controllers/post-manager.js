@@ -1,8 +1,7 @@
-var NUM_STORIES = 100;
-
 var _ = require('underscore');
 var DataProvider = require('../db-provider').DataProvider;
 var Utils = require('../server_utils');
+var settings = require('../settings');
 
 var BSON = require('mongodb').BSONPure;
 
@@ -39,11 +38,11 @@ PM.findAll = function(userName, callback) {
             Utils.logTime("query user stories", startTime);
             if(item === null){
                 console.log("find by regular top_stories!");
-                PM.topStories.find().sort({score:-1,pubDate:-1}).limit(NUM_STORIES).toArray(function(err, items) {
+                PM.topStories.find().sort({score:-1,pubDate:-1}).limit(settings.NUM_STORIES).toArray(function(err, items) {
                     Utils.logTime("query top stories", startTime);
                     _.each(items, function(value, index){
                         value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
-                        value['content'] = null;
+                        if(!settings.PROVIDE_CONTENT) value['content'] = null;
                     });
                     Utils.logTime("modify each story", startTime);
                     callback(null, items);
@@ -56,7 +55,7 @@ PM.findAll = function(userName, callback) {
                 var ids = _.map(item.index, function(score, storyId){ return new BSON.ObjectID(storyId); });
                 Utils.logTime("map ids to BSON objectID", startTime);
 
-                ids = _.first(ids, NUM_STORIES);
+                ids = _.first(ids, settings.NUM_STORIES);
                 Utils.logTime("chop first num stories", startTime);
 //                console.log("ids : ", ids);
 
@@ -65,7 +64,7 @@ PM.findAll = function(userName, callback) {
                     _.each(items, function(value, index){
                         value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
                         value['score'] = item.index[value['_id']];
-                        value['content'] = null;
+                        if(!settings.PROVIDE_CONTENT) value['content'] = null;
 //                    console.log(value['_id']);
                     });
                     Utils.logTime("modify each story", startTime);
@@ -83,11 +82,11 @@ PM.findAll = function(userName, callback) {
 
 PM.findByCategory = function(category, callback){
     var startTime = new Date().getTime();
-    PM.topStories.find({category: category}).sort({score:-1,pubDate:-1}).limit(NUM_STORIES).toArray(function(err, items) {
+    PM.topStories.find({category: category}).sort({score:-1,pubDate:-1}).limit(settings.NUM_STORIES).toArray(function(err, items) {
         Utils.logTime("query top stories by category", startTime);
         _.each(items, function(value, index){
             value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
-            value['content'] = null;
+            if(!settings.PROVIDE_CONTENT) value['content'] = null;
         });
         Utils.logTime("modify each story", startTime);
         callback(null, items);
@@ -107,7 +106,7 @@ PM.findAllForAdmin = function(page, limit, callback) {
             Utils.logTime("ADMIN: Query top stories", startTime);
             _.each(items, function(value, index){
                 value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
-                value['content'] = null;
+                if(!settings.PROVIDE_CONTENT) value['content'] = null;
                 value['storyCount'] = Utils.getTopStoriesCount();
                 value['categoryCount'] = Utils.getCategoryCount();
             });
@@ -128,7 +127,7 @@ PM.findByCategoryForAdmin = function(category, page, limit, callback){
                 Utils.logTime("ADMIN: Query top stories by category", startTime);
                 _.each(items, function(value, index){
                     value['pubDate'] = Utils.getTimeAgo(value['pubDate']);
-                    value['content'] = null;
+                    if(!settings.PROVIDE_CONTENT) value['content'] = null;
                     value['storyCount'] = Utils.getTopStoriesCount();
                     value['categoryCount'] = Utils.getCategoryCount();
                 });

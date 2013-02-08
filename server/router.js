@@ -36,22 +36,22 @@ module.exports = function(app) {
     });
 
     // This is not used now
-//    app.get('/stories/:id', function(req, res){
-//        authenticate(req, res, function(){
-//            var storyId = req.params.id;
-//            PM.findById(storyId, function(err, story){
-////                console.log(req.session.user);
-////                console.log("Story: ", story);
-//                var userId = req.session.user._id;
-//                var userName = req.session.user.user;
-//                var tags = story.tags;
-//                EventMgr.insert(userId, userName, storyId, tags, function(){
-//                    //don't care for now success or fail.
-//                });
-//                res.send(200, story);
-//            });
-//        });
-//    });
+    app.get('/stories/:id', function(req, res){
+        authenticate(req, res, function(){
+            var storyId = req.params.id;
+            PM.findById(storyId, function(err, story){
+//                console.log(req.session.user);
+//                console.log("Story: ", story);
+                var userId = req.session.user._id;
+                var userName = req.session.user.user;
+                var tags = story.tags;
+                EventMgr.insert(userId, userName, storyId, tags, function(){
+                    //don't care for now success or fail.
+                });
+                res.send(200, story);
+            });
+        });
+    });
 
     // For admin use only
     app.get('/admin-stories', function(req, res){

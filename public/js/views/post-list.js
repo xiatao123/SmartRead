@@ -1,5 +1,4 @@
 var SR = SR || {};
-SR.NO_POPUP = true;
 
 SR.PostListView = Backbone.View.extend({
 
@@ -49,7 +48,7 @@ SR.PostListView = Backbone.View.extend({
                 },
                 error: function(model, xhr, options){
                     console.log(xhr);
-                    if(xhr.status === 401 || xhr.responseText() === "unauthorized"){
+                    if(xhr.status === 401 || xhr.responseText === "unauthorized"){
                         SR.navigateHome();
                         SR.utils.showError({message: '用户会话超时，为了您的安全，请从新登录。'});
                     }
@@ -61,7 +60,7 @@ SR.PostListView = Backbone.View.extend({
                 },
                 error: function(model, xhr, options){
                     console.log(xhr);
-                    if(xhr.status === 401 || xhr.responseText() === "unauthorized"){
+                    if(xhr.status === 401 || xhr.responseText === "unauthorized"){
                         SR.navigateHome();
                         SR.utils.showError({message: '用户会话超时，为了您的安全，请从新登录。'});
                     }
