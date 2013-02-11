@@ -9,6 +9,8 @@ var EventMgr = require('./controllers/event-manager');
 var Utils = require('./server_utils');
 var ADMIN_USER = require('./admin-users').adminUsers;
 
+var settings = require('./settings');
+
 module.exports = function(app) {
 
     app.get('/stories', function(req, res){
@@ -48,7 +50,11 @@ module.exports = function(app) {
                 EventMgr.insert(userId, userName, storyId, tags, function(){
                     //don't care for now success or fail.
                 });
-                res.send(200, story);
+                if(!settings.PROVIDE_CONTENT){
+                    res.send(200, '');
+                }else{
+                    res.send(200, story);
+                }
             });
         });
     });

@@ -21,7 +21,7 @@ a {
 }
 a:hover {
     color: #325584;
-    /*text-decoration: none;*/
+    text-decoration: none;
 }
 
 a.active {
@@ -31,7 +31,7 @@ a.active {
 
 a:visited {
     color: #666;
-    /*text-decoration: none;*/
+    text-decoration: none;
 }
 
 a.plain:link {
