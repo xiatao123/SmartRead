@@ -191,7 +191,7 @@ PM.resetTopStoriesCount = function(callback) {
             } else {
                 console.log('ADMIN: ' + count + ' document(s) in total.');
                 Utils.setTopStoriesCount(count);
-                callback;
+                callback();
             }
         }
     );
@@ -205,7 +205,7 @@ PM.resetCategoryCount = function(category, callback) {
             } else {
                 console.log('ADMIN: ' + count + ' document(s) in this category.');
                 Utils.setCategoryCount(category, count);
-                callback;
+                callback();
             }
         }
     );

@@ -21,7 +21,17 @@ a {
 }
 a:hover {
     color: #325584;
-    text-decoration: underline;
+    /*text-decoration: none;*/
+}
+
+a.active {
+    color: #333;
+    text-decoration: none;
+}
+
+a:visited {
+    color: #666;
+    /*text-decoration: none;*/
 }
 
 a.plain:link {
@@ -35,13 +45,17 @@ a.plain:active {
 }
 
 a.plain:visited {
-    color: #333;
+    color: #666;
     text-decoration: none;
 }
 
 a.plain:hover {
     color: #333;
     text-decoration: none;
+}
+
+.visited{
+    color: #666666;
 }
 
 /*.status-bar {*/
@@ -73,15 +87,15 @@ a.plain:hover {
 
 .thumbnail {
     /*include description*/
-    min-height: 450px;
-    /*min-height: 330px;*/
+    /*min-height: 450px;*/
+    min-height: 330px;
     background-color: #FFFFFF;
     border: medium none;
     border-radius: 4px 4px 4px 4px;
     box-shadow: 0 1px 3px rgba(34, 25, 25, 0.4);
     display: block;
     line-height: 20px;
-    padding: 25px;
+    padding: 15px;
     transition: all 0.2s ease-in-out 0s;
 }
 
@@ -99,7 +113,8 @@ a.plain:hover {
 
 .story_image_container{
     margin-bottom: 20px;
-    max-height: 200px;
+    /*max-height: 200px;*/
+    height: 200px;
 }
 
 .story_image{

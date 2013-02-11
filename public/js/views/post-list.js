@@ -36,6 +36,8 @@ SR.PostListView = Backbone.View.extend({
 //        var post = new SR.Post({_id: evt.currentTarget.id});
         var postListView = this;
 
+//        $(evt.target).addClass('visited');
+
         if(!SR.NO_POPUP && post.get('content') !== null){
             post.fetch({
                 success: function(model, response, options){
@@ -57,6 +59,7 @@ SR.PostListView = Backbone.View.extend({
         }else{
             post.fetch({
                 success: function(model, response, options){
+//                    $(evt.target).addClass('visited');
                 },
                 error: function(model, xhr, options){
                     console.log(xhr);
