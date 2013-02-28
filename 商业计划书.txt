@@ -37,7 +37,7 @@ Frank 王砚 www.linkedin.com/in/frankyanwang
 关注互联网和新科技，酷爱创新和写程序。从06年开始在SAP工作一直从事互联网前后端研发。现在硅谷SAP担任资深研发工程师和UI端架构师。做了过个4个SAP商业互联网网站，包括商务报表分享网站，商务协作，社交网站，大数据云移动等研发。中间3个人开发的bi.ondemand.com网站得到了几百万美元收益，客户包括微软，facebook，myspace等等。去年4月被data service组聘请到美国硅谷，花了7个月时间帮助他们实现客户端软件云端化运用HTML5技术。data service组今年希望通过此产品能够实现千万美元收益。他精通整个互联网构架，API 和用户交互界面研发。特长是Javascript，ruby on rails. 也做过几个月的iOS研发。
 
 Tao 夏涛 http://www.linkedin.com/pub/tao-xia/20/1b0/a37 
-05年加入SAP，参与了crystal report的引擎开发测试。09年加入Yahoo!一直在做广告平台后台，现在担任QE Lead和Scrum Master。精通搜索／展示广告投放，数据分析／处理，精准投放，个性化。广告平台每天处理80亿条广告请求，应用最先进的云计算平台，Hadoop，Storm处理large scale系统。
+05年加入SAP，参与了crystal report的引擎开发测试。09年加入Yahoo!一直在做广告平台后台，现在担任QE Lead和Scrum Master。精通搜索／展示广告投放，数据分析／处理，精准投放，个性化。广告平台每天处理80亿条广告请求，应用最先进的云计算平台，Hadoop，Storm处理big data. 积累了很多设计和实现large scale系统的经验。
 
 Leon 齐良 
 从06年开始一直从事软件方面的研发工作。现在就职于JEA担任软件工程师，从事Oracle数据库的研发和应用。精通数据库设计，数据分析，商用智能报表。有丰富的开发，测试，后期维护，产品运营经验。喜爱互联网，科技，移动，摄影等等。
