@@ -20,9 +20,13 @@ module.exports = PM;
 PM.findById = function(storyId, callback) {
     PM.topStories.findOne({'_id':new BSON.ObjectID(storyId)}, function(err, item) {
         if (err){
-            callback('story-not-found');
+            if(callback){
+                callback('story-not-found');
+            }
         }	else{
-            callback(null, item);
+            if(callback){
+                callback(null, item);
+            }
         }
     });
 };
@@ -33,7 +37,9 @@ PM.findAll = function(userName, callback) {
     PM.userStories.findOne({user: userName}, function(err, item) {
         if(err){
             console.log("query user_stories collection failed: ", err);
-            callback("query_failed");
+            if(callback){
+                callback("query_failed");
+            }
         }else{
             Utils.logTime("query user stories", startTime);
             if(item === null){
@@ -45,7 +51,9 @@ PM.findAll = function(userName, callback) {
                         if(!settings.PROVIDE_CONTENT) value['content'] = null;
                     });
                     Utils.logTime("modify each story", startTime);
-                    callback(null, items);
+                    if(callback){
+                        callback(null, items);
+                    }
                     Utils.logTime("Total FindAll time spent", startTime);
                 });
             }else{
@@ -72,7 +80,9 @@ PM.findAll = function(userName, callback) {
                         return -item['score'];
                     });
                     Utils.logTime("sort story by score", startTime);
-                    callback(null, items);
+                    if(callback){
+                        callback(null, items);
+                    }
                     Utils.logTime("Total FindAll time spent", startTime);
                 });
             }
@@ -89,7 +99,9 @@ PM.findByCategory = function(category, callback){
             if(!settings.PROVIDE_CONTENT) value['content'] = null;
         });
         Utils.logTime("modify each story", startTime);
-        callback(null, items);
+        if(callback){
+            callback(null, items);
+        }
         Utils.logTime("Total findByCategory time spent", startTime);
     });
 };
@@ -101,7 +113,7 @@ PM.findAllForAdmin = function(page, limit, callback) {
     var startTime = new Date().getTime();
     var _page = parseInt(page, 10) ? parseInt(page, 10) : 0;
     var _limit = parseInt(limit, 10) ? parseInt(limit, 10) : 0;
-    PM.resetTopStoriesCount(
+    PM.resetTopStoriesCount(function(){
         PM.topStories.find().sort({score:-1,pubDate:-1}).skip(_limit*(_page-1)).limit(_limit).toArray(function(err, items) {
             Utils.logTime("ADMIN: Query top stories", startTime);
             _.each(items, function(value, index){
@@ -111,10 +123,12 @@ PM.findAllForAdmin = function(page, limit, callback) {
                 value['categoryCount'] = Utils.getCategoryCount();
             });
             Utils.logTime("ADMIN: Modify each story", startTime);
-            callback(null, items);
+            if(callback){
+                callback(null, items);
+            }
             Utils.logTime("ADMIN: Total FindAllForAdmin time spent", startTime);
         })
-    );
+    });
 };
 
 PM.findByCategoryForAdmin = function(category, page, limit, callback){
@@ -132,7 +146,9 @@ PM.findByCategoryForAdmin = function(category, page, limit, callback){
                     value['categoryCount'] = Utils.getCategoryCount();
                 });
                 Utils.logTime("ADMIN: Modify each story", startTime);
-                callback(null, items);
+                if(callback){
+                    callback(null, items);
+                }
                 Utils.logTime("ADMIN: Total findByCategory time spent", startTime);
             })
         );
@@ -191,7 +207,9 @@ PM.resetTopStoriesCount = function(callback) {
             } else {
                 console.log('ADMIN: ' + count + ' document(s) in total.');
                 Utils.setTopStoriesCount(count);
-                callback();
+                if(callback){
+                    callback();
+                }
             }
         }
     );
@@ -205,7 +223,9 @@ PM.resetCategoryCount = function(category, callback) {
             } else {
                 console.log('ADMIN: ' + count + ' document(s) in this category.');
                 Utils.setCategoryCount(category, count);
-                callback();
+                if(callback){
+                    callback();
+                }
             }
         }
     );
