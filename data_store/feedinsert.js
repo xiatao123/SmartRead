@@ -145,10 +145,13 @@ function parseFeedBaidu(feedurl, dataProvider, category, callback) {
 
                             articles.forEach(function (article) {
 
+                                var source = getSourceName(article, meta);
+                                if(_.contains(config.ignoreSites, source)){
+                                    return false;
+                                }
+
                                 var $ = cheerio.load(article.description);
                                 var imageUrl = getImageUrl($);
-
-
                                 if(imageUrl === undefined){
                                     return false;
                                 }
@@ -167,7 +170,7 @@ function parseFeedBaidu(feedurl, dataProvider, category, callback) {
                                     guid:article.guid
                                 }, [['_id', 1]], {
                                     _id : id,
-                                    source : getSourceName(article, meta),
+                                    source : source,
                                     name : article.title,
                                     link : article.link,
                                     description : getCleanDescription($,article),
