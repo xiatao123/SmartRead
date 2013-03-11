@@ -14,7 +14,7 @@ import com.mongodb.DBObject;
 public class DBTags extends DBBase {
     private static final Logger logger = LogManager.getLogger(DBTags.class);
 
-    public static void addTags(List<String> tags) {
+    public static void addTags(List<String[]> tags) {
         Long starttime = System.currentTimeMillis();
 
         if (mongoClient == null) {
@@ -27,8 +27,8 @@ public class DBTags extends DBBase {
         DBCollection tagsColl = db.getCollection(DB_TAGS_TABLE);
 
         List<DBObject> objs = new ArrayList<DBObject>();
-        for (String tag : tags) {
-            DBObject obj = new BasicDBObject("name", tag);
+        for (String[] tag : tags) {
+            DBObject obj = new BasicDBObject("name", tag[0]).append("title", tag[1]);
             DBObject result = tagsColl.findOne(obj);
             if (result != null) {
                 continue;

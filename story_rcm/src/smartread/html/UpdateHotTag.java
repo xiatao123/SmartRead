@@ -26,7 +26,7 @@ public class UpdateHotTag {
 
         try {
             ExtractTags et = new ExtractTags();
-            HashSet<String> hs = new HashSet<String>();
+            HashSet<String[]> hs = new HashSet<String[]>();
 
             // Sogou
             Document doc = Jsoup.connect("http://top.sogou.com/hotword0.html")
@@ -42,7 +42,12 @@ public class UpdateHotTag {
                 logger.debug(title);
                 List<String> tags = et.getTags(title);
                 logger.debug(tags);
-                hs.addAll(tags);
+                List<String[]> listArray = new ArrayList<String[]>();
+                for(String s: tags){
+                    String[] temp = {s, title}; 
+                    listArray.add(temp);
+                }
+                hs.addAll(listArray);
             }
 
             // Baidu
@@ -56,10 +61,14 @@ public class UpdateHotTag {
                 logger.debug(link.text());
                 List<String> tags = et.getTags(link.text());
                 logger.debug(tags);
-                hs.addAll(tags);
-            }
+                List<String[]> listArray = new ArrayList<String[]>();
+                for(String s: tags){
+                    String[] temp = {s, link.text()}; 
+                    listArray.add(temp);
+                }
+                hs.addAll(listArray);            }
 
-            List<String> tags = new ArrayList<String>();
+            List<String[]> tags = new ArrayList<String[]>();
             tags.addAll(hs);
             DBTags.cleanTags();
             DBTags.addTags(tags);
