@@ -1,0 +1,20 @@
+<div class="row-fluid">
+    <div class="row-fluid">
+        <table  class="table table-striped span12">
+            <thead>
+            <tr>
+                <th>Tag</th>
+                <th>Title</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% _.each(action, function(list) { %>
+            <tr>
+                <td><%= list.name%></td>
+                <td><%= list.title%></td>
+            </tr>
+            <% }); %>
+            </tbody>
+        </table>
+    </div>
+</div>

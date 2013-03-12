@@ -144,3 +144,17 @@ SR.InviteCollection = Backbone.Collection.extend({
     url: "/invite-users"
 
 });
+
+SR.Tag = Backbone.Model.extend({
+
+    urlRoot: "/admin-tags",
+    idAttribute: "_id"
+});
+
+SR.TagCollection = Backbone.Collection.extend({
+
+    model: SR.Tag,
+
+    url: "/admin-tags"
+
+});

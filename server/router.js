@@ -1,6 +1,7 @@
 var _ = require('underscore');
 
 var PM = require('./controllers/post-manager');
+var TM = require('./controllers/tag-manager');
 var AM = require('./controllers/account-manager');
 var EM = require('./controllers/email-manager');
 var IM = require('./controllers/invitation-manager');
@@ -142,6 +143,23 @@ module.exports = function(app) {
             });
         });
     });
+
+    app.get('/admin-tags', function(req, res){
+        authenticate(req, res, function(){
+            authorize(req, res, function(){
+                TM.findAll(function(err, items){
+                    if(err){
+                        console.log(err);
+                    }else{
+                        res.send(items);
+                    }
+                });
+            });
+
+        });
+
+    });
+
 
     app.post('/login', function(req, res){
         AM.manualLogin(req.param('user'), req.param('pass'), function(e, account){

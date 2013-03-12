@@ -21,6 +21,7 @@ SR.AppRouter = Backbone.Router.extend({
         "admin-stories/page/:page"  : "adminStories",
         "admin-categories/:name"    : "adminCategory",
         "admin-categories/:name/page/:page"    : "adminCategory",
+        "admin-tags"                : "adminTags",
         "about"                     : "about"
     },
 
@@ -222,11 +223,30 @@ SR.AppRouter = Backbone.Router.extend({
             }
 
         });
+    },
+
+    adminTags: function(){
+        this.renderHeader();
+
+        var tagList = new SR.TagCollection();
+        tagList.fetch({
+            success: function(model, response, options){
+                $(document).scrollTop(0);
+                $("#content").html(new SR.AdminTagsView({model: tagList}).el);
+                SR.utils.hideNotification();
+            },
+            error: function(model, xhr, options){
+                if(xhr.status === 401){
+                    SR.navigateHome();
+                }
+            }
+
+        });
     }
 
 });
 
-SR.utils.loadTemplate(['HomeView', 'HeaderView', 'PostView', 'PostListItemView', 'AboutView','PostModalView','SignupView','AdminInviteUsersView','AdminStoriesView'], function() {
+SR.utils.loadTemplate(['HomeView', 'HeaderView', 'PostView', 'PostListItemView', 'AboutView','PostModalView','SignupView','AdminInviteUsersView','AdminStoriesView', 'AdminTagsView'], function() {
     SR.app = new SR.AppRouter();
     Backbone.history.start();
 });
