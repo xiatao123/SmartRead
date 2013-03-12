@@ -55,7 +55,7 @@ public class DBUser extends DBBase {
                 for (String s : int_info) {
                     interests = (DBObject) userInfo.get(s);
                     //TODO: temporarily add temp to increase interest effect
-                    double temp = 2;
+                    double temp = 5;
                     double factor = 1.0*temp;
                     if (s.equalsIgnoreCase("interests_1h")) {
                         factor = 0.8*temp;

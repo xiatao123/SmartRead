@@ -15,14 +15,14 @@ public class ExtractTags {
     public static void main(String[] args) {
         ExtractTags et = new ExtractTags();
 
-        String str = "中芯国际第四季度净利润3970万美元 同比扭亏";
+        String str = "61 岁";
         System.out.println("Title: " + str);
         List<String> tags = et.getTags(str);
         for (String s : tags) {
             System.out.println(s);
         }
 
-        str = "时代华纳第四季度净利润11.7亿美元 同比增51%";
+        str = "61 万";
         System.out.println("Title: " + str);
         tags = et.getTags(str);
         for (String s : tags) {
@@ -46,7 +46,7 @@ public class ExtractTags {
         }
         
         String[] lists = { "名词", "实体名", "机构名", "网址", "事件名", "品牌名", "地名", "人名",
-                "品牌", "数词" };
+                "品牌" };
         type = Arrays.asList(lists);
     }
 
