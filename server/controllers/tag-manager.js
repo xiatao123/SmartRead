@@ -13,7 +13,7 @@ module.exports = TM;
 
 TM.findAll = function (callback){
     var startTime = new Date().getTime();
-    TM.tags.find().toArray(function(err, items){
+    TM.tags.find().sort({title:1}).toArray(function(err, items){
         Utils.logTime("Admin: Query hot tags", startTime);
         if(callback){
             callback(null, items);
