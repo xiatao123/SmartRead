@@ -54,13 +54,15 @@ public class DBUser extends DBBase {
                         "interests_1d", "interests_7d" };
                 for (String s : int_info) {
                     interests = (DBObject) userInfo.get(s);
-                    double factor = 1.0;
+                    //TODO: temporarily add temp to increase interest effect
+                    double temp = 2;
+                    double factor = 1.0*temp;
                     if (s.equalsIgnoreCase("interests_1h")) {
-                        factor = 0.8;
+                        factor = 0.8*temp;
                     } else if (s.equalsIgnoreCase("interests_1d")) {
-                        factor = 0.5;
+                        factor = 0.5*temp;
                     } else if (s.equalsIgnoreCase("interests_7d")) {
-                        factor = 0.2;
+                        factor = 0.2*temp;
                     }
 
                     for (String key : interests.keySet()) {
