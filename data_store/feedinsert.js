@@ -182,7 +182,7 @@ function parseFeedBaidu(feedurl, dataProvider, category, callback) {
                                     comments : article.comments,
                                     category: category,
                                     tags:  tags,
-                                    score: initScore--,
+                                    score: initScore,
                                     picture : imageUrl
                                 }, {
                                     upsert:true
