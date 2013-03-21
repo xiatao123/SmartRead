@@ -29,7 +29,7 @@ public class DBTags extends DBBase {
         List<DBObject> objs = new ArrayList<DBObject>();
         for (String[] tag : tags) {
             DBObject obj = new BasicDBObject("name", tag[0]).append("title", tag[1]);
-            DBObject result = tagsColl.findOne(obj);
+            DBObject result = tagsColl.findOne(new BasicDBObject("name", tag[0]));
             if (result != null) {
                 continue;
             }
