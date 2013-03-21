@@ -70,3 +70,5 @@ Evernote	实体名
 柳岩	人名
 尿不湿	名词
 风水	名词
+iPhone	名词
+iPad	名词
